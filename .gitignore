@@ -19,3 +19,6 @@ chinook.db
 .idea/vcs.xml
 .idea/dataSources/109004f2-4ea8-452e-b038-82b6d7bb07d3/storage_v2/_src_/schema/main.uQUzAA.meta
 .idea/dataSources/109004f2-4ea8-452e-b038-82b6d7bb07d3.xml
+.idea/uiDesigner.xml
+.idea/uiDesigner.xml
+target/**
