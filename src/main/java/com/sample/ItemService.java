@@ -40,6 +40,7 @@ public class ItemService {
                                 resultSet.getInt("Types_idTypes"),
                                 resultSet.getInt("Author_idAuthor")).toString());
                     }
+                    System.out.println(items);
                     return items;
                 case SONG:
                     while (resultSet.next()) {
@@ -51,6 +52,7 @@ public class ItemService {
                                 resultSet.getInt("Album_idAlbum"),
                                 resultSet.getInt("Types_idTypes")).toString());
                     }
+                    System.out.println(items);
                     return items;
             }
             // Возвращаем наш список

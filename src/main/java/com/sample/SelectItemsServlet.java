@@ -17,9 +17,9 @@ public class SelectItemsServlet extends HttpServlet {
 
         ItemService itemService = new ItemService();
         Type l = Type.valueOf(itemType);
-        log(itemType);
         List itemsByType = itemService.getAvailableItems(l);
-
+        //TODO исправить кодировки
+        resp.setContentType("text/html; charset=windows-1251");
         req.setAttribute("items", itemsByType);
         RequestDispatcher view = req.getRequestDispatcher("result.jsp");
         view.forward(req, resp);
