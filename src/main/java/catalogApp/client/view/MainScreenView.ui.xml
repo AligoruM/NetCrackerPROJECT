@@ -1,0 +1,18 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+
+
+    <g:HTMLPanel width="150">
+
+        <g:VerticalPanel >
+
+
+            <g:HorizontalPanel>
+                <g:Label ui:field="nameLbl" text="Name"/>
+                <g:TextArea ui:field="nameTA"/>
+            </g:HorizontalPanel>
+        </g:VerticalPanel>
+
+    </g:HTMLPanel>
+</ui:UiBinder>
+
