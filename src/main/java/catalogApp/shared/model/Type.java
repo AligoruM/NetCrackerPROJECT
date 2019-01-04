@@ -3,7 +3,7 @@ package catalogApp.shared.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Type")
+@Table(name = "Types")
 public class Type {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

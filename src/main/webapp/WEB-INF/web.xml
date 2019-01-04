@@ -16,6 +16,6 @@
 
     <servlet-mapping>
         <servlet-name>Jersey Servlet</servlet-name>
-        <url-pattern>catalogApp/rest/*</url-pattern>
+        <url-pattern>/catalogApp/rest/*</url-pattern>
     </servlet-mapping>
 </web-app>
