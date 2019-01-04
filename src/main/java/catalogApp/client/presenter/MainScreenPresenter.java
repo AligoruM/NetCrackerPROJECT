@@ -7,7 +7,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 
-public class MainScreenPresenter  {
+public class MainScreenPresenter  implements Presenter{
 
     private Display display;
 

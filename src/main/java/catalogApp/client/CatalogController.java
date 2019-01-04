@@ -1,15 +1,20 @@
 package catalogApp.client;
 
+import catalogApp.client.presenter.MainScreenPresenter;
 import catalogApp.client.presenter.Presenter;
 import catalogApp.client.view.MainScreenView;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.*;
 
-public class CatalogController implements Presenter {
+public class CatalogController implements Presenter, ValueChangeHandler<String> {
 
     public void go(HasWidgets container) {
-        SplitLayoutPanel spl = new SplitLayoutPanel();
-        MainScreenView smp = new MainScreenView();
-        spl.add(smp);
-        container.add(spl);
+        Presenter pr = new MainScreenPresenter(new MainScreenView());
+        pr.go(container);
+    }
+
+    @Override
+    public void onValueChange(ValueChangeEvent<String> event) {
     }
 }
