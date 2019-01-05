@@ -5,7 +5,7 @@ import catalogApp.client.presenter.Presenter;
 import catalogApp.client.view.MainScreenView;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.HasWidgets;
 
 public class CatalogController implements Presenter, ValueChangeHandler<String> {
 

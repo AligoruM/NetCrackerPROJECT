@@ -6,15 +6,11 @@ import catalogApp.server.dao.IBookDAO;
 import catalogApp.shared.model.Book;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Path("/test")
@@ -25,11 +21,11 @@ public class TestController {
     @POST
     @Path("/book")
     @Produces(MediaType.APPLICATION_JSON)
-    public ResponseEntity<List<Book>> getAllBooks() {
+    public List<Book> getAllBooks() {
         List<Book> result = customerDAO.findAllBooks();
         //System.out.println(result);
-        if (result.isEmpty())
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        /*if (result.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);*/
+        return result;
     }
 }
