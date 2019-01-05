@@ -7,6 +7,7 @@ import catalogApp.shared.model.Book;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -27,5 +28,12 @@ public class TestController {
         /*if (result.isEmpty())
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);*/
         return result;
+    }
+
+    @POST
+    @Path("/addBook")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void addBook(Book book){
+        customerDAO.addNewBook(book);
     }
 }

@@ -1,0 +1,31 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <g:HTMLPanel>
+        <g:DialogBox ui:field="dialogPanel" text="Adding book">
+            <g:HTMLPanel>
+                <table>
+                    <tr>
+                        <td>Name:</td>
+                        <td>
+                            <g:TextBox ui:field="nameBox"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Author:</td>
+                        <td>
+                            <g:TextBox ui:field="authorBox"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td/>
+                        <td>
+                            <g:Button ui:field="submitButton" text="Submit"/>
+                            <g:Button ui:field="cancelButton" text="Cancel"/>
+                        </td>
+                    </tr>
+                </table>
+            </g:HTMLPanel>
+        </g:DialogBox>
+
+    </g:HTMLPanel>
+</ui:UiBinder>

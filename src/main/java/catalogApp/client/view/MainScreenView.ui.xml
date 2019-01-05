@@ -3,8 +3,10 @@
 
 
     <g:HTMLPanel width="500">
-
-        <g:SimplePanel ui:field="simplePanel"/>
+        <g:VerticalPanel>
+            <g:SimplePanel ui:field="simplePanel"/>
+            <g:Button ui:field="addButton" text="Add book"/>
+        </g:VerticalPanel>
 
     </g:HTMLPanel>
 

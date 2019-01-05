@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface IBookDAO {
     List<Book> findAllBooks();
+    void addNewBook(Book book);
 }

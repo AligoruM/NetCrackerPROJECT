@@ -4,9 +4,11 @@ import catalogApp.client.presenter.MainScreenPresenter;
 import catalogApp.client.services.TestService;
 import catalogApp.shared.model.Book;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
@@ -28,9 +30,11 @@ public class MainScreenView extends Composite implements MainScreenPresenter.Dis
 
     @UiField
     SimplePanel simplePanel;
+    @UiField
+    Button addButton;
 
     private static MainScreenUiBinder mainScreenUiBinder = GWT.create(MainScreenUiBinder.class);
-    private TestService testService = GWT.create(TestService.class);
+    private static TestService testService = GWT.create(TestService.class);
     private final static ListDataProvider<Book> bookDataProvider = new ListDataProvider<>();
 
 
@@ -110,5 +114,14 @@ public class MainScreenView extends Composite implements MainScreenPresenter.Dis
 
         table.addColumnSortHandler(nameSorter);
         table.addColumnSortHandler(authorSorter);
+    }
+
+    @UiHandler("addButton")
+    void doClickCancel(ClickEvent click) {
+        new AddDialog();
+    }
+
+    public static TestService getTestService() {
+        return testService;
     }
 }

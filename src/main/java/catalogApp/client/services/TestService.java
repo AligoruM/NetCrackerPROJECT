@@ -15,4 +15,8 @@ public interface TestService extends RestService {
     @Path("rest/test/book")
     @Consumes(MediaType.APPLICATION_JSON)
     void getAllBooks(MethodCallback<List<Book>> callback);
+
+    @POST
+    @Path("rest/test/addBook")
+    void addBook(Book book, MethodCallback<Void> callback);
 }

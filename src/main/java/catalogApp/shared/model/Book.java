@@ -20,13 +20,6 @@ public class Book {
 
     public Book() {
     }
-/*
-    @JsonCreator
-    public Book(@JsonProperty("id") int id,@JsonProperty("name") String name,@JsonProperty("type") Type type,@JsonProperty("author") Author author) {
-        this.name = name;
-        this.type = type;
-        this.author = author;
-    }*/
 
     public Book(String name, Type type, Author author) {
         this.name = name;

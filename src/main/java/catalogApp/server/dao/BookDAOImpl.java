@@ -14,4 +14,9 @@ public class BookDAOImpl extends BasicDAO implements IBookDAO {
         Criteria criteria = getSession().createCriteria((Book.class));
         return criteria.list();
     }
+
+    @Override
+    public void addNewBook(Book book) {
+        persist(book);
+    }
 }
