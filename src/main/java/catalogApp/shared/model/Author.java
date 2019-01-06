@@ -1,6 +1,7 @@
 package catalogApp.shared.model;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -12,6 +13,10 @@ public class Author {
     private int id;
     @Column(name = "Name")
     private String name;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
+    private List<Book> books;
+
 
     public Author() {
     }
@@ -34,6 +39,10 @@ public class Author {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Book> getBooks() {
+        return books;
     }
 
     @Override

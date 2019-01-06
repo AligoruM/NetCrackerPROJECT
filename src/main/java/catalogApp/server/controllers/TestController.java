@@ -43,7 +43,7 @@ public class TestController {
         Author authorResult = authorDAO.getAuthorByName(author);
         if (authorResult == null)
             authorResult = new Author(author);
-        Type bookType = typeDAO.getTypeById(0);
+        Type bookType = typeDAO.getTypeById(1);
         bookDAO.addNewBook(name, bookType, authorResult);
     }
 

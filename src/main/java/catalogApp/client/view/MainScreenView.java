@@ -58,7 +58,6 @@ public class MainScreenView extends Composite implements MainScreenPresenter.Dis
             }
         });
         bookDataProvider.addDataDisplay(bookTable);
-
         simplePanel.add(bookTable);
     }
 

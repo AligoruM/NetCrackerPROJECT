@@ -2,6 +2,7 @@ package catalogApp.server.dao.author;
 
 import catalogApp.server.dao.BasicDAO;
 import catalogApp.shared.model.Author;
+import catalogApp.shared.model.Book;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -31,5 +32,15 @@ public class AuthorDAOImpl extends BasicDAO implements IAuthorDAO {
         Criteria criteria = getSession().createCriteria(Author.class);
         criteria.add(Restrictions.eq("name", name));
         return (Author) criteria.uniqueResult();
+    }
+    //TODO
+    @Override
+    public List<Book> getAuthorsBooksById() {
+        return null;
+    }
+    //TODO
+    @Override
+    public List<Book> getAuthorsBooksByName() {
+        return null;
     }
 }
