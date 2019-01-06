@@ -13,6 +13,8 @@ import com.google.gwt.user.client.ui.*;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 
+import java.util.Arrays;
+
 public class AddDialog extends Composite {
     interface AddDialogUiBinder extends UiBinder<HTMLPanel, AddDialog> {
     }
@@ -32,21 +34,23 @@ public class AddDialog extends Composite {
 
     public AddDialog() {
         initWidget(ourUiBinder.createAndBindUi(this));
-        dialogPanel.setPopupPosition(100,100);
+        dialogPanel.setPopupPosition(100, 100);
         dialogPanel.show();
     }
+
     @UiHandler("cancelButton")
-    void doClickCancel(ClickEvent click){
+    void doClickCancel(ClickEvent click) {
         dialogPanel.hide();
     }
+
     @UiHandler("submitButton")
-    void doClickSubmit(ClickEvent click){
-        Book tmp = new Book(nameBox.getText(), new Type("Book"), new Author(authorBox.getText()));
-        Window.alert(tmp.toString());
-        MainScreenView.getTestService().addBook(tmp, new MethodCallback<Void>() {
+    void doClickSubmit(ClickEvent click) {
+        String name = nameBox.getText().trim();
+        String author = authorBox.getText().trim();
+        MainScreenView.getTestService().addBook(Arrays.asList(name, author), new MethodCallback<Void>() {
             @Override
             public void onFailure(Method method, Throwable throwable) {
-                Window.alert("Adding doest work");
+                Window.alert("Adding doesnt work");
             }
 
             @Override

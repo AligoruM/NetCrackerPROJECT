@@ -1,6 +1,9 @@
-package catalogApp.server.dao;
+package catalogApp.server.dao.book;
 
+import catalogApp.server.dao.BasicDAO;
+import catalogApp.shared.model.Author;
 import catalogApp.shared.model.Book;
+import catalogApp.shared.model.Type;
 import org.hibernate.Criteria;
 import org.springframework.stereotype.Repository;
 
@@ -16,7 +19,9 @@ public class BookDAOImpl extends BasicDAO implements IBookDAO {
     }
 
     @Override
-    public void addNewBook(Book book) {
-        persist(book);
+    public void addNewBook(String name, Type type, Author author) {
+        Book book = new Book(name, type, author);
+        saveOrUpdate(book);
+
     }
 }

@@ -8,7 +8,7 @@ public class BasicDAO {
     @Autowired
     SessionFactory sessionFactory;
 
-    Session getSession(){
+    protected Session getSession(){
         return sessionFactory.getCurrentSession();
     }
 

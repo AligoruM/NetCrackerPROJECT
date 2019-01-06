@@ -11,10 +11,11 @@ public class Book {
     private int id;
     @Column(name = "Name")
     private String name;
-    @ManyToOne
-    @JoinColumn(name = "Types_idTypes", referencedColumnName = "idTypes")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "Types_idTypes",
+            referencedColumnName = "idTypes")
     private Type type;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "Author_idAuthor", referencedColumnName = "idAuthor")
     private Author author;
 
