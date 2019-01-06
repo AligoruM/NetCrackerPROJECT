@@ -13,7 +13,7 @@
                     <tr>
                         <td>Author:</td>
                         <td>
-                            <g:TextBox ui:field="authorBox"/>
+                            <g:SuggestBox ui:field="authorBox"/>
                         </td>
                     </tr>
                     <tr>

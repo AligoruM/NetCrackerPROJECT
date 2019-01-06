@@ -1,7 +1,7 @@
 package catalogApp.client.services;
 
+import catalogApp.shared.model.Author;
 import catalogApp.shared.model.Book;
-import catalogApp.shared.model.Type;
 import org.fusesource.restygwt.client.MethodCallback;
 import org.fusesource.restygwt.client.RestService;
 
@@ -21,7 +21,8 @@ public interface TestService extends RestService {
     @Path("rest/test/addBook")
     void addBook(List<String> params, MethodCallback<Void> callback);
 
-    /*@POST
-    @Path("rest/test/getType/{id}")
-    Type getTypeById(int i, MethodCallback<Type> callback);*/
+    @POST
+    @Path("rest/test/getAuthor")
+    @Consumes(MediaType.APPLICATION_JSON)
+    void getAllAuthor(MethodCallback<List<String>> callback);
 }

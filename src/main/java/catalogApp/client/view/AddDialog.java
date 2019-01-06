@@ -14,6 +14,7 @@ import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class AddDialog extends Composite {
     interface AddDialogUiBinder extends UiBinder<HTMLPanel, AddDialog> {
@@ -25,16 +26,33 @@ public class AddDialog extends Composite {
     Button cancelButton;
     @UiField
     TextBox nameBox;
-    @UiField
-    TextBox authorBox;
+    @UiField(provided = true)
+    SuggestBox authorBox;
     @UiField
     DialogBox dialogPanel;
 
     private static AddDialogUiBinder ourUiBinder = GWT.create(AddDialogUiBinder.class);
 
     public AddDialog() {
+        MultiWordSuggestOracle wordSuggest = new MultiWordSuggestOracle();
+        MainScreenView.getTestService().getAllAuthor(new MethodCallback<List<String>>() {
+            @Override
+            public void onFailure(Method method, Throwable throwable) {
+                Window.alert("getAllAuthorsNames doesnt work");
+            }
+
+            @Override
+            public void onSuccess(Method method, List<String> authors) {
+                wordSuggest.addAll(authors);
+            }
+        });
+        authorBox = new SuggestBox(wordSuggest);
         initWidget(ourUiBinder.createAndBindUi(this));
         dialogPanel.setPopupPosition(100, 100);
+
+        authorBox.setLimit(6);
+        //authorBox.setAnimationEnabled(true);
+
         dialogPanel.show();
     }
 
@@ -56,6 +74,7 @@ public class AddDialog extends Composite {
             @Override
             public void onSuccess(Method method, Void aVoid) {
                 Window.alert("Added!");
+                dialogPanel.hide();
             }
         });
     }

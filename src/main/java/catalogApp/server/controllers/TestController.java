@@ -44,14 +44,13 @@ public class TestController {
         if (authorResult == null)
             authorResult = new Author(author);
         Type bookType = typeDAO.getTypeById(0);
-        System.out.println(bookType);
         bookDAO.addNewBook(name, bookType, authorResult);
     }
 
     @POST
-    @Path("getType/{id}")
+    @Path("/getAuthor")
     @Produces(MediaType.APPLICATION_JSON)
-    public Type getTypeById(@PathParam("id") int id) {
-        return typeDAO.getTypeById(id);
+    public List<String> getTypeById() {
+        return authorDAO.getAllAuthorsNames();
     }
 }
