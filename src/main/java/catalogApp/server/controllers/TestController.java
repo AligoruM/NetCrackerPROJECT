@@ -4,9 +4,11 @@ package catalogApp.server.controllers;
 import catalogApp.server.config.SpringConfig;
 import catalogApp.server.dao.author.IAuthorDAO;
 import catalogApp.server.dao.book.IBookDAO;
+import catalogApp.server.dao.song.ISongDAO;
 import catalogApp.server.dao.type.ITypeDAO;
 import catalogApp.shared.model.Author;
 import catalogApp.shared.model.Book;
+import catalogApp.shared.model.Song;
 import catalogApp.shared.model.Type;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -21,17 +23,17 @@ public class TestController {
     private IBookDAO bookDAO = (IBookDAO) context.getBean("bookDAO");
     private ITypeDAO typeDAO = (ITypeDAO) context.getBean("typeDAO");
     private IAuthorDAO authorDAO = (IAuthorDAO) context.getBean("authorDAO");
+    private ISongDAO songDAO = (ISongDAO) context.getBean("songDAO");
 
 
     @POST
     @Path("/book")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Book> getAllBooks() {
-        List<Book> result = bookDAO.findAllBooks();
         //System.out.println(result);
         /*if (result.isEmpty())
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);*/
-        return result;
+        return bookDAO.findAllBooks();
     }
 
     @POST
@@ -50,7 +52,14 @@ public class TestController {
     @POST
     @Path("/getAuthor")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<String> getTypeById() {
+    public List<String> getAuthorsNames() {
         return authorDAO.getAllAuthorsNames();
+    }
+
+    @POST
+    @Path("/getSong")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Song> getAllSongs(){
+        return songDAO.findAllSongs();
     }
 }

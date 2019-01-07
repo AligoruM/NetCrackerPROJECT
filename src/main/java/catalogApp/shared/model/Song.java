@@ -15,13 +15,13 @@ public class Song {
     private int duration;
     @Column(name = "Comment")
     private String comment;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "SongGenres_idGenre", referencedColumnName = "idGenre")
     private SongGenre genre;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "Album_idAlbum", referencedColumnName = "idAlbum")
     private Album album;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "Types_idTypes", referencedColumnName = "idTypes")
     private Type type;
 
@@ -92,4 +92,17 @@ public class Song {
     public void setType(Type type) {
         this.type = type;
     }
+
+    @Override
+    public String toString() {
+        return "Song{" + "id=" + id +
+                ", name='" + name + '\'' +
+                ", duration=" + duration +
+                ", comment='" + comment + '\'' +
+                ", genre=" + genre +
+                ", album=" + album +
+                ", type=" + type +
+                '}';
+    }
+
 }

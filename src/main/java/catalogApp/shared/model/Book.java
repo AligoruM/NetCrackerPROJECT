@@ -12,8 +12,7 @@ public class Book {
     @Column(name = "Name")
     private String name;
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "Types_idTypes",
-            referencedColumnName = "idTypes")
+    @JoinColumn(name = "Types_idTypes", referencedColumnName = "idTypes")
     private Type type;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "Author_idAuthor", referencedColumnName = "idAuthor")

@@ -14,8 +14,8 @@ public class Author {
     @Column(name = "Name")
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
-    private List<Book> books;
+    //@OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
+    //private List<Book> books;
 
 
     public Author() {
@@ -41,9 +41,9 @@ public class Author {
         this.name = name;
     }
 
-    public List<Book> getBooks() {
+    /*public List<Book> getBooks() {
         return books;
-    }
+    }*/
 
     @Override
     public boolean equals(Object o) {

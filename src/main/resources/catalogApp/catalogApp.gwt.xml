@@ -7,6 +7,8 @@
     <inherits name="com.google.gwt.uibinder.UiBinder"/>
     <inherits name="com.google.gwt.user.theme.clean.Clean"/>
     <inherits name="org.fusesource.restygwt.RestyGWT"/>
+    <inherits name="com.google.gwt.logging.Logging"/>
+
     <source path="shared"/>
     <source path="client"/>
 

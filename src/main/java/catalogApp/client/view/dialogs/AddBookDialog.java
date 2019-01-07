@@ -1,8 +1,6 @@
-package catalogApp.client.view;
+package catalogApp.client.view.dialogs;
 
-import catalogApp.shared.model.Author;
-import catalogApp.shared.model.Book;
-import catalogApp.shared.model.Type;
+import catalogApp.client.view.MainScreenView;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -16,8 +14,8 @@ import org.fusesource.restygwt.client.MethodCallback;
 import java.util.Arrays;
 import java.util.List;
 
-public class AddDialog extends Composite {
-    interface AddDialogUiBinder extends UiBinder<HTMLPanel, AddDialog> {
+public class AddBookDialog extends Composite {
+    interface AddDialogUiBinder extends UiBinder<HTMLPanel, AddBookDialog> {
     }
 
     @UiField
@@ -33,7 +31,7 @@ public class AddDialog extends Composite {
 
     private static AddDialogUiBinder ourUiBinder = GWT.create(AddDialogUiBinder.class);
 
-    public AddDialog() {
+    public AddBookDialog() {
         MultiWordSuggestOracle wordSuggest = new MultiWordSuggestOracle();
         MainScreenView.getTestService().getAllAuthor(new MethodCallback<List<String>>() {
             @Override

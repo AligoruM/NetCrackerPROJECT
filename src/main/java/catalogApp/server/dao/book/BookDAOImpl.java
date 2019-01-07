@@ -15,6 +15,7 @@ import java.util.List;
 public class BookDAOImpl extends BasicDAO implements IBookDAO {
     public List<Book> findAllBooks() {
         Criteria criteria = getSession().createCriteria((Book.class));
+
         return criteria.list();
     }
 

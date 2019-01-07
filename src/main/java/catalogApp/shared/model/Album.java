@@ -14,7 +14,7 @@ public class Album {
     private String name;
     @Column(name = "Artist")
     private String artist;
-    @Column(name = "Release date")
+    @Column(name = "ReleaseDate")
     private Date date;
 
     public Album() {
@@ -56,5 +56,14 @@ public class Album {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return "Album{" + "id=" + id +
+                ", name='" + name + '\'' +
+                ", artist='" + artist + '\'' +
+                ", date=" + date +
+                '}';
     }
 }
