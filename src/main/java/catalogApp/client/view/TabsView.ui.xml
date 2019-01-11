@@ -6,10 +6,7 @@
     <g:HTMLPanel >
         <g:VerticalPanel>
             <g:TabPanel ui:field="tabPanel"/>
-            <!--<g:SimplePanel ui:field="simplePanel"/>
-            <g:Button ui:field="addButton" text="Add book"/>-->
         </g:VerticalPanel>
-
     </g:HTMLPanel>
 
 </ui:UiBinder>

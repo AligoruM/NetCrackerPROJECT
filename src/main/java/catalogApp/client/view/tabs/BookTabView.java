@@ -1,36 +1,34 @@
 package catalogApp.client.view.tabs;
 
-import catalogApp.client.services.TestService;
-import catalogApp.client.view.MainScreenView;
-import catalogApp.client.view.dialogs.AddBookDialog;
+import catalogApp.client.presenter.BookTabPresenter;
 import catalogApp.shared.model.Book;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.view.client.ListDataProvider;
-import org.fusesource.restygwt.client.Method;
-import org.fusesource.restygwt.client.MethodCallback;
 
 import java.util.Comparator;
-import java.util.List;
+import java.util.logging.Logger;
 
-public class BookTab extends Composite {
-    interface BookTabUiBinder extends UiBinder<HTMLPanel, BookTab> {
+public class BookTabView extends Composite implements BookTabPresenter.Display {
+
+
+    interface BookTabUiBinder extends UiBinder<HTMLPanel, BookTabView> {
     }
 
-    private final static ListDataProvider<Book> bookDataProvider = new ListDataProvider<>();
-    private static TestService testService = MainScreenView.getTestService();
+    private final ListDataProvider<Book> bookDataProvider = new ListDataProvider<>();
+    //private ObjectTable table = new ObjectTable(bookDataProvider.getList());
+    private CellTable<Book> table = new CellTable<>();
 
+    Logger logger = java.util.logging.Logger.getLogger("bookTab");
     @UiField
     SimplePanel simplePanel;
     @UiField
@@ -38,30 +36,18 @@ public class BookTab extends Composite {
 
     private static BookTabUiBinder ourUiBinder = GWT.create(BookTabUiBinder.class);
 
-    public BookTab() {
+    public BookTabView() {
         initWidget(ourUiBinder.createAndBindUi(this));
-        initContent();
+        initializeTable();
+        simplePanel.add(table);
     }
 
-    private void initContent() {
-        CellTable<Book> bookTable = new CellTable<>();
-        testService.getAllBooks(new MethodCallback<List<Book>>() {
-            @Override
-            public void onFailure(Method method, Throwable throwable) {
-                Window.alert("Book doesnt work!");
-            }
 
-            @Override
-            public void onSuccess(Method method, List<Book> books) {
-                bookDataProvider.getList().addAll(books);
-                initializeTable(bookTable);
-            }
-        });
-        bookDataProvider.addDataDisplay(bookTable);
-        simplePanel.add(bookTable);
-    }
+    private void initializeTable(){
+        //table.addCustomColumn("Name", IBaseInterface::getName, new TextCell(), true);
+        //table.addCustomColumn("Author", IBaseInterface::getAuthorName, new TextCell(), true);
 
-    private void initializeTable(CellTable<Book> table){
+
         TextColumn<Book> nameColumn = new TextColumn<Book>() {
             @Override
             public String getValue(Book book) {
@@ -89,8 +75,13 @@ public class BookTab extends Composite {
         table.addColumnSortHandler(authorSorter);
     }
 
-    @UiHandler("addButton")
-    void doClickCancel(ClickEvent click) {
-        new AddBookDialog();
+    @Override
+    public HasClickHandlers getAddButton() {
+        return addButton;
+    }
+
+    @Override
+    public CellTable<Book> getTable() {
+        return table;
     }
 }

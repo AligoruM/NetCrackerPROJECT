@@ -1,20 +1,17 @@
 package catalogApp.client.view.dialogs;
 
-import catalogApp.client.view.MainScreenView;
+import catalogApp.client.presenter.AddBookDialogPresenter;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
-import org.fusesource.restygwt.client.Method;
-import org.fusesource.restygwt.client.MethodCallback;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class AddBookDialog extends Composite {
+public class AddBookDialog extends Composite implements AddBookDialogPresenter.Display {
+
     interface AddDialogUiBinder extends UiBinder<HTMLPanel, AddBookDialog> {
     }
 
@@ -30,50 +27,44 @@ public class AddBookDialog extends Composite {
     DialogBox dialogPanel;
 
     private static AddDialogUiBinder ourUiBinder = GWT.create(AddDialogUiBinder.class);
+    private MultiWordSuggestOracle wordSuggest = new MultiWordSuggestOracle();
 
     public AddBookDialog() {
-        MultiWordSuggestOracle wordSuggest = new MultiWordSuggestOracle();
-        MainScreenView.getTestService().getAllAuthor(new MethodCallback<List<String>>() {
-            @Override
-            public void onFailure(Method method, Throwable throwable) {
-                Window.alert("getAllAuthorsNames doesnt work");
-            }
-
-            @Override
-            public void onSuccess(Method method, List<String> authors) {
-                wordSuggest.addAll(authors);
-            }
-        });
         authorBox = new SuggestBox(wordSuggest);
         initWidget(ourUiBinder.createAndBindUi(this));
         dialogPanel.setPopupPosition(100, 100);
-
         authorBox.setLimit(6);
-        //authorBox.setAnimationEnabled(true);
+    }
 
+
+    @Override
+    public void setSuggestions(List<String> suggestions) {
+        wordSuggest.addAll(suggestions);
+        authorBox.refreshSuggestionList();
+    }
+
+    @Override
+    public HasClickHandlers getSubmitButton() {
+        return submitButton;
+    }
+
+    @Override
+    public HasClickHandlers getCancelButton() {
+        return cancelButton;
+    }
+
+    @Override
+    public void showDialog() {
         dialogPanel.show();
     }
 
-    @UiHandler("cancelButton")
-    void doClickCancel(ClickEvent click) {
+    @Override
+    public void hideDialog() {
         dialogPanel.hide();
     }
 
-    @UiHandler("submitButton")
-    void doClickSubmit(ClickEvent click) {
-        String name = nameBox.getText().trim();
-        String author = authorBox.getText().trim();
-        MainScreenView.getTestService().addBook(Arrays.asList(name, author), new MethodCallback<Void>() {
-            @Override
-            public void onFailure(Method method, Throwable throwable) {
-                Window.alert("Adding doesnt work");
-            }
-
-            @Override
-            public void onSuccess(Method method, Void aVoid) {
-                Window.alert("Added!");
-                dialogPanel.hide();
-            }
-        });
+    @Override
+    public List<String> getAddInfo() {
+        return Arrays.asList(nameBox.getText(), authorBox.getText());
     }
 }

@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "Book")
-public class Book {
+public class Book implements IBaseInterface{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idBook")
@@ -39,6 +39,11 @@ public class Book {
         return name;
     }
 
+    @Override
+    public String getAuthorName() {
+        return author.getName();
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -50,6 +55,7 @@ public class Book {
     public void setType(Type type) {
         this.type = type;
     }
+
 
     public Author getAuthor() {
         return author;

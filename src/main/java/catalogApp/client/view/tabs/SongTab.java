@@ -1,8 +1,5 @@
 package catalogApp.client.view.tabs;
 
-import catalogApp.client.services.TestService;
-import catalogApp.client.view.MainScreenView;
-import catalogApp.shared.model.Book;
 import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -10,31 +7,30 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.view.client.ListDataProvider;
-import org.fusesource.restygwt.client.Method;
-import org.fusesource.restygwt.client.MethodCallback;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SongTab extends Composite {
     interface SongPanelUiBinder extends UiBinder<HTMLPanel, SongTab> {
     }
+
     private final static ListDataProvider<Song> songDataProvider = new ListDataProvider<>();
-    private static TestService testService = MainScreenView.getTestService();
+    //private static TestService testService = TabsView.getTestService();
+    //private ObjectTable table = new ObjectTable(songDataProvider.getList());
+    private CellTable<Song> table = new CellTable<>();
+
     Logger logger = java.util.logging.Logger.getLogger("songTab");
     @UiField
     SimplePanel simplePanel;
     @UiField
     Button addButton;
-
 
     private static SongPanelUiBinder ourUiBinder = GWT.create(SongPanelUiBinder.class);
 
@@ -44,8 +40,7 @@ public class SongTab extends Composite {
     }
 
     private void initContent() {
-        CellTable<Song> songTable = new CellTable<>();
-        testService.getAllSongs(new MethodCallback<List<Song>>() {
+        /*testService.getAllSongs(new MethodCallback<List<Song>>() {
             @Override
             public void onFailure(Method method, Throwable throwable) {
                 logger.log(Level.SEVERE, throwable.toString());
@@ -55,14 +50,17 @@ public class SongTab extends Composite {
             @Override
             public void onSuccess(Method method, List<Song> books) {
                 songDataProvider.getList().addAll(books);
-                initializeTable(songTable);
+                initializeTable();
             }
         });
-        songDataProvider.addDataDisplay(songTable);
-        simplePanel.add(songTable);
+        songDataProvider.addDataDisplay(table);
+        simplePanel.add(table);*/
     }
 
-    private void initializeTable(CellTable<Song> table){
+    private void initializeTable(){
+        //table.addCustomColumn("Name", IBaseInterface::getName, new TextCell(), true);
+        //table.addCustomColumn("Author", IBaseInterface::getAuthorName, new TextCell(), true);
+
         List<Song> listRef = songDataProvider.getList();
         TextColumn<Song> nameColumn = new TextColumn<Song>() {
             @Override

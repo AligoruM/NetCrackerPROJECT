@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "Song")
-public class Song {
+public class Song implements IBaseInterface{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idSong")
@@ -47,6 +47,11 @@ public class Song {
 
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String getAuthorName() {
+        return album.getName();
     }
 
     public void setName(String name) {

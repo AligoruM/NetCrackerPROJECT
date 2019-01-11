@@ -26,6 +26,5 @@
                 </table>
             </g:HTMLPanel>
         </g:DialogBox>
-
     </g:HTMLPanel>
 </ui:UiBinder>
