@@ -1,4 +1,4 @@
-package catalogApp.client.view.tabs;
+package catalogApp.client.view.components;
 
 
 import catalogApp.shared.model.IBaseInterface;
@@ -9,7 +9,7 @@ import com.google.gwt.view.client.ListDataProvider;
 
 import java.util.List;
 
-public class ObjectTable extends CellTable {
+public class AbstractCatalogCellTable extends CellTable {
 
     public static interface GetValue<C> {
         C getValue(IBaseInterface object);
@@ -17,7 +17,7 @@ public class ObjectTable extends CellTable {
 
     private ListDataProvider<IBaseInterface> dataProvider = new ListDataProvider<>();
 
-    public ObjectTable(List data) {
+    public AbstractCatalogCellTable(List data) {
         dataProvider.getList().addAll(data);
         //addCustomColumn("Name", IBaseInterface::getName, new TextCell());
         //addCustomColumn("Author", IBaseInterface::getAuthorName, new TextCell());

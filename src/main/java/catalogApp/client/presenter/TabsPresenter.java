@@ -18,7 +18,7 @@ public class TabsPresenter implements Presenter{
 
     HandlerManager eventBus;
     TestService bookService;
-    public TabsPresenter(Display view, HandlerManager eventBus, TestService bookService) {
+    public TabsPresenter(HandlerManager eventBus, TestService bookService, Display view) {
         this.display = view;
         this.eventBus = eventBus;
         this.bookService = bookService;

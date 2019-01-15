@@ -10,9 +10,9 @@ import com.google.gwt.user.client.ui.*;
 import java.util.Arrays;
 import java.util.List;
 
-public class AddBookDialog extends Composite implements AddBookDialogPresenter.Display {
+public class AddBookDialogView extends Composite implements AddBookDialogPresenter.Display {
 
-    interface AddDialogUiBinder extends UiBinder<HTMLPanel, AddBookDialog> {
+    interface AddDialogViewUiBinder extends UiBinder<HTMLPanel, AddBookDialogView> {
     }
 
     @UiField
@@ -26,10 +26,10 @@ public class AddBookDialog extends Composite implements AddBookDialogPresenter.D
     @UiField
     DialogBox dialogPanel;
 
-    private static AddDialogUiBinder ourUiBinder = GWT.create(AddDialogUiBinder.class);
+    private static AddDialogViewUiBinder ourUiBinder = GWT.create(AddDialogViewUiBinder.class);
     private MultiWordSuggestOracle wordSuggest = new MultiWordSuggestOracle();
 
-    public AddBookDialog() {
+    public AddBookDialogView() {
         authorBox = new SuggestBox(wordSuggest);
         initWidget(ourUiBinder.createAndBindUi(this));
         dialogPanel.setPopupPosition(100, 100);

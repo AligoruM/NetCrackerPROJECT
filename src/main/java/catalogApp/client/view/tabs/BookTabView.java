@@ -21,11 +21,11 @@ import java.util.logging.Logger;
 public class BookTabView extends Composite implements BookTabPresenter.Display {
 
 
-    interface BookTabUiBinder extends UiBinder<HTMLPanel, BookTabView> {
+    interface BookTabViewUiBinder extends UiBinder<HTMLPanel, BookTabView> {
     }
 
     private final ListDataProvider<Book> bookDataProvider = new ListDataProvider<>();
-    //private ObjectTable table = new ObjectTable(bookDataProvider.getList());
+    //private AbstractCatalogCellTable table = new AbstractCatalogCellTable(bookDataProvider.getList());
     private CellTable<Book> table = new CellTable<>();
 
     Logger logger = java.util.logging.Logger.getLogger("bookTab");
@@ -34,7 +34,7 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
     @UiField
     Button addButton;
 
-    private static BookTabUiBinder ourUiBinder = GWT.create(BookTabUiBinder.class);
+    private static BookTabViewUiBinder ourUiBinder = GWT.create(BookTabViewUiBinder.class);
 
     public BookTabView() {
         initWidget(ourUiBinder.createAndBindUi(this));

@@ -6,8 +6,8 @@ import catalogApp.client.presenter.AddBookDialogPresenter;
 import catalogApp.client.presenter.Presenter;
 import catalogApp.client.presenter.TabsPresenter;
 import catalogApp.client.services.TestService;
-import catalogApp.client.view.TabsView;
-import catalogApp.client.view.dialogs.AddBookDialog;
+import catalogApp.client.view.TabPanelView;
+import catalogApp.client.view.dialogs.AddBookDialogView;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
@@ -23,8 +23,8 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
     private HasWidgets container;
     private final TestService bookService;
 
-    public CatalogController(HandlerManager eventBus, TestService rest) {
-        this.bookService = rest;
+    public CatalogController(HandlerManager eventBus, TestService bookService) {
+        this.bookService = bookService;
         this.eventBus = eventBus;
         go(RootPanel.get());
     }
@@ -32,7 +32,7 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
     public void go(HasWidgets container) {
         this.container = container;
         bind();
-        TabsPresenter pr = new TabsPresenter(new TabsView(), eventBus, bookService);
+        TabsPresenter pr = new TabsPresenter(eventBus, bookService, new TabPanelView());
         pr.go(container);
     }
 
@@ -59,7 +59,7 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
             Presenter presenter = null;
             switch (token) {
                 case "addBook":
-                    presenter = new AddBookDialogPresenter(bookService, eventBus, new AddBookDialog());
+                    presenter = new AddBookDialogPresenter(bookService, eventBus, new AddBookDialogView());
                     break;
                 case "showBooks":
                     break;

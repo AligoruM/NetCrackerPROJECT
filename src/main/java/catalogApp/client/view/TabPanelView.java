@@ -10,20 +10,20 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.TabPanel;
 
 
-public class TabsView extends Composite implements TabsPresenter.Display {
+public class TabPanelView extends Composite implements TabsPresenter.Display {
 
-    @UiTemplate("TabsView.ui.xml")
-    interface MainScreenUiBinder extends UiBinder<Panel, TabsView> {
+    @UiTemplate("TabPanelView.ui.xml")
+    interface TabPanelViewUiBinder extends UiBinder<Panel, TabPanelView> {
     }
 
     @UiField
     TabPanel tabPanel;
 
-    private static MainScreenUiBinder mainScreenUiBinder = GWT.create(MainScreenUiBinder.class);
+    private static TabPanelViewUiBinder tabPanelViewUiBinder = GWT.create(TabPanelViewUiBinder.class);
 
 
-    public TabsView() {
-        initWidget(mainScreenUiBinder.createAndBindUi(this));
+    public TabPanelView() {
+        initWidget(tabPanelViewUiBinder.createAndBindUi(this));
     }
 
     @Override

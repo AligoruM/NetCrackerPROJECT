@@ -17,13 +17,13 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class SongTab extends Composite {
-    interface SongPanelUiBinder extends UiBinder<HTMLPanel, SongTab> {
+public class SongTabView extends Composite {
+    interface SongTabViewUiBinder extends UiBinder<HTMLPanel, SongTabView> {
     }
 
     private final static ListDataProvider<Song> songDataProvider = new ListDataProvider<>();
-    //private static TestService testService = TabsView.getTestService();
-    //private ObjectTable table = new ObjectTable(songDataProvider.getList());
+    //private static TestService testService = TabPanelView.getTestService();
+    //private AbstractCatalogCellTable table = new AbstractCatalogCellTable(songDataProvider.getList());
     private CellTable<Song> table = new CellTable<>();
 
     Logger logger = java.util.logging.Logger.getLogger("songTab");
@@ -32,9 +32,9 @@ public class SongTab extends Composite {
     @UiField
     Button addButton;
 
-    private static SongPanelUiBinder ourUiBinder = GWT.create(SongPanelUiBinder.class);
+    private static SongTabViewUiBinder ourUiBinder = GWT.create(SongTabViewUiBinder.class);
 
-    public SongTab() {
+    public SongTabView() {
         initWidget(ourUiBinder.createAndBindUi(this));
         initContent();
     }
