@@ -24,7 +24,7 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
     interface BookTabViewUiBinder extends UiBinder<HTMLPanel, BookTabView> {
     }
 
-    private final ListDataProvider<Book> bookDataProvider = new ListDataProvider<>();
+    private ListDataProvider<Book> bookDataProvider;
     //private AbstractCatalogCellTable table = new AbstractCatalogCellTable(bookDataProvider.getList());
     private CellTable<Book> table = new CellTable<>();
 
@@ -38,10 +38,8 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
 
     public BookTabView() {
         initWidget(ourUiBinder.createAndBindUi(this));
-        initializeTable();
         simplePanel.add(table);
     }
-
 
     private void initializeTable(){
         //table.addCustomColumn("Name", IBaseInterface::getName, new TextCell(), true);
@@ -83,5 +81,11 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
     @Override
     public CellTable<Book> getTable() {
         return table;
+    }
+
+    @Override
+    public void setDataProviderAndInitialize(ListDataProvider<Book> dataProvider) {
+        bookDataProvider = dataProvider;
+        initializeTable();
     }
 }

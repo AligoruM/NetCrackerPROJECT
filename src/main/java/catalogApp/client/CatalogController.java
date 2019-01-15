@@ -26,7 +26,6 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
     public CatalogController(HandlerManager eventBus, TestService bookService) {
         this.bookService = bookService;
         this.eventBus = eventBus;
-        go(RootPanel.get());
     }
 
     public void go(HasWidgets container) {
