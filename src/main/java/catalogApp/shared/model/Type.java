@@ -1,21 +1,14 @@
 package catalogApp.shared.model;
 
-import javax.persistence.*;
-import java.util.Objects;
-
-@Entity
-@Table(name = "Type")
 public class Type {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idTypes")
+
     private int id;
-    @Column(name = "Name")
     private String name;
 
-    /*public Type(String name) {
+    public Type(int id, String name) {
+        this.id = id;
         this.name = name;
-    }*/
+    }
 
     public Type() {
     }
@@ -38,23 +31,10 @@ public class Type {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("Type{");
+        final StringBuffer sb = new StringBuffer("Types{");
         sb.append("id=").append(id);
         sb.append(", name='").append(name).append('\'');
         sb.append('}');
         return sb.toString();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Type type = (Type) o;
-        return id == type.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 }

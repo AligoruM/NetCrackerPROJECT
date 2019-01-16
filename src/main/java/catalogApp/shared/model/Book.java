@@ -1,21 +1,9 @@
 package catalogApp.shared.model;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "Book")
 public class Book implements IBaseInterface{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idBook")
     private int id;
-    @Column(name = "Name")
     private String name;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "Types_idTypes", referencedColumnName = "idTypes")
     private Type type;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "Author_idAuthor", referencedColumnName = "idAuthor")
     private Author author;
 
     public Book() {

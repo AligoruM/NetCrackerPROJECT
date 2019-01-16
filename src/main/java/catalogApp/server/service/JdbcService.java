@@ -1,20 +1,28 @@
 package catalogApp.server.service;
 
+import catalogApp.server.config.SpringConfig;
 import catalogApp.server.dao.IJdbcDAO;
 import catalogApp.shared.model.Book;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
 
 import java.util.List;
 
-public class JdbcService {
-    private IJdbcDAO jdbcDAO;
 
-    @Autowired
-    public void setJdbcDAO(IJdbcDAO jdbcDAO) {
-        this.jdbcDAO = jdbcDAO;
+public class JdbcService {
+    private static AbstractApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+
+    private IJdbcDAO jdbcDAO = (IJdbcDAO) context.getBean("jdbcEavDAO");
+
+    public List<Book> getAllBooks(){
+        return jdbcDAO.getAllBooks();
     }
 
-    List<Book> getAllBooks(){
-        return jdbcDAO.getAllBooks();
+    public List<String> getAllAuthorsNames(){
+        return jdbcDAO.getAllAuthorNames();
+    }
+
+    public void addBook(String name, String authorName){
+        jdbcDAO.addBook(name, authorName);
     }
 }
