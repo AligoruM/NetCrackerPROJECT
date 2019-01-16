@@ -6,7 +6,6 @@ import catalogApp.shared.model.Book;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
@@ -20,6 +19,7 @@ public class BookTabPresenter implements Presenter {
     public interface Display{
         HasClickHandlers getAddButton();
         CellTable<Book> getTable();
+        void setDataProviderAndInitialize(ListDataProvider<Book> dataProvider);
         Widget asWidget();
     }
 
@@ -27,7 +27,7 @@ public class BookTabPresenter implements Presenter {
     private final HandlerManager eventBus;
     private final TestService bookService;
 
-    private static final ListDataProvider<Book> bookListDataProvider = new ListDataProvider<>();
+    private final ListDataProvider<Book> bookListDataProvider = new ListDataProvider<>();
 
     public BookTabPresenter(Display display, HandlerManager eventBus, TestService bookService) {
         this.display = display;
@@ -42,7 +42,7 @@ public class BookTabPresenter implements Presenter {
     }
 
     private void bind(){
-
+            display.setDataProviderAndInitialize(bookListDataProvider);
             bookService.getAllBooks(new MethodCallback<List<Book>>() {
                 @Override
                 public void onFailure(Method method, Throwable throwable) {

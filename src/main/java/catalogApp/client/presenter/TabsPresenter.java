@@ -16,8 +16,9 @@ public class TabsPresenter implements Presenter{
         Widget asWidget();
     }
 
-    HandlerManager eventBus;
-    TestService bookService;
+    private HandlerManager eventBus;
+    private TestService bookService;
+
     public TabsPresenter(HandlerManager eventBus, TestService bookService, Display view) {
         this.display = view;
         this.eventBus = eventBus;
@@ -31,6 +32,5 @@ public class TabsPresenter implements Presenter{
         display.getTabPanel().add(bookTabView, "Books");
         display.getTabPanel().selectTab(0);
         bookTabPresenter.go(container);
-        //bookTabPresenter.go();
     }
 }
