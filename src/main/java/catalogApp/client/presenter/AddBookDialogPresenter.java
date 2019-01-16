@@ -74,6 +74,7 @@ public class AddBookDialogPresenter implements Presenter {
                 public void onSuccess(Method method, Void aVoid) {
                     Window.alert("Added!");
                     display.hideDialog();
+                    eventBus.fireEvent(new ClosedDialogEvent());
                 }
             });
         });

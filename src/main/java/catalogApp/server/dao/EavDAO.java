@@ -1,14 +1,19 @@
 package catalogApp.server.dao;
 
+import catalogApp.server.dao.constants.Attribure;
 import catalogApp.server.dao.constants.SQLQuery;
 import catalogApp.server.dao.constants.Types;
 import catalogApp.server.dao.mapper.BookMapper;
 import catalogApp.shared.model.Book;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Repository("jdbcEavDAO")
@@ -31,12 +36,34 @@ public class EavDAO implements IJdbcDAO {
 
     @Override
     public boolean addBook(String name, String authorName) {
-        List<String> author_id = jdbcTemplate.query(SQLQuery.AUTHOR_ID_BY_NAME(authorName),(resultSet, i) -> resultSet.getString("idObject"));
-        if(author_id.isEmpty()){
-            jdbcTemplate.execute(SQLQuery.CREATE_OBJECT(authorName, Types.AUTHOR));
-            author_id = jdbcTemplate.query(SQLQuery.AUTHOR_ID_BY_NAME(authorName), (resultSet, i) -> resultSet.getString("idObject"));
+        int author_id;
+        int book_id;
+        try {
+            author_id = jdbcTemplate.queryForObject(SQLQuery.AUTHOR_ID_BY_NAME(authorName), (rs, rowNum) -> rs.getInt("idObject"));
+        } catch (IncorrectResultSizeDataAccessException exception) {
+            SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
+            author_id = jdbcInsert.withTableName("Object")
+                    .usingGeneratedKeyColumns("idObject")
+                    .executeAndReturnKey(new HashMap<String, String>() {{
+                        put("name", authorName);
+                        put("idType", String.valueOf(Types.AUTHOR));
+                    }})
+                    .intValue();
         }
-        jdbcTemplate.execute(SQLQuery.CREATE_OBJECT(name, Types.BOOK));
-        jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(author_id.get(0), ));
+        SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
+        book_id = jdbcInsert.withTableName("Object")
+                .usingGeneratedKeyColumns("idObject")
+                .executeAndReturnKey(new HashMap<String, String>() {{
+                    put("name", name);
+                    put("idType", String.valueOf(Types.BOOK));
+                }})
+                .intValue();
+        try {
+            jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(String.valueOf(author_id), book_id, Attribure.BOOK_AUTHOR_ID));
+            return true;
+        }catch (DataAccessException ex){
+            ex.printStackTrace();
+            return false;
+        }
     }
 }
