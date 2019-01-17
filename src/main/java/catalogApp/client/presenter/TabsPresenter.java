@@ -1,7 +1,9 @@
 package catalogApp.client.presenter;
 
-import catalogApp.client.services.TestService;
-import catalogApp.client.view.tabs.BookTabView;
+import catalogApp.client.services.BookWebService;
+import catalogApp.client.services.SongWebService;
+import catalogApp.client.view.mainPage.tabs.BookTabView;
+import catalogApp.client.view.mainPage.tabs.SongTabView;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.TabPanel;
@@ -17,20 +19,30 @@ public class TabsPresenter implements Presenter{
     }
 
     private HandlerManager eventBus;
-    private TestService bookService;
+    private BookWebService bookWebService;
+    private SongWebService songWebService;
 
-    public TabsPresenter(HandlerManager eventBus, TestService bookService, Display view) {
+    public TabsPresenter(Display view, HandlerManager eventBus, BookWebService bookWebService, SongWebService songWebService ) {
         this.display = view;
         this.eventBus = eventBus;
-        this.bookService = bookService;
+        this.bookWebService = bookWebService;
+        this.songWebService = songWebService;
     }
 
     public void go(final HasWidgets container) {
         container.add(display.asWidget());
+
         BookTabView bookTabView = new BookTabView();
-        BookTabPresenter bookTabPresenter= new BookTabPresenter(bookTabView, eventBus, bookService);
+        BookTabPresenter bookTabPresenter= new BookTabPresenter(bookTabView, eventBus, bookWebService);
+
+        SongTabView songTabView = new SongTabView();
+        SongTabPresenter songTabPresenter= new SongTabPresenter(songTabView, eventBus, songWebService);
+
         display.getTabPanel().add(bookTabView, "Books");
+        display.getTabPanel().add(songTabView, "Songs");
         display.getTabPanel().selectTab(0);
+
         bookTabPresenter.go(container);
+        songTabPresenter.go(container);
     }
 }

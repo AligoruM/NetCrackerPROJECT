@@ -1,7 +1,7 @@
 package catalogApp.client.presenter;
 
 import catalogApp.client.event.ClosedDialogEvent;
-import catalogApp.client.services.TestService;
+import catalogApp.client.services.BookWebService;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;
@@ -33,10 +33,10 @@ public class AddBookDialogPresenter implements Presenter {
 
     private final HandlerManager eventBus;
     private final Display display;
-    private final TestService bookService;
+    private final BookWebService bookService;
 
-    public AddBookDialogPresenter(TestService rest, HandlerManager eventBus, Display view) {
-        this.bookService = rest;
+    public AddBookDialogPresenter(Display view, BookWebService bookService, HandlerManager eventBus) {
+        this.bookService = bookService;
         this.eventBus = eventBus;
         this.display = view;
     }

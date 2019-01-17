@@ -1,7 +1,8 @@
 package catalogApp.client.presenter;
 
 import catalogApp.client.event.AddBookEvent;
-import catalogApp.client.services.TestService;
+import catalogApp.client.services.BookWebService;
+import catalogApp.client.view.components.AbstractCatalogCellTable;
 import catalogApp.shared.model.Book;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerManager;
@@ -18,18 +19,17 @@ import java.util.List;
 public class BookTabPresenter implements Presenter {
     public interface Display{
         HasClickHandlers getAddButton();
-        CellTable<Book> getTable();
         void setDataProviderAndInitialize(ListDataProvider<Book> dataProvider);
         Widget asWidget();
     }
 
     private final Display display;
     private final HandlerManager eventBus;
-    private final TestService bookService;
+    private final BookWebService bookService;
 
     private final ListDataProvider<Book> bookListDataProvider = new ListDataProvider<>();
 
-    public BookTabPresenter(Display display, HandlerManager eventBus, TestService bookService) {
+    public BookTabPresenter(Display display, HandlerManager eventBus, BookWebService bookService) {
         this.display = display;
         this.eventBus = eventBus;
         this.bookService = bookService;
@@ -38,7 +38,6 @@ public class BookTabPresenter implements Presenter {
     @Override
     public void go(HasWidgets container) {
         bind();
-        //container.add(display.asWidget());
     }
 
     private void bind(){
@@ -54,8 +53,6 @@ public class BookTabPresenter implements Presenter {
                     bookListDataProvider.getList().addAll(books);
                 }
             });
-
-            bookListDataProvider.addDataDisplay(display.getTable());
 
         display.getAddButton().addClickHandler(event -> eventBus.fireEvent(new AddBookEvent()));
     }

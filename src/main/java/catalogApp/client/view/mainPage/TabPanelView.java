@@ -1,4 +1,4 @@
-package catalogApp.client.view;
+package catalogApp.client.view.mainPage;
 
 import catalogApp.client.presenter.TabsPresenter;
 import com.google.gwt.core.client.GWT;

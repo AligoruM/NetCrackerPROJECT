@@ -1,31 +1,21 @@
 package catalogApp.shared.model;
 
-public class Author {
-
-    private int id;
-    private String name;
+public class Author extends BaseObject{
 
     public Author() {
     }
 
-    public Author(String name) {
-        this.name = name;
+    public Author(int id, String name, Type type) {
+        super(id, name, type);
     }
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
+    @Override
+    public String toString() {
+        return "Author{" +
+                "id=" + getId() +
+                ", name='" + getName() + '\'' +
+                ", type=" + getType() +
+                '}';
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
 }

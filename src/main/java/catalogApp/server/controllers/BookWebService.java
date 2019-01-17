@@ -11,8 +11,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-@Path("/test")
-public class TestController {
+@Path("/")
+public class BookWebService {
 
     private JdbcService jdbcService = new JdbcService();
 

@@ -9,20 +9,17 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import java.util.List;
 
-public interface TestService extends RestService {
+public interface BookWebService extends RestService {
     @POST
-    @Path("rest/test/book")
+    @Path("rest/book")
     void getAllBooks(MethodCallback<List<Book>> callback);
 
     @POST
-    @Path("rest/test/addBook")
+    @Path("rest/addBook")
     void addBook(List<String> params, MethodCallback<Void> callback);
 
     @POST
-    @Path("rest/test/getAuthor")
+    @Path("rest/getAuthor")
     void getAllAuthor(MethodCallback<List<String>> callback);
 
-    @POST
-    @Path("rest/test/getSong")
-    void getAllSongs(MethodCallback<List<Song>> callback);
 }

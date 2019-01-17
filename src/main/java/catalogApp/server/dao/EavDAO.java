@@ -4,7 +4,9 @@ import catalogApp.server.dao.constants.Attribure;
 import catalogApp.server.dao.constants.SQLQuery;
 import catalogApp.server.dao.constants.Types;
 import catalogApp.server.dao.mapper.BookMapper;
+import catalogApp.server.dao.mapper.SongMapper;
 import catalogApp.shared.model.Book;
+import catalogApp.shared.model.Song;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -12,16 +14,22 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
 
 @Repository("jdbcEavDAO")
+@Transactional
 public class EavDAO implements IJdbcDAO {
+    private final JdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
     @Autowired
-    private JdbcTemplate jdbcTemplate;
-    @Autowired
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    public EavDAO(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+    }
 
 
     @Override
@@ -65,5 +73,10 @@ public class EavDAO implements IJdbcDAO {
             ex.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public List<Song> getAllSongs() {
+        return jdbcTemplate.query(SQLQuery.ALL_SONGS(), new SongMapper());
     }
 }

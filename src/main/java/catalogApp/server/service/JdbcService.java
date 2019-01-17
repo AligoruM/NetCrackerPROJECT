@@ -3,6 +3,7 @@ package catalogApp.server.service;
 import catalogApp.server.config.SpringConfig;
 import catalogApp.server.dao.IJdbcDAO;
 import catalogApp.shared.model.Book;
+import catalogApp.shared.model.Song;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 
@@ -24,5 +25,9 @@ public class JdbcService {
 
     public void addBook(String name, String authorName){
         jdbcDAO.addBook(name, authorName);
+    }
+
+    public List<Song> getAllSong(){
+        return jdbcDAO.getAllSongs();
     }
 }

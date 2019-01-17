@@ -9,13 +9,16 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 import javax.sql.DataSource;
 
 @Configuration
 @ComponentScan(basePackages = "catalogApp")
 @PropertySource(value = {"classpath:application.properties"})
-public class SpringConfig {
+public class SpringConfig{
 
     private final Environment environment;
 

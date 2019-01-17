@@ -1,16 +1,18 @@
 package catalogApp.shared.model;
 
-public class Type {
+public class BaseObject {
 
     private int id;
     private String name;
+    private Type type;
 
-    public Type(int id, String name) {
+    public BaseObject(int id, String name, Type type) {
         this.id = id;
         this.name = name;
+        this.type = type;
     }
 
-    public Type() {
+    public BaseObject() {
     }
 
     public int getId() {
@@ -29,12 +31,19 @@ public class Type {
         this.name = name;
     }
 
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("Type{");
-        sb.append("id=").append(id);
-        sb.append(", name='").append(name).append('\'');
-        sb.append('}');
-        return sb.toString();
+        return "BaseObject{" + "id=" + id +
+                ", name='" + name + '\'' +
+                ", type=" + type +
+                '}';
     }
 }
