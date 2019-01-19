@@ -2,6 +2,8 @@ package catalogApp.client;
 
 import catalogApp.client.event.AddBookEvent;
 import catalogApp.client.event.ClosedDialogEvent;
+import catalogApp.client.event.ShowBooksEvent;
+import catalogApp.client.event.ShowSongsEvent;
 import catalogApp.client.presenter.AddBookDialogPresenter;
 import catalogApp.client.presenter.Presenter;
 import catalogApp.client.presenter.TabsPresenter;
@@ -23,6 +25,8 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
     private final BookWebService bookWebService;
     private final SongWebService songWebService;
 
+    TabsPresenter tabsPresenter;
+
     public CatalogController(HandlerManager eventBus, BookWebService bookService, SongWebService songWebService) {
         this.songWebService = songWebService;
         this.bookWebService = bookService;
@@ -32,23 +36,33 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
     public void go(HasWidgets container) {
         this.container = container;
         bind();
-        TabsPresenter pr = new TabsPresenter(new TabPanelView(), eventBus, bookWebService, songWebService);
-        pr.go(container);
+        tabsPresenter = new TabsPresenter(new TabPanelView(), eventBus, bookWebService, songWebService);
+        tabsPresenter.go(container);
     }
 
-    private void bind(){
+    private void bind() {
         History.addValueChangeHandler(this);
 
         eventBus.addHandler(AddBookEvent.TYPE, event -> doAddNewBook());
         eventBus.addHandler(ClosedDialogEvent.TYPE, event -> doClosedDialog());
+        eventBus.addHandler(ShowBooksEvent.TYPE, event -> doShowBooks());
+        eventBus.addHandler(ShowSongsEvent.TYPE, event -> doShowSongs());
     }
 
     private void doAddNewBook() {
         History.newItem("addBook");
     }
 
-    private void doClosedDialog(){
+    private void doClosedDialog() {
         History.newItem("");
+    }
+
+    private void doShowBooks() {
+        History.newItem("showBooks");
+    }
+
+    private void doShowSongs() {
+        History.newItem("showSongs");
     }
 
     @Override
@@ -61,8 +75,10 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
                     presenter = new AddBookDialogPresenter(new AddBookDialogView(), bookWebService, eventBus);
                     break;
                 case "showBooks":
+                    tabsPresenter.showBooks();
                     break;
-                case "....":
+                case "showSongs":
+                    tabsPresenter.showSongs();
                     break;
                 case ".....":
                     break;

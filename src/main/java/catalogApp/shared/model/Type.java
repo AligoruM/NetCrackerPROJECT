@@ -31,10 +31,8 @@ public class Type {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("Type{");
-        sb.append("id=").append(id);
-        sb.append(", name='").append(name).append('\'');
-        sb.append('}');
-        return sb.toString();
+        return "Type{" + "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

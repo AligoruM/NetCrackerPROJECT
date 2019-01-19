@@ -11,8 +11,10 @@ public class SongGenre extends BaseObject{
 
     @Override
     public String toString() {
-        return "SongGenre{" + "id=" + getId() +
+        return "SongGenre{" +
+                "id=" + getId() +
                 ", name='" + getName() + '\'' +
+                ", type=" + getType() +
                 '}';
     }
 }

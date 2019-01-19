@@ -27,6 +27,14 @@ public class SQLQuery {
         return "select O.idObject as idObject, O.name as name, AV.value as duration, AV3.idObject as idGenre, AV3.name as genreName" +
                 "  from Object O  join AttributeValue AV on (O.idObject = AV.id_object and AV.id_attribute=" + Attribure.SONG_DURATION + ")" +
                 "  join AttributeValue AV2 on (O.idObject=AV2.id_object and AV2.id_attribute=" + Attribure.SONG_GENRE_ID + ")" +
-                "  join (select idObject, name from Object where idType=" + Types.GENRE +") AV3 on AV2.value=AV3.idObject";
+                "  join (select idObject, name from Object where idType=" + Types.SONG_GENRE +") AV3 on AV2.value=AV3.idObject";
+    }
+
+    public static String USER_BY_NAME(String name){
+     return "select O.idObject as idObject, O.name as objectName, AV.value as password, AV2.value as role, AV3.value as active from Object O" +
+             " join AttributeValue AV on O.idObject = AV.id_object and Av.id_attribute=" + Attribure.USER_PASSWORD +
+             " join AttributeValue AV2 on O.idObject = AV2.id_object and AV2.id_attribute=" + Attribure.USER_ROLE +
+             " join AttributeValue AV3 on O.idObject = AV3.id_object and AV3.id_attribute=" + Attribure.USER_ACTIVE +
+             " where objectName = \"" + name + "\"";
     }
 }

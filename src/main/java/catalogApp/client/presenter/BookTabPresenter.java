@@ -15,18 +15,21 @@ import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 public class BookTabPresenter implements Presenter {
-    public interface Display{
+    public interface Display {
         HasClickHandlers getAddButton();
+
         void setDataProviderAndInitialize(ListDataProvider<Book> dataProvider);
+
         Widget asWidget();
     }
 
+    private boolean loaded = false;
     private final Display display;
     private final HandlerManager eventBus;
     private final BookWebService bookService;
-
     private final ListDataProvider<Book> bookListDataProvider = new ListDataProvider<>();
 
     public BookTabPresenter(Display display, HandlerManager eventBus, BookWebService bookService) {
@@ -40,21 +43,30 @@ public class BookTabPresenter implements Presenter {
         bind();
     }
 
-    private void bind(){
-            display.setDataProviderAndInitialize(bookListDataProvider);
-            bookService.getAllBooks(new MethodCallback<List<Book>>() {
-                @Override
-                public void onFailure(Method method, Throwable throwable) {
-                    Window.alert("getAllBooks doesnt work");
-                }
-
-                @Override
-                public void onSuccess(Method method, List<Book> books) {
-                    bookListDataProvider.getList().addAll(books);
-                }
-            });
-
+    private void bind() {
+        display.setDataProviderAndInitialize(bookListDataProvider);
         display.getAddButton().addClickHandler(event -> eventBus.fireEvent(new AddBookEvent()));
     }
 
+    public void loadData() {
+        if (!loaded) {
+            bookService.getAllBooks(new MethodCallback<List<Book>>() {
+                @Override
+                public void onFailure(Method method, Throwable throwable) {
+                    StringBuilder string = new StringBuilder();
+                    for (StackTraceElement element : throwable.getStackTrace()) {
+                        string.append(element).append("\n");
+                    }
+                    Window.alert("getAllBooks doesnt work\n" + throwable.getMessage() + "\n" + string);
+
+                }
+
+                @Override
+                public void onSuccess(Method method, List<Book> songs) {
+                    bookListDataProvider.getList().addAll(songs);
+                    loaded = true;
+                }
+            });
+        }
+    }
 }

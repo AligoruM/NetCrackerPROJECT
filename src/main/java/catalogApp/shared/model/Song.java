@@ -1,7 +1,5 @@
 package catalogApp.shared.model;
 
-import javax.persistence.*;
-
 public class Song extends BaseObject{
 
     private int duration;
@@ -10,10 +8,8 @@ public class Song extends BaseObject{
     public Song() {
     }
 
-    public Song(int id, String name, Type type, int duration, SongGenre genre) {
+    public Song(int id, String name, Type type) {
         super(id, name, type);
-        this.duration = duration;
-        this.genre = genre;
     }
 
     public int getDuration() {

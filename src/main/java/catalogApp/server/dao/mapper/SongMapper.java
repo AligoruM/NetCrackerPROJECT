@@ -12,7 +12,7 @@ import java.sql.SQLException;
 
 public class SongMapper implements RowMapper<Song> {
     private static Type songType = new Type(Types.SONG, "Song");
-    private static Type genreType = new Type(Types.GENRE, "SongGenre");
+    private static Type genreType = new Type(Types.SONG_GENRE, "SongGenre");
     @Override
     public Song mapRow(ResultSet rs, int rowNum) throws SQLException {
         Song song = new Song();
@@ -20,7 +20,7 @@ public class SongMapper implements RowMapper<Song> {
 
         genre.setId(rs.getInt("idGenre"));
         genre.setName(rs.getString("genreName"));
-        genre.setType(genreType);
+        //genre.setType(genreType);
 
         song.setId(rs.getInt("idObject"));
         song.setName(rs.getString("name"));

@@ -5,9 +5,12 @@ import catalogApp.server.dao.constants.SQLQuery;
 import catalogApp.server.dao.constants.Types;
 import catalogApp.server.dao.mapper.BookMapper;
 import catalogApp.server.dao.mapper.SongMapper;
+import catalogApp.server.dao.mapper.UserMapper;
 import catalogApp.shared.model.Book;
 import catalogApp.shared.model.Song;
+import catalogApp.shared.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 
-@Repository("jdbcEavDAO")
 @Transactional
 public class EavDAO implements IJdbcDAO {
     private final JdbcTemplate jdbcTemplate;
@@ -79,4 +81,5 @@ public class EavDAO implements IJdbcDAO {
     public List<Song> getAllSongs() {
         return jdbcTemplate.query(SQLQuery.ALL_SONGS(), new SongMapper());
     }
+
 }

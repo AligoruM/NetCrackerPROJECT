@@ -4,10 +4,63 @@
          xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
-    <http />
+    <authentication-manager>
+        <authentication-provider ref="authenticationProvider"/>
+    </authentication-manager>
 
-    <user-service>
-        <user name="admin" password="admin" authorities="ADMIN" />
-    </user-service>
+    <global-method-security secured-annotations="enabled" />
+
+    <b:bean name="authenticationProvider" class="catalogApp.server.security.CustomAuthenticationProvider" >
+        <b:property name="userDetailsService" ref="userDetailsService"/>
+    </b:bean>
+
+    <http auto-config='true' use-expressions="false">
+        <csrf disabled="true"/>
+        <intercept-url pattern="/index.html" access="ROLE_USER, ROLE_ADMIN"/>
+        <intercept-url pattern="/catalogApp/rest/**" access="ROLE_USER, ROLE_ADMIN"/>
+        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <logout logout-success-url="/j_spring_security_check"/>
+    </http>
+
+    <b:bean id="userDetailsService" class="catalogApp.server.security.UserDetailsServiceImpl">
+        <b:constructor-arg ref="authDAO"/>
+    </b:bean>
+
+    <b:bean id="jdbcService" class="catalogApp.server.service.JdbcService">
+        <b:constructor-arg ref="jdbcEavDAO"/>
+    </b:bean>
+
+    <b:bean id="authDAO" class="catalogApp.server.dao.AuthDAO">
+        <b:constructor-arg ref="jdbcTemplate"/>
+    </b:bean>
+
+    <b:bean id="jdbcEavDAO" class="catalogApp.server.dao.EavDAO">
+        <b:constructor-arg ref="jdbcTemplate"/>
+        <b:constructor-arg ref="namedParameterJdbcTemplate"/>
+    </b:bean>
+
+    <b:bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <b:constructor-arg ref="dataSource"/>
+    </b:bean>
+
+    <b:bean id="namedParameterJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+        <b:constructor-arg ref="dataSource"/>
+    </b:bean>
+
+    <b:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+        <b:constructor-arg  value="10" />
+    </b:bean>
+
+    <b:bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <b:property name="driverClassName" value="org.sqlite.JDBC" />
+        <b:property name="url" value="jdbc:sqlite:C://Users//Сергей//IdeaProjects//NetCrackerPROJECT//DataBase//EAV_DB.db"/>
+    </b:bean>
+
+    <b:bean id="bookController" class="catalogApp.server.controllers.BookWebService">
+        <b:property name="jdbcService" ref="jdbcService"/>
+    </b:bean>
+    <b:bean class="catalogApp.server.controllers.SongWebService" id="songWebService">
+        <b:property name="jdbcService" ref="jdbcService"/>
+    </b:bean>
 
 </b:beans>
