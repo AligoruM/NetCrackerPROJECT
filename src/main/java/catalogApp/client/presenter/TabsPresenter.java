@@ -6,8 +6,6 @@ import catalogApp.client.services.BookWebService;
 import catalogApp.client.services.SongWebService;
 import catalogApp.client.view.mainPage.tabs.BookTabView;
 import catalogApp.client.view.mainPage.tabs.SongTabView;
-import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.TabPanel;

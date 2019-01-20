@@ -2,11 +2,9 @@ package catalogApp.client.presenter;
 
 import catalogApp.client.event.AddBookEvent;
 import catalogApp.client.services.BookWebService;
-import catalogApp.client.view.components.AbstractCatalogCellTable;
 import catalogApp.shared.model.Book;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
@@ -15,7 +13,6 @@ import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 public class BookTabPresenter implements Presenter {
     public interface Display {
@@ -30,7 +27,7 @@ public class BookTabPresenter implements Presenter {
     private final Display display;
     private final HandlerManager eventBus;
     private final BookWebService bookService;
-    private final ListDataProvider<Book> bookListDataProvider = new ListDataProvider<>();
+    private final static ListDataProvider<Book> bookListDataProvider = new ListDataProvider<>();
 
     public BookTabPresenter(Display display, HandlerManager eventBus, BookWebService bookService) {
         this.display = display;
@@ -68,5 +65,9 @@ public class BookTabPresenter implements Presenter {
                 }
             });
         }
+    }
+
+    public static ListDataProvider<Book> getBookListDataProvider() {
+        return bookListDataProvider;
     }
 }

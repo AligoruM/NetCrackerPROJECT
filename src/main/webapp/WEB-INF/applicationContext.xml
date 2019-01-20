@@ -26,6 +26,18 @@
         <b:constructor-arg ref="authDAO"/>
     </b:bean>
 
+<!--    <b:bean id="authWebService" class="catalogApp.server.controllers.AuthWebService">
+        <b:constructor-arg ref="authDAO"/>
+    </b:bean>-->
+
+    <b:bean id="bookWebService" class="catalogApp.server.controllers.BookWebService">
+        <b:property name="jdbcService" ref="jdbcService"/>
+    </b:bean>
+
+    <b:bean id="songWebService" class="catalogApp.server.controllers.SongWebService" >
+        <b:property name="jdbcService" ref="jdbcService"/>
+    </b:bean>
+
     <b:bean id="jdbcService" class="catalogApp.server.service.JdbcService">
         <b:constructor-arg ref="jdbcEavDAO"/>
     </b:bean>
@@ -56,11 +68,5 @@
         <b:property name="url" value="jdbc:sqlite:C://Users//Сергей//IdeaProjects//NetCrackerPROJECT//DataBase//EAV_DB.db"/>
     </b:bean>
 
-    <b:bean id="bookController" class="catalogApp.server.controllers.BookWebService">
-        <b:property name="jdbcService" ref="jdbcService"/>
-    </b:bean>
-    <b:bean class="catalogApp.server.controllers.SongWebService" id="songWebService">
-        <b:property name="jdbcService" ref="jdbcService"/>
-    </b:bean>
 
 </b:beans>

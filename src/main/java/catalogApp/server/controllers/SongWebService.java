@@ -1,9 +1,8 @@
 package catalogApp.server.controllers;
 
 import catalogApp.server.service.JdbcService;
-import catalogApp.shared.model.Book;
 import catalogApp.shared.model.Song;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,7 +13,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @Service
-@RestController
+@Controller
 @Path("/")
 public class SongWebService {
 

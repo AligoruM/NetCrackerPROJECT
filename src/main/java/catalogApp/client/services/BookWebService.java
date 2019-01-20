@@ -1,7 +1,6 @@
 package catalogApp.client.services;
 
 import catalogApp.shared.model.Book;
-import catalogApp.shared.model.Song;
 import org.fusesource.restygwt.client.MethodCallback;
 import org.fusesource.restygwt.client.RestService;
 
@@ -16,7 +15,7 @@ public interface BookWebService extends RestService {
 
     @POST
     @Path("rest/addBook")
-    void addBook(List<String> params, MethodCallback<Void> callback);
+    void addBook(List<String> params, MethodCallback<Book> callback);
 
     @POST
     @Path("rest/getAuthor")

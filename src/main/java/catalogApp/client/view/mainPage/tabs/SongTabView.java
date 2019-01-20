@@ -8,6 +8,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -23,11 +24,12 @@ public class SongTabView extends Composite implements SongTabPresenter.Display {
 
     private AbstractCatalogCellTable<Song> table = new AbstractCatalogCellTable<>();
 
-    Logger logger = java.util.logging.Logger.getLogger("songTab");
     @UiField
     SimplePanel simplePanel;
     @UiField
     Button addButton;
+    @UiField
+    SimplePager pager;
 
     private static SongTabViewUiBinder ourUiBinder = GWT.create(SongTabViewUiBinder.class);
 
@@ -37,6 +39,8 @@ public class SongTabView extends Composite implements SongTabPresenter.Display {
     }
 
     private void initializeTable(ListDataProvider<Song> dataProvider){
+        pager.setDisplay(table);
+        table.setPageSize(3);
         table.setDataProvider(dataProvider);
         table.addColumn(CellTableColumns.getSongGenreColumn(true), "Genre");
         table.addColumn(CellTableColumns.getSongDurationColumn(true), "Duration");

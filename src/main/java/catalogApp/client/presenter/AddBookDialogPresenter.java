@@ -2,6 +2,8 @@ package catalogApp.client.presenter;
 
 import catalogApp.client.event.ClosedDialogEvent;
 import catalogApp.client.services.BookWebService;
+import catalogApp.shared.model.Book;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;
@@ -64,15 +66,15 @@ public class AddBookDialogPresenter implements Presenter {
         display.getSubmitButton().addClickHandler(event -> {
             //TODO validation
             List<String> tmp = display.getAddInfo();
-            bookService.addBook(tmp, new MethodCallback<Void>() {
+            bookService.addBook(tmp, new MethodCallback<Book>() {
                 @Override
                 public void onFailure(Method method, Throwable throwable) {
-                    Window.alert("Adding doesnt work");
+                    GWT.log("Adding doesnt work", throwable);
                 }
 
                 @Override
-                public void onSuccess(Method method, Void aVoid) {
-                    Window.alert("Added!");
+                public void onSuccess(Method method, Book book) {
+                    BookTabPresenter.getBookListDataProvider().getList().add(book);
                     display.hideDialog();
                     eventBus.fireEvent(new ClosedDialogEvent());
                 }

@@ -6,11 +6,13 @@ import catalogApp.client.event.ShowBooksEvent;
 import catalogApp.client.event.ShowSongsEvent;
 import catalogApp.client.presenter.AddBookDialogPresenter;
 import catalogApp.client.presenter.Presenter;
+import catalogApp.client.presenter.ProfileBarPresenter;
 import catalogApp.client.presenter.TabsPresenter;
 import catalogApp.client.services.BookWebService;
 import catalogApp.client.services.SongWebService;
-import catalogApp.client.view.mainPage.TabPanelView;
 import catalogApp.client.view.dialogs.AddBookDialogView;
+import catalogApp.client.view.mainPage.ProfileBarView;
+import catalogApp.client.view.mainPage.TabPanelView;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
@@ -25,7 +27,7 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
     private final BookWebService bookWebService;
     private final SongWebService songWebService;
 
-    TabsPresenter tabsPresenter;
+    private TabsPresenter tabsPresenter;
 
     public CatalogController(HandlerManager eventBus, BookWebService bookService, SongWebService songWebService) {
         this.songWebService = songWebService;
@@ -36,7 +38,9 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
     public void go(HasWidgets container) {
         this.container = container;
         bind();
+        ProfileBarPresenter profileBarPresenter = new ProfileBarPresenter(new ProfileBarView(), eventBus);
         tabsPresenter = new TabsPresenter(new TabPanelView(), eventBus, bookWebService, songWebService);
+        profileBarPresenter.go(container);
         tabsPresenter.go(container);
     }
 

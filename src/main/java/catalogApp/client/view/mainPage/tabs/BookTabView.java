@@ -6,10 +6,12 @@ import catalogApp.client.view.components.CellTableColumns;
 import catalogApp.shared.model.BaseObject;
 import catalogApp.shared.model.Book;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
+import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -31,6 +33,8 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
     SimplePanel simplePanel;
     @UiField
     Button addButton;
+    @UiField
+    SimplePager pager;
 
     private static BookTabViewUiBinder ourUiBinder = GWT.create(BookTabViewUiBinder.class);
 
@@ -40,9 +44,11 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
     }
 
     private void initializeTable(ListDataProvider<Book> dataProvider){
+        pager.setDisplay(table);
+        table.setPageSize(3);
         table.setDataProvider(dataProvider);
         table.addColumn(CellTableColumns.getBookAuthorNameColumn(true), "Author");
-
+        table.setColumnWidth(2, 200, Style.Unit.PX);
         ColumnSortEvent.ListHandler<Book> authorSorter = new ColumnSortEvent.ListHandler<>(dataProvider.getList());
         authorSorter.setComparator(table.getColumn(2), Comparator.comparing(BaseObject::getId));
         table.addColumnSortHandler(authorSorter);

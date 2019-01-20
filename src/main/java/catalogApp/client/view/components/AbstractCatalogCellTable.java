@@ -2,9 +2,8 @@ package catalogApp.client.view.components;
 
 
 import catalogApp.shared.model.BaseObject;
-
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.cellview.client.CellTable;
-
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.view.client.ListDataProvider;
@@ -24,7 +23,8 @@ public class AbstractCatalogCellTable<T extends BaseObject> extends CellTable<T>
     public AbstractCatalogCellTable() {
         addColumn(idColumn, "ID");
         addColumn(nameColumn, "Name");
-
+        setColumnWidth(0, 50, com.google.gwt.dom.client.Style.Unit.PX);
+        setColumnWidth(1, 200, com.google.gwt.dom.client.Style.Unit.PX);
         nameSorter = new ColumnSortEvent.ListHandler<>(dataProvider.getList());
         nameSorter.setComparator(getColumn(1), Comparator.comparing(BaseObject::getName));
         addColumnSortHandler(nameSorter);
