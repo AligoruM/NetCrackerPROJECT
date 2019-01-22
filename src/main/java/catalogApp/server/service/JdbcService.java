@@ -1,8 +1,11 @@
 package catalogApp.server.service;
 
+import catalogApp.server.dao.AuthDAO;
 import catalogApp.server.dao.IJdbcDAO;
 import catalogApp.shared.model.Book;
 import catalogApp.shared.model.Song;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,9 +15,11 @@ import java.util.List;
 public class JdbcService {
 
     private IJdbcDAO jdbcDAO;
+    private AuthDAO authDAO;
 
-    public JdbcService(IJdbcDAO jdbcDAO) {
+    public JdbcService(IJdbcDAO jdbcDAO, AuthDAO authDAO) {
         this.jdbcDAO = jdbcDAO;
+        this.authDAO = authDAO;
     }
 
     public List<Book> getAllBooks(){
@@ -33,4 +38,9 @@ public class JdbcService {
         return jdbcDAO.getAllSongs();
     }
 
+    public List<Integer> getLikedBooksIds(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        int user_id = authDAO.getSimpleUser(authentication.getName()).getId();
+        return jdbcDAO.getBooksIdsByUserId(user_id);
+    }
 }

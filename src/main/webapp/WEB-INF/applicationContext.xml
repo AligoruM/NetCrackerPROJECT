@@ -40,6 +40,7 @@
 
     <b:bean id="jdbcService" class="catalogApp.server.service.JdbcService">
         <b:constructor-arg ref="jdbcEavDAO"/>
+        <b:constructor-arg ref="authDAO"/>
     </b:bean>
 
     <b:bean id="authDAO" class="catalogApp.server.dao.AuthDAO">

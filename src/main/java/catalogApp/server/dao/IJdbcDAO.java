@@ -14,4 +14,6 @@ public interface IJdbcDAO {
     Book addBook(String name, String authorName);
 
     List<Song> getAllSongs();
+
+    List<Integer> getBooksIdsByUserId(int id);
 }

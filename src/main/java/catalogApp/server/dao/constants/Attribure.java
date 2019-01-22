@@ -7,4 +7,5 @@ public class Attribure {
     public static final int USER_PASSWORD = 7;
     public static final int USER_ROLE = 8;
     public static final int USER_ACTIVE = 9;
+    public static final int LIKED_BOOK_ID = 10;
 }

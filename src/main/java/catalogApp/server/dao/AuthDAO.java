@@ -23,6 +23,6 @@ public class AuthDAO {
     public SimpleUser getSimpleUser(String name){
         int id = jdbcTemplate.queryForObject(SQLQuery.USER_ID_BY_NAME(name), (rs, rowNum) -> rs.getInt("id"));
         String role = jdbcTemplate.queryForObject(SQLQuery.USER_ROLE_BY_ID(id), (rs, rowNum) -> rs.getString("role"));
-        return new SimpleUser(name, role);
+        return new SimpleUser(id, name, role);
     }
 }

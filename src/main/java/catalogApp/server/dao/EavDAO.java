@@ -11,10 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -76,6 +79,11 @@ public class EavDAO implements IJdbcDAO {
     @Override
     public List<Song> getAllSongs() {
         return jdbcTemplate.query(SQLQuery.ALL_SONGS(), new SongMapper());
+    }
+
+    @Override
+    public List<Integer> getBooksIdsByUserId(int id) {
+        return jdbcTemplate.query(SQLQuery.LIKED_BOOK_BY_USER_ID(id), (rs, rowNum) -> rs.getInt("id"));
     }
 
 }

@@ -1,5 +1,7 @@
 package catalogApp.server.dao.constants;
 
+import org.w3c.dom.Attr;
+
 import java.sql.PreparedStatement;
 
 public class SQLQuery {
@@ -53,5 +55,9 @@ public class SQLQuery {
 
     public static String USER_ROLE_BY_ID(int id){
         return "select AV.value as role from AttributeValue AV where AV.id_object=" + id + " and AV.id_attribute=" + Attribure.USER_ROLE;
+    }
+
+    public static String LIKED_BOOK_BY_USER_ID(int id){
+        return "select AV.value as id from AttributeValue AV where AV.id_object=" + id + "and AV.id_attribute=" + Attribure.LIKED_BOOK_ID;
     }
 }
