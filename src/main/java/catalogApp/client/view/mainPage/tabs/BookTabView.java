@@ -18,9 +18,11 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.view.client.ListDataProvider;
+import com.google.gwt.view.client.MultiSelectionModel;
 
 import java.util.Comparator;
-import java.util.logging.Logger;
+import java.util.List;
+import java.util.Set;
 
 public class BookTabView extends Composite implements BookTabPresenter.Display {
 
@@ -50,7 +52,7 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
 
         Column authorColumn = CellTableColumns.getBookAuthorNameColumn(true);
         table.addColumn(authorColumn, "Author");
-        table.setColumnWidth(authorColumn, 200, Style.Unit.PX);
+        //table.setColumnWidth(authorColumn, 200, Style.Unit.PX);
         ColumnSortEvent.ListHandler<Book> authorSorter = new ColumnSortEvent.ListHandler<>(dataProvider.getList());
         authorSorter.setComparator(authorColumn, Comparator.comparing(BaseObject::getId));
         table.addColumnSortHandler(authorSorter);
@@ -64,5 +66,10 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
     @Override
     public void setDataProviderAndInitialize(ListDataProvider<Book> dataProvider) {
         initializeTable(dataProvider);
+    }
+
+    @Override
+    public Set<Book> getSelectedItems() {
+        return ((MultiSelectionModel<Book>)table.getSelectionModel()).getSelectedSet();
     }
 }

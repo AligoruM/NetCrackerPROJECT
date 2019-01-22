@@ -60,6 +60,7 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
 
     public void go(HasWidgets container) {
         this.container = container;
+
         bind();
         ProfileBarPresenter profileBarPresenter = new ProfileBarPresenter(new ProfileBarView(), eventBus);
         tabsPresenter = new TabsPresenter(new TabPanelView(), eventBus, bookWebService, songWebService);
@@ -121,7 +122,7 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
 
     }
 
-    public static SimpleUser getUser() {
-        return user;
+    public static boolean isAdmin() {
+        return "ADMIN".equals(user.getRole());
     }
 }

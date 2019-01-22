@@ -2,6 +2,7 @@ package catalogApp.server.service;
 
 import catalogApp.server.dao.AuthDAO;
 import catalogApp.server.dao.IJdbcDAO;
+import catalogApp.server.dao.constants.Attribure;
 import catalogApp.shared.model.Book;
 import catalogApp.shared.model.Song;
 import org.springframework.security.core.Authentication;
@@ -41,6 +42,11 @@ public class JdbcService {
     public List<Integer> getLikedBooksIds(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         int user_id = authDAO.getSimpleUser(authentication.getName()).getId();
-        return jdbcDAO.getBooksIdsByUserId(user_id);
+        return jdbcDAO.getObjectsIdsByUserIdAndAttribute(user_id, Attribure.LIKED_BOOK_ID);
+    }
+
+    public void addBooksToLibrary(List<Integer> idList){
+        int user_id = authDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
+        jdbcDAO.addObjectsToUserLibrary(user_id, idList, Attribure.LIKED_BOOK_ID);
     }
 }

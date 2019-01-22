@@ -4,7 +4,6 @@ import catalogApp.server.service.JdbcService;
 import catalogApp.shared.model.Song;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;

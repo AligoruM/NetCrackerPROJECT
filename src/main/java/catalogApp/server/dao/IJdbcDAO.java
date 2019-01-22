@@ -15,5 +15,7 @@ public interface IJdbcDAO {
 
     List<Song> getAllSongs();
 
-    List<Integer> getBooksIdsByUserId(int id);
+    List<Integer> getObjectsIdsByUserIdAndAttribute(int id, int idAttribute);
+
+    void addObjectsToUserLibrary(int id, List<Integer> objectIds, int attributeId);
 }

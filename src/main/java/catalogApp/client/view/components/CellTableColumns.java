@@ -3,13 +3,14 @@ package catalogApp.client.view.components;
 import catalogApp.shared.model.BaseObject;
 import catalogApp.shared.model.Book;
 import catalogApp.shared.model.Song;
+import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
 
 public class CellTableColumns<T extends BaseObject> {
 
-    public Column<T, String> getNameColumn(boolean sortable){
-        return new TextColumn<T>() {
+    Column<T, String> getNameColumn(){
+        return new Column<T, String>(new TextCell()) {
             @Override
             public String getValue(BaseObject object) {
                 return object.getName();
@@ -17,13 +18,13 @@ public class CellTableColumns<T extends BaseObject> {
 
             @Override
             public boolean isSortable() {
-                return sortable;
+                return true;
             }
 
         };
     }
 
-    public Column<T, String> getIdColumn(boolean sortable){
+    Column<T, String> getIdColumn(){
         return new TextColumn<T>() {
             @Override
             public String getValue(BaseObject object) {
@@ -32,7 +33,7 @@ public class CellTableColumns<T extends BaseObject> {
 
             @Override
             public boolean isSortable() {
-                return sortable;
+                return true;
             }
 
         };

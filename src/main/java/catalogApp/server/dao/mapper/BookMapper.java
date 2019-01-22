@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 public class BookMapper implements RowMapper<Book> {
 
-    private static Type bookType = new Type(Types.BOOK, "Book");
+    private static final Type bookType = new Type(Types.BOOK, "Book");
 
     @Override
     public Book mapRow(ResultSet resultSet, int i) throws SQLException {

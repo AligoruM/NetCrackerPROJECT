@@ -5,7 +5,6 @@ import catalogApp.server.service.JdbcService;
 import catalogApp.shared.model.Book;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -43,6 +42,13 @@ public class BookWebService {
     @Produces(MediaType.APPLICATION_JSON)
     public List<String> getAuthorsNames() {
         return jdbcService.getAllAuthorsNames();
+    }
+
+    @POST
+    @Path("/addBooksToUserLib")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void addBooksToUserLib(List<Integer> ids){
+        jdbcService.addBooksToLibrary(ids);
     }
 
     public void setJdbcService(JdbcService service) {

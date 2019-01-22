@@ -16,8 +16,6 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.view.client.ListDataProvider;
 
-import java.util.logging.Logger;
-
 public class SongTabView extends Composite implements SongTabPresenter.Display {
 
     interface SongTabViewUiBinder extends UiBinder<HTMLPanel, SongTabView> {
