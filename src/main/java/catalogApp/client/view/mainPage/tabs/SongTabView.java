@@ -8,6 +8,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -39,11 +40,13 @@ public class SongTabView extends Composite implements SongTabPresenter.Display {
     }
 
     private void initializeTable(ListDataProvider<Song> dataProvider){
+        Column genreColumn = CellTableColumns.getSongGenreColumn(true);
+        Column durationColumn = CellTableColumns.getSongDurationColumn(true);
         pager.setDisplay(table);
         table.setPageSize(3);
         table.setDataProvider(dataProvider);
-        table.addColumn(CellTableColumns.getSongGenreColumn(true), "Genre");
-        table.addColumn(CellTableColumns.getSongDurationColumn(true), "Duration");
+        table.addColumn(genreColumn, "Genre");
+        table.addColumn(durationColumn, "Duration");
     }
 
 

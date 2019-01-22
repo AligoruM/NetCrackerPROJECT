@@ -57,6 +57,7 @@ public class SongTabPresenter implements Presenter {
 
                 @Override
                 public void onSuccess(Method method, List<Song> songs) {
+                    GWT.log(songs.get(0).toString());
                     songListDataProvider.getList().addAll(songs);
                     loaded=true;
                 }

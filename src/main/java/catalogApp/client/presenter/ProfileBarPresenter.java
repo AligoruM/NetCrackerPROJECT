@@ -1,5 +1,6 @@
 package catalogApp.client.presenter;
 
+import catalogApp.client.CatalogController;
 import catalogApp.client.services.AuthWebService;
 import catalogApp.shared.model.SimpleUser;
 import com.google.gwt.core.client.GWT;
@@ -18,7 +19,6 @@ public class ProfileBarPresenter implements Presenter {
 
     private Display display;
     HandlerManager eventBus;
-    private final AuthWebService authWebService = GWT.create(AuthWebService.class);
 
     public ProfileBarPresenter(Display display, HandlerManager eventBus) {
         this.display = display;
@@ -32,16 +32,10 @@ public class ProfileBarPresenter implements Presenter {
     }
 
     private void bind(){
-        authWebService.getSimpleUser(new MethodCallback<SimpleUser>() {
-            @Override
-            public void onFailure(Method method, Throwable exception) {
-                GWT.log("simpleUser doesnt work",exception);
-            }
+    }
 
-            @Override
-            public void onSuccess(Method method, SimpleUser response) {
-                display.setDataLabel(response.getUsername(), response.getRole());
-            }
-        });
+    public void setData(SimpleUser simpleUser){
+        display.setDataLabel(simpleUser.getUsername(), simpleUser.getRole());
+
     }
 }

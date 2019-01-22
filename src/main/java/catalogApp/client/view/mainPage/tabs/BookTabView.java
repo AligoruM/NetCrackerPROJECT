@@ -10,6 +10,7 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.ui.Button;
@@ -28,7 +29,6 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
 
     private AbstractCatalogCellTable<Book> table = new AbstractCatalogCellTable<>();
 
-    Logger logger = java.util.logging.Logger.getLogger("bookTab");
     @UiField
     SimplePanel simplePanel;
     @UiField
@@ -47,12 +47,13 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
         pager.setDisplay(table);
         table.setPageSize(3);
         table.setDataProvider(dataProvider);
-        table.addColumn(CellTableColumns.getBookAuthorNameColumn(true), "Author");
-        table.setColumnWidth(2, 200, Style.Unit.PX);
-        ColumnSortEvent.ListHandler<Book> authorSorter = new ColumnSortEvent.ListHandler<>(dataProvider.getList());
-        authorSorter.setComparator(table.getColumn(2), Comparator.comparing(BaseObject::getId));
-        table.addColumnSortHandler(authorSorter);
 
+        Column authorColumn = CellTableColumns.getBookAuthorNameColumn(true);
+        table.addColumn(authorColumn, "Author");
+        table.setColumnWidth(authorColumn, 200, Style.Unit.PX);
+        ColumnSortEvent.ListHandler<Book> authorSorter = new ColumnSortEvent.ListHandler<>(dataProvider.getList());
+        authorSorter.setComparator(authorColumn, Comparator.comparing(BaseObject::getId));
+        table.addColumnSortHandler(authorSorter);
     }
 
     @Override

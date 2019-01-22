@@ -1,5 +1,6 @@
 package catalogApp.client;
 
+import catalogApp.client.services.AuthWebService;
 import catalogApp.client.services.BookWebService;
 import catalogApp.client.services.SongWebService;
 import com.google.gwt.core.client.EntryPoint;
@@ -19,7 +20,7 @@ public class CatalogApplication implements EntryPoint {
         HandlerManager eventBus = new HandlerManager(null);
         SongWebService songWebService = GWT.create(SongWebService.class);
         BookWebService bookWebService = GWT.create(BookWebService.class);
-        CatalogController contr = new CatalogController(eventBus, bookWebService, songWebService);
-        contr.go(RootPanel.get());
+        AuthWebService authWebService = GWT.create(AuthWebService.class);
+        CatalogController contr = new CatalogController(eventBus, bookWebService, songWebService, authWebService);
     }
 }

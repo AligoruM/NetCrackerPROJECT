@@ -1,6 +1,7 @@
 package catalogApp.client.view.components;
 
 
+import catalogApp.client.CatalogController;
 import catalogApp.shared.model.BaseObject;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -20,18 +21,21 @@ public class AbstractCatalogCellTable<T extends BaseObject> extends CellTable<T>
     private Column nameColumn = new CellTableColumns().getNameColumn(true);
     private Column idColumn = new CellTableColumns().getIdColumn(true);
 
-    public AbstractCatalogCellTable() {
-        addColumn(idColumn, "ID");
-        addColumn(nameColumn, "Name");
-        setColumnWidth(0, 50, com.google.gwt.dom.client.Style.Unit.PX);
-        setColumnWidth(1, 200, com.google.gwt.dom.client.Style.Unit.PX);
-        nameSorter = new ColumnSortEvent.ListHandler<>(dataProvider.getList());
-        nameSorter.setComparator(getColumn(1), Comparator.comparing(BaseObject::getName));
-        addColumnSortHandler(nameSorter);
+    boolean isAdmin = CatalogController.getUser().getRole().equals("ADMIN");
 
-        idSorter = new ColumnSortEvent.ListHandler<>(dataProvider.getList());
-        nameSorter.setComparator(getColumn(0), Comparator.comparing(BaseObject::getId));
-        addColumnSortHandler(idSorter);
+    public AbstractCatalogCellTable() {
+        if(isAdmin){
+            addColumn(idColumn, "ID");
+            setColumnWidth(idColumn, 50, com.google.gwt.dom.client.Style.Unit.PX);
+            idSorter = new ColumnSortEvent.ListHandler<>(dataProvider.getList());
+            idSorter.setComparator(idColumn, Comparator.comparing(BaseObject::getId));
+            addColumnSortHandler(idSorter);
+        }
+        addColumn(nameColumn, "Name");
+        setColumnWidth(nameColumn, 200, com.google.gwt.dom.client.Style.Unit.PX);
+        nameSorter = new ColumnSortEvent.ListHandler<>(dataProvider.getList());
+        nameSorter.setComparator(nameColumn, Comparator.comparing(BaseObject::getName));
+        addColumnSortHandler(nameSorter);
 
     }
 
@@ -40,7 +44,8 @@ public class AbstractCatalogCellTable<T extends BaseObject> extends CellTable<T>
         this.dataProvider = dataProvider;
         this.dataProvider.addDataDisplay(this);
         nameSorter.setList(dataProvider.getList());
-        idSorter.setList(dataProvider.getList());
+        if(isAdmin)
+            idSorter.setList(dataProvider.getList());
 
     }
 }
