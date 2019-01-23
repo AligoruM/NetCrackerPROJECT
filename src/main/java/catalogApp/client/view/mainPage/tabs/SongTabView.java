@@ -15,6 +15,9 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.view.client.ListDataProvider;
+import com.google.gwt.view.client.MultiSelectionModel;
+
+import java.util.Set;
 
 public class SongTabView extends Composite implements SongTabPresenter.Display {
 
@@ -37,7 +40,7 @@ public class SongTabView extends Composite implements SongTabPresenter.Display {
         simplePanel.add(table);
     }
 
-    private void initializeTable(ListDataProvider<Song> dataProvider){
+    private void initializeTable(ListDataProvider<Song> dataProvider) {
         Column genreColumn = CellTableColumns.getSongGenreColumn(true);
         Column durationColumn = CellTableColumns.getSongDurationColumn(true);
         pager.setDisplay(table);
@@ -56,5 +59,10 @@ public class SongTabView extends Composite implements SongTabPresenter.Display {
     @Override
     public void setDataProviderAndInitialize(ListDataProvider<Song> dataProvider) {
         initializeTable(dataProvider);
+    }
+
+    @Override
+    public Set<Song> getSelectedItems() {
+        return ((MultiSelectionModel<Song>) table.getSelectionModel()).getSelectedSet();
     }
 }

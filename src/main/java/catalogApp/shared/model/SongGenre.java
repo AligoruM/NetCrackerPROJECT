@@ -1,6 +1,6 @@
 package catalogApp.shared.model;
 
-public class SongGenre extends BaseObject{
+public class SongGenre extends BaseObject {
 
     public SongGenre() {
     }

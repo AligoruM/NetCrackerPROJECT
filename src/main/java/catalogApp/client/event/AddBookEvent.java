@@ -12,6 +12,6 @@ public class AddBookEvent extends GwtEvent<AddBookEventHandler> {
 
     @Override
     protected void dispatch(AddBookEventHandler handler) {
-        handler.onAddBookTask(this);
+        handler.onAddBookEvent(this);
     }
 }

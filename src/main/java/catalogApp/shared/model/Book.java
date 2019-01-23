@@ -1,6 +1,6 @@
 package catalogApp.shared.model;
 
-public class Book extends BaseObject{
+public class Book extends BaseObject {
 
 
     private Author author;

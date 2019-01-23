@@ -21,7 +21,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         if (username.equals(userDetails.getUsername()) && password.equals(userDetails.getPassword())) {
             return new UsernamePasswordAuthenticationToken(username, password,
                     new HashSet<>(userDetails.getAuthorities()));
-        }else {
+        } else {
             throw new BadCredentialsException("Bad Credentials");
         }
     }

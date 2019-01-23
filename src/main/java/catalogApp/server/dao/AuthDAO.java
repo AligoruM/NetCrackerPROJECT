@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.List;
+
 public class AuthDAO {
     private final JdbcTemplate jdbcTemplate;
 
@@ -20,9 +22,16 @@ public class AuthDAO {
         return jdbcTemplate.queryForObject(SQLQuery.USER_BY_NAME(name), new UserMapper());
     }
 
-    public SimpleUser getSimpleUser(String name){
-        int id = jdbcTemplate.queryForObject(SQLQuery.USER_ID_BY_NAME(name), (rs, rowNum) -> rs.getInt("id"));
-        String role = jdbcTemplate.queryForObject(SQLQuery.USER_ROLE_BY_ID(id), (rs, rowNum) -> rs.getString("role"));
-        return new SimpleUser(id, name, role);
+    public SimpleUser getSimpleUser(String name) {
+        Integer id = jdbcTemplate.queryForObject(SQLQuery.USER_ID_BY_NAME(name), (rs, rowNum) -> rs.getInt("id"));
+        if (id!=null) {
+            String role = jdbcTemplate.queryForObject(SQLQuery.USER_ROLE_BY_ID(id), (rs, rowNum) -> rs.getString("role"));
+            return new SimpleUser(id, name, role);
+        }else
+            return null;
+    }
+
+    public List<User> getAllUsers(){
+        return jdbcTemplate.query(SQLQuery.ALL_USERS(), new UserMapper());
     }
 }

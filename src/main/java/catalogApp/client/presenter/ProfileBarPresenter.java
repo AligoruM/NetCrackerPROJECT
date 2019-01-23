@@ -1,14 +1,15 @@
 package catalogApp.client.presenter;
 
 import catalogApp.shared.model.SimpleUser;
-
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
 public class ProfileBarPresenter implements Presenter {
-    public interface Display{
+    public interface Display {
         void setDataLabel(String username, String role);
+
         Widget asWidget();
     }
 
@@ -21,11 +22,11 @@ public class ProfileBarPresenter implements Presenter {
     }
 
     @Override
-    public void go(HasWidgets container) {
-        container.add(display.asWidget());
+    public void go(DockPanel container) {
+        container.add(display.asWidget(), DockPanel.NORTH);
     }
 
-    public void setData(SimpleUser simpleUser){
+    public void setData(SimpleUser simpleUser) {
         display.setDataLabel(simpleUser.getUsername(), simpleUser.getRole());
     }
 }

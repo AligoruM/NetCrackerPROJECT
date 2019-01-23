@@ -8,13 +8,12 @@
                 <table>
                     <tr>
                         <td align='left'>
-                            <c:SimplePager ui:field='pager'  location="CENTER"/>
+                            <c:SimplePager ui:field='pager' location="CENTER"/>
                         </td>
                         <td align='right'>
                             <g:Button ui:field="addButton" text="Add book"/>
                         </td>
                     </tr>
-
                 </table>
             </g:HTMLPanel>
         </g:VerticalPanel>

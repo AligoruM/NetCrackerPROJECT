@@ -4,6 +4,7 @@ package catalogApp.client.view.components;
 import catalogApp.client.CatalogController;
 import catalogApp.shared.model.BaseObject;
 import com.google.gwt.cell.client.CheckboxCell;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
@@ -26,10 +27,12 @@ public class AbstractCatalogCellTable<T extends BaseObject> extends CellTable<T>
 
     private boolean isAdmin = CatalogController.isAdmin();
 
-    private final SelectionModel<T> selectionModel = new MultiSelectionModel<>(element-> element.getId());
+    private final SelectionModel<T> selectionModel = new MultiSelectionModel<>(element -> element.getId());
 
     public AbstractCatalogCellTable() {
         super(item -> item.getId());
+        setWidth("500px", true);
+        //super.getElement().getStyle().setBorderWidth(1, com.google.gwt.dom.client.Style.Unit.PX);
         setSelectionModel(selectionModel, DefaultSelectionEventManager.createCheckboxManager());
         Column<T, Boolean> selectionColumn = new Column<T, Boolean>(new CheckboxCell()) {
             @Override
@@ -41,15 +44,14 @@ public class AbstractCatalogCellTable<T extends BaseObject> extends CellTable<T>
         addColumn(selectionColumn);
         setColumnWidth(selectionColumn, 40, com.google.gwt.dom.client.Style.Unit.PX);
 
-        if(isAdmin){
+        if (isAdmin) {
             addColumn(idColumn, "ID");
-            setColumnWidth(idColumn, 40, com.google.gwt.dom.client.Style.Unit.PX);
+            setColumnWidth(idColumn, 60, com.google.gwt.dom.client.Style.Unit.PX);
             idSorter = new ColumnSortEvent.ListHandler<>(dataProvider.getList());
             idSorter.setComparator(idColumn, Comparator.comparing(BaseObject::getId));
             addColumnSortHandler(idSorter);
         }
         addColumn(nameColumn, "Name");
-        //setColumnWidth(nameColumn, 200, com.google.gwt.dom.client.Style.Unit.PX);
         nameSorter = new ColumnSortEvent.ListHandler<>(dataProvider.getList());
         nameSorter.setComparator(nameColumn, Comparator.comparing(BaseObject::getName));
         addColumnSortHandler(nameSorter);
@@ -61,7 +63,7 @@ public class AbstractCatalogCellTable<T extends BaseObject> extends CellTable<T>
         this.dataProvider = dataProvider;
         this.dataProvider.addDataDisplay(this);
         nameSorter.setList(dataProvider.getList());
-        if(isAdmin)
+        if (isAdmin)
             idSorter.setList(dataProvider.getList());
 
     }

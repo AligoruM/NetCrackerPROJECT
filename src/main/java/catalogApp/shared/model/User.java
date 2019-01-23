@@ -1,6 +1,6 @@
 package catalogApp.shared.model;
 
-public class User extends BaseObject{
+public class User extends BaseObject {
     private String password;
     private String role;
     private boolean active;

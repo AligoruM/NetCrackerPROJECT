@@ -1,12 +1,11 @@
 package catalogApp.client.presenter;
 
 import catalogApp.client.event.ClosedDialogEvent;
-import catalogApp.client.services.BookWebService;
-import catalogApp.shared.model.Book;
+import catalogApp.client.services.SongWebService;
+import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -16,7 +15,7 @@ import org.fusesource.restygwt.client.MethodCallback;
 
 import java.util.List;
 
-public class AddBookDialogPresenter implements Presenter {
+public class AddSongDialogPresenter implements Presenter{
 
     public interface Display {
         HasClickHandlers getSubmitButton();
@@ -34,14 +33,15 @@ public class AddBookDialogPresenter implements Presenter {
         void setSuggestions(List<String> suggestions);
     }
 
+
     private final HandlerManager eventBus;
     private final Display display;
-    private final BookWebService bookService;
+    private final SongWebService songWebService;
 
-    public AddBookDialogPresenter(Display view, BookWebService bookService, HandlerManager eventBus) {
-        this.bookService = bookService;
+    public AddSongDialogPresenter(Display display,  SongWebService songWebService, HandlerManager eventBus) {
         this.eventBus = eventBus;
-        this.display = view;
+        this.display = display;
+        this.songWebService = songWebService;
     }
 
     @Override
@@ -51,11 +51,11 @@ public class AddBookDialogPresenter implements Presenter {
         display.showDialog();
     }
 
-    private void bind() {
-        bookService.getAllAuthor(new MethodCallback<List<String>>() {
+    private void bind(){
+        songWebService.getGenreNames(new MethodCallback<List<String>>() {
             @Override
             public void onFailure(Method method, Throwable throwable) {
-                Window.alert("AuthorNames doesnt work");
+                GWT.log("GenreNames doesnt work", throwable);
             }
 
             @Override
@@ -67,15 +67,15 @@ public class AddBookDialogPresenter implements Presenter {
         display.getSubmitButton().addClickHandler(event -> {
             //TODO validation
             List<String> tmp = display.getAddInfo();
-            bookService.addBook(tmp, new MethodCallback<Book>() {
+            songWebService.addSong(tmp, new MethodCallback<Song>() {
                 @Override
                 public void onFailure(Method method, Throwable throwable) {
-                    GWT.log("Adding doesnt work", throwable);
+                    GWT.log("Adding song doesnt work", throwable);
                 }
 
                 @Override
-                public void onSuccess(Method method, Book book) {
-                    BookTabPresenter.getBookListDataProvider().getList().add(book);
+                public void onSuccess(Method method, Song song) {
+                    SongTabPresenter.getSongListDataProvider().getList().add(song);
                     display.hideDialog();
                     eventBus.fireEvent(new ClosedDialogEvent());
                 }

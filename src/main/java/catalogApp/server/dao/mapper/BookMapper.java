@@ -12,6 +12,7 @@ import java.sql.SQLException;
 public class BookMapper implements RowMapper<Book> {
 
     private static final Type bookType = new Type(Types.BOOK, "Book");
+    private static final Type authorType = new Type(Types.AUTHOR, "Author");
 
     @Override
     public Book mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -20,7 +21,7 @@ public class BookMapper implements RowMapper<Book> {
 
         author.setId(resultSet.getInt("authorId"));
         author.setName(resultSet.getString("authorName"));
-
+        author.setType(authorType);
         book.setId(resultSet.getInt("idObject"));
         book.setName(resultSet.getString("objectName"));
         book.setAuthor(author);

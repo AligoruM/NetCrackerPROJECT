@@ -8,6 +8,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
@@ -42,29 +43,31 @@ public class BookTabPresenter implements Presenter {
     }
 
     @Override
-    public void go(HasWidgets container) {
+    public void go(DockPanel container) {
         bind();
     }
 
     private void bind() {
         display.setDataProviderAndInitialize(bookListDataProvider);
-        if(CatalogController.isAdmin()){
+        if (CatalogController.isAdmin()) {
             display.getAddButton().addClickHandler(event -> eventBus.fireEvent(new AddBookEvent()));
-        }else {
+        } else {
             display.getAddButton().addClickHandler(event -> {
                 List<Integer> tmp = new ArrayList<>();
-                display.getSelectedItems().forEach(e-> tmp.add(e.getId()));
-                bookService.addBooksToUserLib(tmp, new MethodCallback<Void>() {
-                    @Override
-                    public void onFailure(Method method, Throwable exception) {
-                        GWT.log("addBookToLib doesnt work", exception);
-                    }
+                display.getSelectedItems().forEach(e -> tmp.add(e.getId()));
+                if(!tmp.isEmpty()) {
+                    bookService.addBooksToUserLib(tmp, new MethodCallback<Void>() {
+                        @Override
+                        public void onFailure(Method method, Throwable exception) {
+                            GWT.log("addBookToLib doesnt work", exception);
+                        }
 
-                    @Override
-                    public void onSuccess(Method method, Void response) {
-                        Window.alert("Added to user's lib");
-                    }
-                });
+                        @Override
+                        public void onSuccess(Method method, Void response) {
+                            Window.alert("Added to user's lib");
+                        }
+                    });
+                }
             });
         }
     }

@@ -25,4 +25,8 @@ public interface BookWebService extends RestService {
     @Path("rest/addBooksToUserLib")
     void addBooksToUserLib(List<Integer> ids, MethodCallback<Void> callback);
 
+    @POST
+    @Path("rest/getUserBooks")
+    void getUserBooks(MethodCallback<List<Book>> callback);
+
 }

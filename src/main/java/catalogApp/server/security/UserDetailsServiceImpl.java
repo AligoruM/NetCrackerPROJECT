@@ -20,6 +20,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -44,7 +45,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             Set<GrantedAuthority> roles = new HashSet<>();
             roles.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
             return new org.springframework.security.core.userdetails.User(user.getName(), user.getPassword(), roles);
-        } catch (EmptyResultDataAccessException ex){
+        } catch (EmptyResultDataAccessException ex) {
             throw new UsernameNotFoundException("User not found");
         }
     }
@@ -52,10 +53,20 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @POST
     @Path("/user")
     @Produces(MediaType.APPLICATION_JSON)
-    public SimpleUser getUser(){
+    public SimpleUser getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authDAO.getSimpleUser(authentication.getName());
+        SimpleUser user = authDAO.getSimpleUser(authentication.getName());
+        if(user!=null)
+            return user;
+        else
+            throw new UsernameNotFoundException("User not found");
     }
 
+    @POST
+    @Path("/allUsers")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<User> getAllUsers(){
+        return authDAO.getAllUsers();
+    }
 
 }

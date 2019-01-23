@@ -1,0 +1,9 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+                xmlns:c='urn:import:catalogApp.client.view.components'>
+    <g:HTMLPanel >
+        <g:VerticalPanel>
+            <c:AbstractCatalogCellTable ui:field="userTable"/>
+        </g:VerticalPanel>
+    </g:HTMLPanel>
+</ui:UiBinder>

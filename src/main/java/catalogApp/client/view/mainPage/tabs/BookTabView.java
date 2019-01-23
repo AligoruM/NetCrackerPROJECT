@@ -6,7 +6,6 @@ import catalogApp.client.view.components.CellTableColumns;
 import catalogApp.shared.model.BaseObject;
 import catalogApp.shared.model.Book;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -21,7 +20,6 @@ import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 
 import java.util.Comparator;
-import java.util.List;
 import java.util.Set;
 
 public class BookTabView extends Composite implements BookTabPresenter.Display {
@@ -45,7 +43,7 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
         simplePanel.add(table);
     }
 
-    private void initializeTable(ListDataProvider<Book> dataProvider){
+    private void initializeTable(ListDataProvider<Book> dataProvider) {
         pager.setDisplay(table);
         table.setPageSize(3);
         table.setDataProvider(dataProvider);
@@ -54,7 +52,7 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
         table.addColumn(authorColumn, "Author");
         //table.setColumnWidth(authorColumn, 200, Style.Unit.PX);
         ColumnSortEvent.ListHandler<Book> authorSorter = new ColumnSortEvent.ListHandler<>(dataProvider.getList());
-        authorSorter.setComparator(authorColumn, Comparator.comparing(BaseObject::getId));
+        authorSorter.setComparator(authorColumn, Comparator.comparing(e-> e.getAuthor().getName()));
         table.addColumnSortHandler(authorSorter);
     }
 
@@ -70,6 +68,6 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
 
     @Override
     public Set<Book> getSelectedItems() {
-        return ((MultiSelectionModel<Book>)table.getSelectionModel()).getSelectedSet();
+        return ((MultiSelectionModel<Book>) table.getSelectionModel()).getSelectedSet();
     }
 }

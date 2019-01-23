@@ -1,17 +1,17 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
              xmlns:c='urn:import:com.google.gwt.user.cellview.client'>
-<g:HTMLPanel>
+    <g:HTMLPanel>
         <g:VerticalPanel>
             <g:SimplePanel ui:field="simplePanel"/>
             <g:HTMLPanel>
                 <table>
                     <tr>
                         <td align='left'>
-                            <c:SimplePager ui:field='pager'  location="CENTER"/>
+                            <c:SimplePager ui:field='pager' location="CENTER"/>
                         </td>
                         <td align='right'>
-                            <g:Button ui:field="addButton" text="Add book"/>
+                            <g:Button ui:field="addButton" text="Add song"/>
                         </td>
                     </tr>
                 </table>

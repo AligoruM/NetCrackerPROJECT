@@ -24,6 +24,7 @@ public class TabPanelView extends Composite implements TabsPresenter.Display {
 
     public TabPanelView() {
         initWidget(tabPanelViewUiBinder.createAndBindUi(this));
+        //tabPanel.setWidth("500px");
     }
 
     @Override

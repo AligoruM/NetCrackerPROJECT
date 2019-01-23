@@ -31,7 +31,7 @@ public class BookWebService {
     @Path("/addBook")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Book addBook(List params){
+    public Book addBook(List params) {
         String name = (String) params.get(0);
         String author = (String) params.get(1);
         return jdbcService.addBook(name, author);
@@ -47,11 +47,18 @@ public class BookWebService {
     @POST
     @Path("/addBooksToUserLib")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void addBooksToUserLib(List<Integer> ids){
+    public void addBooksToUserLib(List<Integer> ids) {
         jdbcService.addBooksToLibrary(ids);
     }
 
+    @POST
+    @Path("/getUserBooks")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Book> getUserBookLib() {
+        return jdbcService.getLibBooks();
+    }
+
     public void setJdbcService(JdbcService service) {
-        jdbcService=service;
+        jdbcService = service;
     }
 }

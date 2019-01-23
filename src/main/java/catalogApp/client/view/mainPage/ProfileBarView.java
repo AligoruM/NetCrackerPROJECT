@@ -24,6 +24,7 @@ public class ProfileBarView extends Composite implements ProfileBarPresenter.Dis
     HorizontalPanel hPanel;
     @UiField
     Label dataLabel;
+
     @Override
     public void setDataLabel(String username, String role) {
         dataLabel.setText("Username: " + username + " Your role: " + role);

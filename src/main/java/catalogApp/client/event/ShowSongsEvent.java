@@ -4,6 +4,7 @@ import com.google.gwt.event.shared.GwtEvent;
 
 public class ShowSongsEvent extends GwtEvent<ShowSongsEventHandler> {
     public static Type<ShowSongsEventHandler> TYPE = new Type<>();
+
     @Override
     public Type<ShowSongsEventHandler> getAssociatedType() {
         return TYPE;
