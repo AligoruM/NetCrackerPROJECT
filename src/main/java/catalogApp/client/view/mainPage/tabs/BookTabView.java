@@ -3,10 +3,8 @@ package catalogApp.client.view.mainPage.tabs;
 import catalogApp.client.presenter.BookTabPresenter;
 import catalogApp.client.view.components.AbstractCatalogCellTable;
 import catalogApp.client.view.components.CellTableColumns;
-import catalogApp.shared.model.BaseObject;
 import catalogApp.shared.model.Book;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.Column;
@@ -47,7 +45,6 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
         pager.setDisplay(table);
         table.setPageSize(3);
         table.setDataProvider(dataProvider);
-
         Column authorColumn = CellTableColumns.getBookAuthorNameColumn(true);
         table.addColumn(authorColumn, "Author");
         //table.setColumnWidth(authorColumn, 200, Style.Unit.PX);
@@ -57,13 +54,19 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
     }
 
     @Override
-    public HasClickHandlers getAddButton() {
+    public Button getAddButton() {
         return addButton;
     }
+
 
     @Override
     public void setDataProviderAndInitialize(ListDataProvider<Book> dataProvider) {
         initializeTable(dataProvider);
+    }
+
+    @Override
+    public MultiSelectionModel<Book> getSelectionModel() {
+        return ((MultiSelectionModel<Book>) table.getSelectionModel());
     }
 
     @Override

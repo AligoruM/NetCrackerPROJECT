@@ -5,7 +5,6 @@ import catalogApp.client.view.components.AbstractCatalogCellTable;
 import catalogApp.client.view.components.CellTableColumns;
 import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.Column;
@@ -52,7 +51,7 @@ public class SongTabView extends Composite implements SongTabPresenter.Display {
 
 
     @Override
-    public HasClickHandlers getAddButton() {
+    public Button getAddButton() {
         return addButton;
     }
 
@@ -64,5 +63,9 @@ public class SongTabView extends Composite implements SongTabPresenter.Display {
     @Override
     public Set<Song> getSelectedItems() {
         return ((MultiSelectionModel<Song>) table.getSelectionModel()).getSelectedSet();
+    }
+
+    public MultiSelectionModel<Song> getSelectionModel(){
+        return ((MultiSelectionModel<Song>) table.getSelectionModel());
     }
 }

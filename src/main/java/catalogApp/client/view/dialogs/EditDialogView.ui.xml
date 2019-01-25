@@ -1,0 +1,21 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <g:HTMLPanel>
+        <g:DialogBox ui:field="dialogPanel" text="Editing">
+            <g:HTMLPanel>
+                <g:ListBox ui:field="listBox"/>
+                <g:FlexTable ui:field="flexTable"/>
+                <g:HTMLPanel>
+                    <table>
+                        <tr>
+                            <td>
+                                <g:Button ui:field="submitButton" text="Submit"/>
+                                <g:Button ui:field="cancelButton" text="Cancel"/>
+                            </td>
+                        </tr>
+                    </table>
+                </g:HTMLPanel>
+            </g:HTMLPanel>
+        </g:DialogBox>
+    </g:HTMLPanel>
+</ui:UiBinder>

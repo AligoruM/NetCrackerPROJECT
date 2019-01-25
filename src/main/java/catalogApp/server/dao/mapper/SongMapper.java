@@ -7,6 +7,7 @@ import catalogApp.shared.model.SongGenre;
 import catalogApp.shared.model.Type;
 import org.springframework.jdbc.core.RowMapper;
 
+import javax.annotation.Nonnull;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -15,7 +16,7 @@ public class SongMapper implements RowMapper<Song> {
     private static Type genreType = new Type(Types.SONG_GENRE, "SongGenre");
 
     @Override
-    public Song mapRow(ResultSet rs, int rowNum) throws SQLException {
+    public Song mapRow(@Nonnull ResultSet rs, int rowNum) throws SQLException {
         Song song = new Song();
         SongGenre genre = new SongGenre();
 

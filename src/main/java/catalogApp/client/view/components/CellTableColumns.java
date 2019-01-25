@@ -3,7 +3,6 @@ package catalogApp.client.view.components;
 import catalogApp.shared.model.BaseObject;
 import catalogApp.shared.model.Book;
 import catalogApp.shared.model.Song;
-import catalogApp.shared.model.User;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
@@ -86,12 +85,4 @@ public class CellTableColumns<T extends BaseObject> {
     }
 
 
-    public static Column<User, String> getUserRoleColumn(){
-        return new TextColumn<User>() {
-            @Override
-            public String getValue(User object) {
-                return object.getRole();
-            }
-        };
-    }
 }

@@ -4,9 +4,9 @@ import catalogApp.shared.model.Book;
 import org.fusesource.restygwt.client.MethodCallback;
 import org.fusesource.restygwt.client.RestService;
 
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import java.util.List;
+import java.util.Map;
 
 public interface BookWebService extends RestService {
     @POST
@@ -29,4 +29,11 @@ public interface BookWebService extends RestService {
     @Path("rest/getUserBooks")
     void getUserBooks(MethodCallback<List<Book>> callback);
 
+    @DELETE
+    @Path("rest/book")
+    void deleteBookFromLib(List<Integer> ids, MethodCallback<Void> callback);
+
+    @PUT
+    @Path("rest/book/{id}")
+    void updateBook(@PathParam("id")int id, Map<String, String> params, MethodCallback<Void> callback);
 }

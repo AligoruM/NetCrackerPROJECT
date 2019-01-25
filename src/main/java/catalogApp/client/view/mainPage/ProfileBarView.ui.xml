@@ -2,8 +2,11 @@
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <g:HTMLPanel>
         <g:HorizontalPanel ui:field="hPanel" width="100%">
-            <g:cell horizontalAlignment="ALIGN_RIGHT" width="100%">
+            <g:cell horizontalAlignment="ALIGN_RIGHT" width="100%" verticalAlignment="ALIGN_MIDDLE">
                 <g:Label ui:field="dataLabel"/>
+            </g:cell>
+            <g:cell width="100%">
+                <g:Button ui:field="logoutButton" text="Logout"/>
             </g:cell>
         </g:HorizontalPanel>
     </g:HTMLPanel>

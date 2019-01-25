@@ -1,24 +1,23 @@
 package catalogApp.server.controllers;
 
 
+import catalogApp.server.service.IJdbcService;
 import catalogApp.server.service.JdbcService;
 import catalogApp.shared.model.Book;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Controller
 @Path("/")
 public class BookWebService {
 
-    private static JdbcService jdbcService;
+    private static IJdbcService jdbcService;
 
     @POST
     @Path("/book")
@@ -56,6 +55,19 @@ public class BookWebService {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Book> getUserBookLib() {
         return jdbcService.getLibBooks();
+    }
+
+    @DELETE
+    @Path("/book")
+    public void deleteBooksFromUserLibs(List<Integer> ids){
+        jdbcService.deleteBooksFromLibrary(ids);
+    }
+
+    @PUT
+    @Path("/book/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void updateBook(@PathParam("id")int id, Map<String, String> params){
+        jdbcService.updateBook(id, params);
     }
 
     public void setJdbcService(JdbcService service) {

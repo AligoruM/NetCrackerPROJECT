@@ -3,15 +3,16 @@ package catalogApp.client.presenter;
 import catalogApp.client.CatalogController;
 import catalogApp.client.event.AddSongEvent;
 import catalogApp.client.services.SongWebService;
+import catalogApp.client.view.dialogs.EditDialogView;
 import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
+import com.google.gwt.view.client.MultiSelectionModel;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 
@@ -21,9 +22,11 @@ import java.util.Set;
 
 public class SongTabPresenter implements Presenter {
     public interface Display {
-        HasClickHandlers getAddButton();
+        Button getAddButton();
 
         void setDataProviderAndInitialize(ListDataProvider<Song> dataProvider);
+
+        MultiSelectionModel<Song> getSelectionModel();
 
         Set<Song> getSelectedItems();
 
@@ -50,8 +53,16 @@ public class SongTabPresenter implements Presenter {
 
     private void bind() {
         display.setDataProviderAndInitialize(songListDataProvider);
-        if(CatalogController.isAdmin())
-            display.getAddButton().addClickHandler(event -> eventBus.fireEvent(new AddSongEvent()));
+        if(CatalogController.isAdmin()) {
+            display.getAddButton().addClickHandler(event -> {
+                if (!event.isControlKeyDown())
+                    eventBus.fireEvent(new AddSongEvent());
+            });
+            display.getAddButton().addClickHandler(event -> {
+               if(event.isControlKeyDown())
+                   new EditSongDialogPresenter(new EditDialogView(), songWebService, songListDataProvider).go(null);
+            });
+        }
         else{
             display.getAddButton().addClickHandler(event -> {
                 List<Integer> tmp = new ArrayList<>();

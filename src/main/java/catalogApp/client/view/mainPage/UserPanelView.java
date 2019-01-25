@@ -2,7 +2,6 @@ package catalogApp.client.view.mainPage;
 
 import catalogApp.client.presenter.UserPanelPresenter;
 import catalogApp.client.view.components.AbstractCatalogCellTable;
-import catalogApp.shared.model.Book;
 import catalogApp.shared.model.User;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;

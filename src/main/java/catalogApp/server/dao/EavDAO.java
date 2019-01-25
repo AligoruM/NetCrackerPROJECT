@@ -111,6 +111,16 @@ public class EavDAO implements IJdbcDAO {
         return namedParameterJdbcTemplate.query(SQLQuery.SONGS_BY_IDS("ids"), params, new SongMapper());
     }
 
+    @Override
+    public void updateObjectName(int id, String name) {
+        jdbcTemplate.execute(SQLQuery.UPDATE_OBJECT_NAME(id, name));
+    }
+
+    @Override
+    public void updateAttributeValue(int id, int attributeId, String value) {
+        jdbcTemplate.execute(SQLQuery.UPDATE_ATTRIBUTE_VALUE(value, id, attributeId));
+    }
+
     private List<Integer> getObjectsIdsByUserIdAndAttribute(int id, int idAttribute) {
         return jdbcTemplate.query(SQLQuery.LIKED_OBJECT_BY_USER_ID(id, idAttribute), (rs, rowNum) -> rs.getInt("id"));
     }
@@ -133,6 +143,13 @@ public class EavDAO implements IJdbcDAO {
             if (!ids.contains(x)) {
                 jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(String.valueOf(x), userId, attributeId));
             }
+        }
+    }
+
+    @Override
+    public void deleteObjectFromUserLibrary(int id, List<Integer> ids, int attributeId) {
+        for (int x: ids) {
+            jdbcTemplate.execute(SQLQuery.DELETE_ATTRIBUTE_VALUE(String.valueOf(x), id, attributeId));
         }
     }
 

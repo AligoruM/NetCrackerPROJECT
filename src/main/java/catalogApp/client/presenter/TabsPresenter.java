@@ -7,7 +7,9 @@ import catalogApp.client.services.SongWebService;
 import catalogApp.client.view.mainPage.tabs.BookTabView;
 import catalogApp.client.view.mainPage.tabs.SongTabView;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class TabsPresenter implements Presenter {
 
@@ -36,8 +38,8 @@ public class TabsPresenter implements Presenter {
     public void go(final DockPanel container) {
 
         container.add(display.asWidget(), DockPanel.WEST);
-        container.setCellWidth(display.asWidget(), "500px");
-        container.setCellHorizontalAlignment(display.asWidget(), HasHorizontalAlignment.ALIGN_CENTER);
+        container.setCellWidth(display.asWidget(), "400px");
+        //container.setCellHorizontalAlignment(display.asWidget(), HasHorizontalAlignment.ALIGN_CENTER);
         BookTabView bookTabView = new BookTabView();
         bookTabPresenter = new BookTabPresenter(bookTabView, eventBus, bookWebService);
 

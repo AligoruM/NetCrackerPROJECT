@@ -5,6 +5,7 @@ import catalogApp.shared.model.Type;
 import catalogApp.shared.model.User;
 import org.springframework.jdbc.core.RowMapper;
 
+import javax.annotation.Nonnull;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -12,7 +13,7 @@ public class UserMapper implements RowMapper<User> {
     private static Type userType = new Type(Types.USER, "User");
 
     @Override
-    public User mapRow(ResultSet rs, int i) throws SQLException {
+    public User mapRow(@Nonnull ResultSet rs, int i) throws SQLException {
         User user = new User();
         user.setId(rs.getInt("idObject"));
         user.setName(rs.getString("objectName"));

@@ -69,8 +69,20 @@ public class SQLQuery {
         return "insert into Object (name, idType) values (?,?)";
     }
 
+    public static String UPDATE_OBJECT_NAME(int id, String name){
+        return "update Object set name=\"" + name + "\" where idObject=" + id;
+    }
+
     public static String CREATE_ATTRIBUTE_VALUE(String value, int objectId, int attrId) {
         return "insert into AttributeValue (value, id_object, id_attribute) values (\"" + value + "\", " + objectId + ", " + attrId + ")";
+    }
+
+    public static String UPDATE_ATTRIBUTE_VALUE(String value, int objectId, int attrId){
+        return "update AttributeValue set value=\"" + value + "\" where id_object=" + objectId + " and id_attribute=" + attrId;
+    }
+
+    public static String DELETE_ATTRIBUTE_VALUE(String value, int objectId, int attId){
+        return "delete from AttributeValue where id_object=" + objectId + " and id_attribute=" + attId + " and value=\"" + value + "\"";
     }
 
     public static String LIKED_OBJECT_BY_USER_ID(int id, int idAttribute) {

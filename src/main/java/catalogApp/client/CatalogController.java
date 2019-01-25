@@ -19,7 +19,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
@@ -60,26 +59,28 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
 
     public void go(DockPanel container) {
         this.container = container;
+        bind();
+
+
         RootPanel.get().add(dock);
 
         dock.setSpacing(4);
         dock.setWidth("100%");
         dock.setHorizontalAlignment(DockPanel.ALIGN_CENTER);
         dock.setBorderWidth(3);
-        bind();
-        ProfileBarPresenter profileBarPresenter = new ProfileBarPresenter(new ProfileBarView(), eventBus);
+
+        ProfileBarPresenter profileBarPresenter = new ProfileBarPresenter(new ProfileBarView());
         tabsPresenter = new TabsPresenter(new TabPanelView(), eventBus, bookWebService, songWebService);
         profileBarPresenter.setData(user);
         profileBarPresenter.go(container);
+
         tabsPresenter.go(dock);
 
-
-
-        UserLibPanelPresenter userLibPanelPresenter = new UserLibPanelPresenter(new BookTabView(), new SongTabView(), bookWebService, songWebService, eventBus);
+        UserLibPanelPresenter userLibPanelPresenter = new UserLibPanelPresenter(new BookTabView(), new SongTabView(), bookWebService, songWebService);
         userLibPanelPresenter.go(dock);
 
-        if(isAdmin()) {
-            UserPanelPresenter userPanelPresenter = new UserPanelPresenter(new UserPanelView(), authWebService, eventBus);
+        if (isAdmin()) {
+            UserPanelPresenter userPanelPresenter = new UserPanelPresenter(new UserPanelView(), authWebService);
             userPanelPresenter.go(dock);
         }
     }
@@ -131,8 +132,6 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
                     break;
                 case "showSongs":
                     tabsPresenter.showSongs();
-                    break;
-                case ".....":
                     break;
                 default:
             }
