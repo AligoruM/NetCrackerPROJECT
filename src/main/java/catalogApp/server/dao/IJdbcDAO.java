@@ -25,6 +25,7 @@ public interface IJdbcDAO {
 
     List<Song> getUsersSongs(int id);
 
+    //general
     void updateObjectName(int id, String name);
 
     void updateAttributeValue(int id, int attributeId, String value);
@@ -32,4 +33,6 @@ public interface IJdbcDAO {
     void addObjectsToUserLibrary(int id, List<Integer> objectIds, int attributeId);
 
     void deleteObjectFromUserLibrary(int id, List<Integer> ids, int attributeId);
+
+    void rateObject(int id, int attributeId, String value);
 }

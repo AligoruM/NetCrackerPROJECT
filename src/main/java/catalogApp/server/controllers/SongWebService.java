@@ -57,6 +57,12 @@ public class SongWebService {
         return jdbcService.getLibSongs();
     }
 
+    @POST
+    @Path("/rateSong/{id}")
+    public void rateSong(@PathParam("id") int id, int mark){
+
+    }
+
     @DELETE
     @Path("/song")
     public void deleteBooksFromUserLibs(List<Integer> ids){

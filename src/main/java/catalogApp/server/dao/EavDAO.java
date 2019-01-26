@@ -153,6 +153,11 @@ public class EavDAO implements IJdbcDAO {
         }
     }
 
+    @Override
+    public void rateObject(int id, int attributeId, String value) {
+
+    }
+
 
 }
 

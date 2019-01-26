@@ -40,19 +40,19 @@ public class JdbcService implements IJdbcService {
 
     @Override
     public List<Book> getLibBooks() {
-        int user_id = authDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
+        int user_id = getUserId();
         return jdbcDAO.getUsersBooks(user_id);
     }
 
     @Override
     public void addBooksToLibrary(List<Integer> idList) {
-        int user_id = authDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
+        int user_id = getUserId();
         jdbcDAO.addObjectsToUserLibrary(user_id, idList, Attribute.LIKED_BOOK_ID);
     }
 
     @Override
     public void deleteBooksFromLibrary(List<Integer> ids) {
-        int userId= authDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
+        int userId= getUserId();
         jdbcDAO.deleteObjectFromUserLibrary(userId, ids, Attribute.LIKED_BOOK_ID);
     }
 
@@ -80,19 +80,19 @@ public class JdbcService implements IJdbcService {
 
     @Override
     public List<Song> getLibSongs() {
-        int userId = authDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
+        int userId = getUserId();
         return jdbcDAO.getUsersSongs(userId);
     }
 
     @Override
     public void addSongsToLibrary(List<Integer> idList) {
-        int userId = authDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
+        int userId = getUserId();
         jdbcDAO.addObjectsToUserLibrary(userId, idList, Attribute.LIKED_SONG_ID);
     }
 
     @Override
     public void deleteSongsFromLibrary(List<Integer> ids) {
-        int userId= authDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
+        int userId= getUserId();
         jdbcDAO.deleteObjectFromUserLibrary(userId, ids, Attribute.LIKED_SONG_ID);
     }
 
@@ -104,5 +104,15 @@ public class JdbcService implements IJdbcService {
         if(params.containsKey("duration")){
             jdbcDAO.updateAttributeValue(id, Attribute.SONG_DURATION, params.get("duration"));
         }
+    }
+
+    @Override
+    public void rateSong(int id) {
+        int userId = getUserId();
+        //jdbcDAO.rateObject(id, )
+    }
+
+    private int getUserId(){
+        return authDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
     }
 }

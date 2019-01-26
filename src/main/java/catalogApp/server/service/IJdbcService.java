@@ -34,4 +34,6 @@ public interface IJdbcService {
     void deleteSongsFromLibrary(List<Integer> ids);
 
     void updateSong(int id, Map<String, String> params);
+
+    void rateSong(int id);
 }
