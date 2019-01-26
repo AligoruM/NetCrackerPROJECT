@@ -2,6 +2,9 @@
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <g:HTMLPanel>
         <g:HorizontalPanel ui:field="hPanel" width="100%">
+            <g:cell width="50px" horizontalAlignment="ALIGN_LEFT">
+                <g:Button ui:field="profileButton" text="My profile"/>
+            </g:cell>
             <g:cell horizontalAlignment="ALIGN_RIGHT" width="100%" verticalAlignment="ALIGN_MIDDLE">
                 <g:Label ui:field="dataLabel"/>
             </g:cell>

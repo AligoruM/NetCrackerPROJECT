@@ -27,6 +27,8 @@ public class ProfileBarView extends Composite implements ProfileBarPresenter.Dis
     Label dataLabel;
     @UiField
     Button logoutButton;
+    @UiField
+    Button profileButton;
 
     @Override
     public void setDataLabel(String username, String role) {
@@ -36,5 +38,10 @@ public class ProfileBarView extends Composite implements ProfileBarPresenter.Dis
     @Override
     public Button getLogoutButton() {
         return logoutButton;
+    }
+
+    @Override
+    public Button getProfileButton() {
+        return profileButton;
     }
 }

@@ -32,7 +32,6 @@ public class AddSongDialogPresenter implements Presenter{
         void setSuggestions(List<String> suggestions);
     }
 
-
     private final HandlerManager eventBus;
     private final Display display;
     private final SongWebService songWebService;

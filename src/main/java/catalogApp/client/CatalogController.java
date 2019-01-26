@@ -7,6 +7,7 @@ import catalogApp.client.services.BookWebService;
 import catalogApp.client.services.SongWebService;
 import catalogApp.client.view.dialogs.AddBookDialogView;
 import catalogApp.client.view.dialogs.AddSongDialogView;
+import catalogApp.client.view.dialogs.ProfilePopupView;
 import catalogApp.client.view.mainPage.ProfileBarView;
 import catalogApp.client.view.mainPage.TabPanelView;
 import catalogApp.client.view.mainPage.UserPanelView;
@@ -69,7 +70,7 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
         dock.setHorizontalAlignment(DockPanel.ALIGN_CENTER);
         dock.setBorderWidth(3);
 
-        ProfileBarPresenter profileBarPresenter = new ProfileBarPresenter(new ProfileBarView());
+        ProfileBarPresenter profileBarPresenter = new ProfileBarPresenter(new ProfileBarView(), eventBus);
         tabsPresenter = new TabsPresenter(new TabPanelView(), eventBus, bookWebService, songWebService);
         profileBarPresenter.setData(user);
         profileBarPresenter.go(container);
@@ -87,12 +88,16 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
 
     private void bind() {
         History.addValueChangeHandler(this);
-
+        eventBus.addHandler(ShowProfileEvent.TYPE, event -> doShowProfile());
         eventBus.addHandler(AddBookEvent.TYPE, event -> doAddNewBook());
         eventBus.addHandler(AddSongEvent.TYPE, event -> doAddNewSong());
         eventBus.addHandler(ClosedDialogEvent.TYPE, event -> doClosedDialog());
         eventBus.addHandler(ShowBooksEvent.TYPE, event -> doShowBooks());
         eventBus.addHandler(ShowSongsEvent.TYPE, event -> doShowSongs());
+    }
+
+    private void doShowProfile() {
+        History.newItem("profile");
     }
 
     private void doAddNewBook() {
@@ -133,6 +138,8 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
                 case "showSongs":
                     tabsPresenter.showSongs();
                     break;
+                case "profile":
+                    presenter = new ProfilePopupPresenter(new ProfilePopupView(), authWebService, eventBus);
                 default:
             }
 
@@ -145,5 +152,9 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
 
     public static boolean isAdmin() {
         return "ADMIN".equals(user.getRole());
+    }
+
+    public static SimpleUser getUser() {
+        return user;
     }
 }
