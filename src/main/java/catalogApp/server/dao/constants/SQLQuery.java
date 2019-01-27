@@ -1,5 +1,8 @@
 package catalogApp.server.dao.constants;
 
+import java.util.Arrays;
+import java.util.StringJoiner;
+
 public class SQLQuery {
     //BOOKS
     public static String ALL_BOOKS() {
@@ -81,12 +84,16 @@ public class SQLQuery {
         return "update AttributeValue set value=\"" + value + "\" where id_object=" + objectId + " and id_attribute=" + attrId;
     }
 
-    public static String DELETE_ATTRIBUTE_VALUE(String value, int objectId, int attId){
+    public static String DELETE_ATTRIBUTE_VALUE_BY_ALL_FIELDS(String value, int objectId, int attId){
         return "delete from AttributeValue where id_object=" + objectId + " and id_attribute=" + attId + " and value=\"" + value + "\"";
     }
+    public static String DELETE_ATTRIBUTE_VALUE_BY_KEYS(int objectId, int attId){
+        return "delete from AttributeValue where id_object=" + objectId + " and id_attribute=" + attId;
+    }
 
-    public static String LIKED_OBJECT_BY_USER_ID(int id, int idAttribute) {
-        return "select AV.value as id from AttributeValue AV where AV.id_object=" + id + " and AV.id_attribute=" + idAttribute;
+    public static String ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(int id, int idAttribute) {
+        return "select AV.value as value from AttributeValue AV" +
+                " where AV.id_object=" + id + " and AV.id_attribute=" + idAttribute;
     }
 
     //USERS

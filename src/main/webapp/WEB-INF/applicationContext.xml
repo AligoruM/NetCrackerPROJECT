@@ -23,12 +23,16 @@
     </http>
 
     <b:bean id="userDetailsService" class="catalogApp.server.security.UserDetailsServiceImpl">
-        <b:constructor-arg ref="authDAO"/>
+        <b:constructor-arg ref="userDAO"/>
     </b:bean>
 
 <!--    <b:bean id="authWebService" class="catalogApp.server.controllers.AuthWebService">
-        <b:constructor-arg ref="authDAO"/>
+        <b:constructor-arg ref="userDAO"/>
     </b:bean>-->
+
+    <b:bean id="userWebService" class="catalogApp.server.controllers.UserWebService">
+        <b:property name="jdbcService" ref="jdbcService"/>
+    </b:bean>
 
     <b:bean id="bookWebService" class="catalogApp.server.controllers.BookWebService">
         <b:property name="jdbcService" ref="jdbcService"/>
@@ -40,10 +44,10 @@
 
     <b:bean id="jdbcService" class="catalogApp.server.service.JdbcService">
         <b:constructor-arg ref="jdbcEavDAO"/>
-        <b:constructor-arg ref="authDAO"/>
+        <b:constructor-arg ref="userDAO"/>
     </b:bean>
 
-    <b:bean id="authDAO" class="catalogApp.server.dao.AuthDAO">
+    <b:bean id="userDAO" class="catalogApp.server.dao.UserDAO">
         <b:constructor-arg ref="jdbcTemplate"/>
     </b:bean>
 

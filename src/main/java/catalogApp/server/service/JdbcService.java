@@ -1,6 +1,6 @@
 package catalogApp.server.service;
 
-import catalogApp.server.dao.AuthDAO;
+import catalogApp.server.dao.UserDAO;
 import catalogApp.server.dao.IJdbcDAO;
 import catalogApp.server.dao.constants.Attribute;
 import catalogApp.shared.model.Book;
@@ -16,11 +16,11 @@ import java.util.Map;
 public class JdbcService implements IJdbcService {
 
     private IJdbcDAO jdbcDAO;
-    private AuthDAO authDAO;
+    private UserDAO userDAO;
 
-    public JdbcService(IJdbcDAO jdbcDAO, AuthDAO authDAO) {
+    public JdbcService(IJdbcDAO jdbcDAO, UserDAO userDAO) {
         this.jdbcDAO = jdbcDAO;
-        this.authDAO = authDAO;
+        this.userDAO = userDAO;
     }
 
     @Override
@@ -40,19 +40,19 @@ public class JdbcService implements IJdbcService {
 
     @Override
     public List<Book> getLibBooks() {
-        int user_id = authDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
+        int user_id = userDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
         return jdbcDAO.getUsersBooks(user_id);
     }
 
     @Override
     public void addBooksToLibrary(List<Integer> idList) {
-        int user_id = authDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
+        int user_id = userDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
         jdbcDAO.addObjectsToUserLibrary(user_id, idList, Attribute.LIKED_BOOK_ID);
     }
 
     @Override
     public void deleteBooksFromLibrary(List<Integer> ids) {
-        int userId= authDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
+        int userId= userDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
         jdbcDAO.deleteObjectFromUserLibrary(userId, ids, Attribute.LIKED_BOOK_ID);
     }
 
@@ -80,19 +80,19 @@ public class JdbcService implements IJdbcService {
 
     @Override
     public List<Song> getLibSongs() {
-        int userId = authDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
+        int userId = userDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
         return jdbcDAO.getUsersSongs(userId);
     }
 
     @Override
     public void addSongsToLibrary(List<Integer> idList) {
-        int userId = authDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
+        int userId = userDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
         jdbcDAO.addObjectsToUserLibrary(userId, idList, Attribute.LIKED_SONG_ID);
     }
 
     @Override
     public void deleteSongsFromLibrary(List<Integer> ids) {
-        int userId= authDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
+        int userId= userDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
         jdbcDAO.deleteObjectFromUserLibrary(userId, ids, Attribute.LIKED_SONG_ID);
     }
 
@@ -104,5 +104,17 @@ public class JdbcService implements IJdbcService {
         if(params.containsKey("duration")){
             jdbcDAO.updateAttributeValue(id, Attribute.SONG_DURATION, params.get("duration"));
         }
+    }
+
+    @Override
+    public void updateUserProfile(Map<String, String> params) {
+        int userId= userDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
+        userDAO.updateUserProfile(userId, params);
+    }
+
+    @Override
+    public Map<String, String> getUserProfile() {
+        int userId= userDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
+        return userDAO.getUserProfile(userId);
     }
 }

@@ -1,6 +1,6 @@
 package catalogApp.server.security;
 
-import catalogApp.server.dao.AuthDAO;
+import catalogApp.server.dao.UserDAO;
 import catalogApp.shared.model.SimpleUser;
 import catalogApp.shared.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,33 +15,29 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Controller
 @Path("/")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private static AuthDAO authDAO;
+    private static UserDAO userDAO;
 
     public UserDetailsServiceImpl() {
     }
 
     @Autowired
-    public UserDetailsServiceImpl(AuthDAO authDAO) {
-        UserDetailsServiceImpl.authDAO = authDAO;
+    public UserDetailsServiceImpl(UserDAO userDAO) {
+        UserDetailsServiceImpl.userDAO = userDAO;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try {
-            User user = authDAO.getUser(username);
+            User user = userDAO.getUser(username);
             Set<GrantedAuthority> roles = new HashSet<>();
             roles.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
             return new org.springframework.security.core.userdetails.User(user.getName(), user.getPassword(), roles);
@@ -55,7 +51,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Produces(MediaType.APPLICATION_JSON)
     public SimpleUser getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        SimpleUser user = authDAO.getSimpleUser(authentication.getName());
+        SimpleUser user = userDAO.getSimpleUser(authentication.getName());
         if(user!=null)
             return user;
         else
@@ -66,7 +62,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Path("/allUsers")
     @Produces(MediaType.APPLICATION_JSON)
     public List<User> getAllUsers(){
-        return authDAO.getAllUsers();
+        return userDAO.getAllUsers();
     }
-
 }

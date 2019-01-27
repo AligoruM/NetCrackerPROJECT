@@ -2,25 +2,30 @@
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <g:HTMLPanel>
         <g:DialogBox ui:field="dialogBox">
-            <g:HTMLPanel width="400px" height="300px">
-                <g:DockLayoutPanel unit="PX" width="100%" height="100%">
-                    <g:west size="150">
-                        <g:VerticalPanel>
-                            <g:Image ui:field="avatarImg" width="150px" height="150px"/>
-                            <g:Label ui:field="nameLabel"/>
-                        </g:VerticalPanel>
-                    </g:west>
-                    <g:north size="400">
-                        <g:Label ui:field="titleLabel" >Your PROFILE</g:Label>
-                    </g:north>
-                    <g:south size="30">
-                        <g:Button ui:field="closeButton" text="Close"/>
-                    </g:south>
-                    <g:center>
+            <g:VerticalPanel>
+                <g:cell horizontalAlignment="ALIGN_CENTER">
+                    <g:Label ui:field="titleLabel">Your PROFILE</g:Label>
+                </g:cell>
+                <g:HorizontalPanel width="100%" height="100%">
+                    <g:VerticalPanel>
+                        <g:Image ui:field="avatarImg" width="150px" height="150px"/>
+                        <g:TextBox ui:field="avatarUrl"/>
+                    </g:VerticalPanel>
+                    <g:VerticalPanel>
                         <g:FlexTable ui:field="table"/>
-                    </g:center>
-                </g:DockLayoutPanel>
-            </g:HTMLPanel>
+                    </g:VerticalPanel>
+                </g:HorizontalPanel>
+                <g:cell horizontalAlignment="ALIGN_RIGHT">
+                    <g:HorizontalPanel>
+                        <g:cell>
+                            <g:Button ui:field="submitButton" text="submit"/>
+                        </g:cell>
+                        <g:cell>
+                            <g:Button ui:field="closeButton" text="Close"/>
+                        </g:cell>
+                    </g:HorizontalPanel>
+                </g:cell>
+            </g:VerticalPanel>
         </g:DialogBox>
     </g:HTMLPanel>
 </ui:UiBinder>

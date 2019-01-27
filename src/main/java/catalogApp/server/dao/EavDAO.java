@@ -122,7 +122,7 @@ public class EavDAO implements IJdbcDAO {
     }
 
     private List<Integer> getObjectsIdsByUserIdAndAttribute(int id, int idAttribute) {
-        return jdbcTemplate.query(SQLQuery.LIKED_OBJECT_BY_USER_ID(id, idAttribute), (rs, rowNum) -> rs.getInt("id"));
+        return jdbcTemplate.query(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(id, idAttribute), (rs, rowNum) -> rs.getInt("value"));
     }
 
     private int createObjectAndReturnNewId(String name, int type) {
@@ -149,7 +149,7 @@ public class EavDAO implements IJdbcDAO {
     @Override
     public void deleteObjectFromUserLibrary(int id, List<Integer> ids, int attributeId) {
         for (int x: ids) {
-            jdbcTemplate.execute(SQLQuery.DELETE_ATTRIBUTE_VALUE(String.valueOf(x), id, attributeId));
+            jdbcTemplate.execute(SQLQuery.DELETE_ATTRIBUTE_VALUE_BY_ALL_FIELDS(String.valueOf(x), id, attributeId));
         }
     }
 
