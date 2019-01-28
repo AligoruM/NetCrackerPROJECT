@@ -4,8 +4,12 @@ import catalogApp.server.dao.UserDAO;
 import catalogApp.server.dao.IJdbcDAO;
 import catalogApp.server.dao.constants.Attribute;
 import catalogApp.shared.model.Book;
+import catalogApp.shared.model.SimpleUser;
 import catalogApp.shared.model.Song;
+import catalogApp.shared.model.User;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -104,6 +108,21 @@ public class JdbcService implements IJdbcService {
         if(params.containsKey("duration")){
             jdbcDAO.updateAttributeValue(id, Attribute.SONG_DURATION, params.get("duration"));
         }
+    }
+
+    @Override
+    public SimpleUser getUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        SimpleUser user = userDAO.getSimpleUser(authentication.getName());
+        if(user!=null)
+            return user;
+        else
+            throw new UsernameNotFoundException("User not found");
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userDAO.getAllUsers();
     }
 
     @Override

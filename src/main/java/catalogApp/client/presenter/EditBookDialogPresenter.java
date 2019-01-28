@@ -104,6 +104,7 @@ public class EditBookDialogPresenter implements Presenter {
                         for (Book x : dataProvider.getList()) {
                             if (x.getId() == selected_id) {
                                 x.setName(newName);
+                                dataProvider.refresh();
                                 break;
                             }
                         }

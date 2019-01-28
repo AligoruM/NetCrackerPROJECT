@@ -54,7 +54,7 @@ public class EditDialogView extends Composite implements EditBookDialogPresenter
 
     @Override
     public void showDialog() {
-        dialogPanel.show();
+        dialogPanel.center();
     }
 
     @Override

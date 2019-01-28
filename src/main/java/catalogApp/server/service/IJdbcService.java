@@ -1,7 +1,9 @@
 package catalogApp.server.service;
 
 import catalogApp.shared.model.Book;
+import catalogApp.shared.model.SimpleUser;
 import catalogApp.shared.model.Song;
+import catalogApp.shared.model.User;
 
 import java.util.List;
 import java.util.Map;
@@ -34,6 +36,10 @@ public interface IJdbcService {
     void deleteSongsFromLibrary(List<Integer> ids);
 
     void updateSong(int id, Map<String, String> params);
+
+    SimpleUser getUser();
+
+    List<User> getAllUsers();
 
     void updateUserProfile(Map<String, String> params);
 

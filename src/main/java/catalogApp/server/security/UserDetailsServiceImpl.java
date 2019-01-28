@@ -20,8 +20,6 @@ import javax.ws.rs.core.MediaType;
 import java.util.*;
 
 @Service
-@Controller
-@Path("/")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private static UserDAO userDAO;
@@ -40,28 +38,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             User user = userDAO.getUser(username);
             Set<GrantedAuthority> roles = new HashSet<>();
             roles.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
+            if(user.getRole().equals("ADMIN"))
+                roles.add(new SimpleGrantedAuthority("ROLE_USER"));
             return new org.springframework.security.core.userdetails.User(user.getName(), user.getPassword(), roles);
         } catch (EmptyResultDataAccessException ex) {
             throw new UsernameNotFoundException("User not found");
         }
     }
 
-    @POST
-    @Path("/user")
-    @Produces(MediaType.APPLICATION_JSON)
-    public SimpleUser getUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        SimpleUser user = userDAO.getSimpleUser(authentication.getName());
-        if(user!=null)
-            return user;
-        else
-            throw new UsernameNotFoundException("User not found");
-    }
-
-    @POST
-    @Path("/allUsers")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<User> getAllUsers(){
-        return userDAO.getAllUsers();
-    }
 }
