@@ -49,7 +49,7 @@ public class AddSongDialogView extends Composite implements AddSongDialogPresent
 
     @Override
     public void showDialog() {
-        dialogPanel.show();
+        dialogPanel.center();
     }
 
     @Override

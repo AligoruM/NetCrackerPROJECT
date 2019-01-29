@@ -22,7 +22,6 @@ import java.util.Set;
 
 public class SongTabPresenter implements Presenter {
     public interface Display {
-        Button getAddButton();
 
         void setDataProviderAndInitialize(ListDataProvider<Song> dataProvider);
 
@@ -53,35 +52,13 @@ public class SongTabPresenter implements Presenter {
 
     private void bind() {
         display.setDataProviderAndInitialize(songListDataProvider);
-        if(CatalogController.isAdmin()) {
-            display.getAddButton().addClickHandler(event -> {
-                if (!event.isControlKeyDown())
-                    eventBus.fireEvent(new AddSongEvent());
-            });
-            display.getAddButton().addClickHandler(event -> {
-               if(event.isControlKeyDown())
-                   new EditSongDialogPresenter(new EditDialogView(), songWebService, songListDataProvider).go(null);
-            });
-        }
-        else{
-            display.getAddButton().addClickHandler(event -> {
-                List<Integer> tmp = new ArrayList<>();
-                display.getSelectedItems().forEach(e -> tmp.add(e.getId()));
-                if(!tmp.isEmpty()) {
-                    songWebService.addSongsToUserLib(tmp, new MethodCallback<Void>() {
-                        @Override
-                        public void onFailure(Method method, Throwable exception) {
-                            GWT.log("addSongsToLib doesnt work", exception);
-                        }
 
-                        @Override
-                        public void onSuccess(Method method, Void response) {
-                            Window.alert("Added to user's lib");
-                        }
-                    });
-                }
-            });
-        }
+    }
+
+    public List<Integer> getSelectedItems(){
+        List<Integer> tmp = new ArrayList<>();
+        display.getSelectedItems().forEach(e -> tmp.add(e.getId()));
+        return tmp;
     }
 
     public void loadData() {
@@ -90,12 +67,10 @@ public class SongTabPresenter implements Presenter {
                 @Override
                 public void onFailure(Method method, Throwable throwable) {
                     GWT.log("getAllSongs", throwable);
-                    Window.alert("getAllSongs doesnt work\n" + throwable.getMessage());
                 }
 
                 @Override
                 public void onSuccess(Method method, List<Song> songs) {
-                    GWT.log(songs.get(0).toString());
                     songListDataProvider.getList().addAll(songs);
                     loaded = true;
                 }
@@ -103,7 +78,7 @@ public class SongTabPresenter implements Presenter {
         }
     }
 
-    public static ListDataProvider<Song> getSongListDataProvider() {
+    public ListDataProvider<Song> getSongListDataProvider() {
         return songListDataProvider;
     }
 }

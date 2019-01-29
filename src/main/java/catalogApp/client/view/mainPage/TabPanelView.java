@@ -1,16 +1,17 @@
 package catalogApp.client.view.mainPage;
 
-import catalogApp.client.presenter.TabsPresenter;
+import catalogApp.client.presenter.TabPanelPresenter;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.TabPanel;
 
 
-public class TabPanelView extends Composite implements TabsPresenter.Display {
+public class TabPanelView extends Composite implements TabPanelPresenter.Display {
 
     @UiTemplate("TabPanelView.ui.xml")
     interface TabPanelViewUiBinder extends UiBinder<Panel, TabPanelView> {
@@ -18,6 +19,12 @@ public class TabPanelView extends Composite implements TabsPresenter.Display {
 
     @UiField
     TabPanel tabPanel;
+    @UiField
+    Button addButton;
+    @UiField
+    Button addToLib;
+    @UiField
+    Button editItem;
 
     private static TabPanelViewUiBinder tabPanelViewUiBinder = GWT.create(TabPanelViewUiBinder.class);
 
@@ -25,6 +32,21 @@ public class TabPanelView extends Composite implements TabsPresenter.Display {
     public TabPanelView() {
         initWidget(tabPanelViewUiBinder.createAndBindUi(this));
         //tabPanel.setWidth("500px");
+    }
+
+    @Override
+    public Button getAddButton() {
+        return addButton;
+    }
+
+    @Override
+    public Button getAddToLibButton() {
+        return addToLib;
+    }
+
+    @Override
+    public Button getEditButton() {
+        return editItem;
     }
 
     @Override

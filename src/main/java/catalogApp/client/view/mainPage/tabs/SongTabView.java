@@ -27,8 +27,8 @@ public class SongTabView extends Composite implements SongTabPresenter.Display {
 
     @UiField
     SimplePanel simplePanel;
-    @UiField
-    Button addButton;
+    //@UiField
+    //Button addButton;
     @UiField
     SimplePager pager;
 
@@ -50,10 +50,7 @@ public class SongTabView extends Composite implements SongTabPresenter.Display {
     }
 
 
-    @Override
-    public Button getAddButton() {
-        return addButton;
-    }
+
 
     @Override
     public void setDataProviderAndInitialize(ListDataProvider<Song> dataProvider) {

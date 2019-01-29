@@ -30,8 +30,6 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
     @UiField
     SimplePanel simplePanel;
     @UiField
-    Button addButton;
-    @UiField
     SimplePager pager;
 
     private static BookTabViewUiBinder ourUiBinder = GWT.create(BookTabViewUiBinder.class);
@@ -53,10 +51,6 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
         table.addColumnSortHandler(authorSorter);
     }
 
-    @Override
-    public Button getAddButton() {
-        return addButton;
-    }
 
 
     @Override

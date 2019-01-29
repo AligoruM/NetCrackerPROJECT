@@ -5,7 +5,11 @@ import catalogApp.client.services.SongWebService;
 import catalogApp.shared.model.Book;
 import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
@@ -17,6 +21,10 @@ public class UserLibPanelPresenter implements Presenter {
 
     private BookTabPresenter.Display bookView;
     private SongTabPresenter.Display songView;
+
+    private Button deleteBooks = new Button("Delete books from lib");
+    private Button deleteSongs = new Button("Delete songs from lib");
+
     private SongWebService songWebService;
     private BookWebService bookWebService;
 
@@ -63,15 +71,18 @@ public class UserLibPanelPresenter implements Presenter {
         dockPanel.setBorderWidth(3);
         dockPanel.setSpacing(4);
         bind();
-        dockPanel.add(bookView.asWidget(), DockPanel.EAST);
+        //HorizontalPanel horizontalPanel = new HorizontalPanel();
+        //horizontalPanel.add(deleteSongs);
+        //horizontalPanel.add(deleteBooks);
+        dockPanel.add(deleteSongs, DockPanel.WEST);
         dockPanel.add(songView.asWidget(), DockPanel.WEST);
-
+        dockPanel.add(deleteBooks, DockPanel.EAST);
+        dockPanel.add(bookView.asWidget(), DockPanel.EAST);
         container.add(dockPanel, DockPanel.CENTER);
     }
 
     private void bind() {
-        bookView.getAddButton().setText("Delete books from lib");
-        bookView.getAddButton().addClickHandler(event -> {
+        deleteBooks.addClickHandler(event -> {
             List<Integer> tmp = new ArrayList<>();
             bookView.getSelectedItems().forEach(e -> tmp.add(e.getId()));
             if (!tmp.isEmpty()) {
@@ -91,8 +102,7 @@ public class UserLibPanelPresenter implements Presenter {
             }
         });
 
-        songView.getAddButton().setText("Delete songs from lib");
-        songView.getAddButton().addClickHandler(event -> {
+        deleteSongs.addClickHandler(event -> {
             List<Integer> tmp = new ArrayList<>();
             songView.getSelectedItems().forEach(e -> tmp.add(e.getId()));
             if (!tmp.isEmpty()) {

@@ -3,6 +3,11 @@
 
     <g:HTMLPanel>
         <g:VerticalPanel>
+            <g:HorizontalPanel>
+                <g:Button ui:field="addButton" text="Add item"/>
+                <g:Button ui:field="addToLib" text="Add item to lib"/>
+                <g:Button ui:field="editItem" text="Edit item"/>
+            </g:HorizontalPanel>
             <g:TabPanel ui:field="tabPanel"/>
         </g:VerticalPanel>
     </g:HTMLPanel>

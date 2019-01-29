@@ -4,18 +4,9 @@
     <g:HTMLPanel>
         <g:VerticalPanel>
             <g:SimplePanel ui:field="simplePanel"/>
-            <g:HTMLPanel>
-                <table>
-                    <tr>
-                        <td align='left'>
-                            <c:SimplePager ui:field='pager' location="CENTER"/>
-                        </td>
-                        <td align='right'>
-                            <g:Button ui:field="addButton" text="Add book"/>
-                        </td>
-                    </tr>
-                </table>
-            </g:HTMLPanel>
+            <g:cell horizontalAlignment="ALIGN_CENTER">
+                <c:SimplePager ui:field='pager' location="CENTER"/>
+            </g:cell>
         </g:VerticalPanel>
     </g:HTMLPanel>
 </ui:UiBinder>

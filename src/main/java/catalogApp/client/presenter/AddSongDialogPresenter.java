@@ -35,11 +35,13 @@ public class AddSongDialogPresenter implements Presenter{
     private final HandlerManager eventBus;
     private final Display display;
     private final SongWebService songWebService;
+    private final SongTabPresenter songTabPresenter;
 
-    public AddSongDialogPresenter(Display display,  SongWebService songWebService, HandlerManager eventBus) {
+    public AddSongDialogPresenter(Display display,  SongWebService songWebService, SongTabPresenter songTabPresenter, HandlerManager eventBus) {
         this.eventBus = eventBus;
         this.display = display;
         this.songWebService = songWebService;
+        this.songTabPresenter = songTabPresenter;
     }
 
     @Override
@@ -73,7 +75,7 @@ public class AddSongDialogPresenter implements Presenter{
 
                 @Override
                 public void onSuccess(Method method, Song song) {
-                    SongTabPresenter.getSongListDataProvider().getList().add(song);
+                    songTabPresenter.getSongListDataProvider().getList().add(song);
                     display.hideDialog();
                     eventBus.fireEvent(new ClosedDialogEvent());
                 }

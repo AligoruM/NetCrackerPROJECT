@@ -55,7 +55,7 @@ public class AddBookDialogView extends Composite implements AddBookDialogPresent
 
     @Override
     public void showDialog() {
-        dialogPanel.show();
+        dialogPanel.center();
     }
 
     @Override

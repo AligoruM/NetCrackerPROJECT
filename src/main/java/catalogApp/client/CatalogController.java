@@ -35,7 +35,7 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
     private final AuthWebService authWebService;
     private DockPanel dock = new DockPanel();
 
-    private TabsPresenter tabsPresenter;
+    private TabPanelPresenter tabPanelPresenter;
 
     public CatalogController(HandlerManager eventBus, BookWebService bookService,
                              SongWebService songWebService, AuthWebService authWebService) {
@@ -71,11 +71,11 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
         dock.setBorderWidth(3);
 
         ProfileBarPresenter profileBarPresenter = new ProfileBarPresenter(new ProfileBarView(), eventBus);
-        tabsPresenter = new TabsPresenter(new TabPanelView(), eventBus, bookWebService, songWebService);
+        tabPanelPresenter = new TabPanelPresenter(new TabPanelView(), eventBus, bookWebService, songWebService);
         profileBarPresenter.setData(user);
         profileBarPresenter.go(container);
 
-        tabsPresenter.go(dock);
+        tabPanelPresenter.go(dock);
 
         UserLibPanelPresenter userLibPanelPresenter = new UserLibPanelPresenter(new BookTabView(), new SongTabView(), bookWebService, songWebService);
         userLibPanelPresenter.go(dock);
@@ -127,16 +127,16 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
             Presenter presenter = null;
             switch (token) {
                 case "addBook":
-                    presenter = new AddBookDialogPresenter(new AddBookDialogView(), bookWebService, eventBus);
+                    presenter = new AddBookDialogPresenter(new AddBookDialogView(), bookWebService, tabPanelPresenter.getBookPresenter() , eventBus);
                     break;
                 case "addSong":
-                    presenter = new AddSongDialogPresenter(new AddSongDialogView(), songWebService, eventBus);
+                    presenter = new AddSongDialogPresenter(new AddSongDialogView(), songWebService, tabPanelPresenter.getSongPresenter(), eventBus);
                     break;
                 case "showBooks":
-                    tabsPresenter.showBooks();
+                    tabPanelPresenter.showBooks();
                     break;
                 case "showSongs":
-                    tabsPresenter.showSongs();
+                    tabPanelPresenter.showSongs();
                     break;
                 case "profile":
                     presenter = new ProfilePopupPresenter(new ProfilePopupView(), authWebService, eventBus);

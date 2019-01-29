@@ -40,11 +40,9 @@ public class CustomAuthenticationProviderTest {
         //authenticationProvider.authenticate(authentication);
 
         //verify(authenticationProvider).authenticate(authentication);
-        try {
-            assertTrue(authenticationProvider.authenticate(authentication).isAuthenticated());
-        }catch (BadCredentialsException ex){
-            fail(ex.getMessage());
-        }
+
+        assertTrue(authenticationProvider.authenticate(authentication).isAuthenticated());
+
     }
 
     @Test(expected = BadCredentialsException.class)

@@ -36,11 +36,13 @@ public class AddBookDialogPresenter implements Presenter {
     private final HandlerManager eventBus;
     private final Display display;
     private final BookWebService bookService;
+    private final BookTabPresenter bookTabPresenter;
 
-    public AddBookDialogPresenter(Display view, BookWebService bookService, HandlerManager eventBus) {
+    public AddBookDialogPresenter(Display view, BookWebService bookService, BookTabPresenter bookTabPresenter, HandlerManager eventBus) {
         this.bookService = bookService;
         this.eventBus = eventBus;
         this.display = view;
+        this.bookTabPresenter = bookTabPresenter;
     }
 
     @Override
@@ -74,7 +76,7 @@ public class AddBookDialogPresenter implements Presenter {
 
                 @Override
                 public void onSuccess(Method method, Book book) {
-                    BookTabPresenter.getBookListDataProvider().getList().add(book);
+                    bookTabPresenter.getBookListDataProvider().getList().add(book);
                     display.hideDialog();
                     eventBus.fireEvent(new ClosedDialogEvent());
                 }

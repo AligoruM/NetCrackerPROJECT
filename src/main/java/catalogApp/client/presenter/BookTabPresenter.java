@@ -22,7 +22,6 @@ import java.util.Set;
 
 public class BookTabPresenter implements Presenter {
     public interface Display {
-        Button getAddButton();
 
         void setDataProviderAndInitialize(ListDataProvider<Book> dataProvider);
 
@@ -52,35 +51,12 @@ public class BookTabPresenter implements Presenter {
 
     private void bind() {
         display.setDataProviderAndInitialize(bookListDataProvider);
-        if (CatalogController.isAdmin()) {
-            display.getAddButton().addClickHandler(event -> {
-                if(!event.isControlKeyDown())
-                    eventBus.fireEvent(new AddBookEvent());
-            });
-            display.getAddButton().addClickHandler(event -> {
-                if (event.isControlKeyDown()){
-                    new EditBookDialogPresenter(new EditDialogView(), bookService, bookListDataProvider).go(null);
-                }
-            });
-        } else {
-            display.getAddButton().addClickHandler(event -> {
-                List<Integer> tmp = new ArrayList<>();
-                display.getSelectedItems().forEach(e -> tmp.add(e.getId()));
-                if(!tmp.isEmpty()) {
-                    bookService.addBooksToUserLib(tmp, new MethodCallback<Void>() {
-                        @Override
-                        public void onFailure(Method method, Throwable exception) {
-                            GWT.log("addBookToLib doesnt work", exception);
-                        }
+    }
 
-                        @Override
-                        public void onSuccess(Method method, Void response) {
-                            Window.alert("Added to user's lib");
-                        }
-                    });
-                }
-            });
-        }
+    public List<Integer> getSelectedItems(){
+        List<Integer> tmp = new ArrayList<>();
+        display.getSelectedItems().forEach(e -> tmp.add(e.getId()));
+        return tmp;
     }
 
     public void loadData() {
@@ -100,7 +76,7 @@ public class BookTabPresenter implements Presenter {
         }
     }
 
-    static ListDataProvider<Book> getBookListDataProvider() {
+    public ListDataProvider<Book> getBookListDataProvider() {
         return bookListDataProvider;
     }
 }
