@@ -7,13 +7,14 @@ import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class ProfileBarPresenter implements Presenter {
     public interface Display {
         void setDataLabel(String username, String role);
         Button getLogoutButton();
-        Button getProfileButton();
+        //Button getProfileButton();
         Widget asWidget();
     }
 
@@ -26,15 +27,15 @@ public class ProfileBarPresenter implements Presenter {
     }
 
     @Override
-    public void go(DockPanel container) {
-        container.add(display.asWidget(), DockPanel.NORTH);
+    public void go(Panel container) {
+        container.add(display.asWidget());
         display.getLogoutButton().addClickHandler(event -> {
             Cookies.removeCookie("JSESSIONID");
             Window.Location.replace("/login");
 
         });
 
-        display.getProfileButton().addClickHandler(event -> eventBus.fireEvent(new ShowProfileEvent()));
+        //display.getProfileButton().addClickHandler(event -> eventBus.fireEvent(new ShowProfileEvent()));
     }
 
     public void setData(SimpleUser simpleUser) {

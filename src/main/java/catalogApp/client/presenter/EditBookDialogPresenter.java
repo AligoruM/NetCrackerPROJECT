@@ -53,7 +53,7 @@ public class EditBookDialogPresenter implements Presenter {
     }
 
     @Override
-    public void go(DockPanel container) {
+    public void go(Panel container) {
         RootPanel.get().add(display.asWidget());
         authorBox.setEnabled(false);
         display.getTable().setWidget(2, 0, new Label("Author"));

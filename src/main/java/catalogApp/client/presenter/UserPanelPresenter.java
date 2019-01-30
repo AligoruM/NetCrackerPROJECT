@@ -4,6 +4,7 @@ import catalogApp.client.services.AuthWebService;
 import catalogApp.shared.model.User;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import org.fusesource.restygwt.client.Method;
@@ -28,8 +29,9 @@ public class UserPanelPresenter implements Presenter {
     }
 
     @Override
-    public void go(DockPanel container) {
-        container.add(display.asWidget(), DockPanel.EAST);
+    public void go(Panel container) {
+        container.clear();
+        container.add(display.asWidget());
         authWebService.getAllUsers(new MethodCallback<List<User>>() {
             @Override
             public void onFailure(Method method, Throwable exception) {

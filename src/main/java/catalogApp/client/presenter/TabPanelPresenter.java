@@ -1,11 +1,9 @@
 package catalogApp.client.presenter;
 
-import catalogApp.client.event.AddBookEvent;
-import catalogApp.client.event.AddSongEvent;
-import catalogApp.client.event.ShowBooksEvent;
-import catalogApp.client.event.ShowSongsEvent;
 import catalogApp.client.services.BookWebService;
 import catalogApp.client.services.SongWebService;
+import catalogApp.client.view.dialogs.AddBookDialogView;
+import catalogApp.client.view.dialogs.AddSongDialogView;
 import catalogApp.client.view.dialogs.EditDialogView;
 import catalogApp.client.view.mainPage.tabs.BookTabView;
 import catalogApp.client.view.mainPage.tabs.SongTabView;
@@ -14,10 +12,7 @@ import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.TabPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 
@@ -52,39 +47,37 @@ public class TabPanelPresenter implements Presenter {
         this.eventBus = eventBus;
         this.bookWebService = bookWebService;
         this.songWebService = songWebService;
-    }
-
-    public void go(final DockPanel container) {
-        container.add(display.asWidget(), DockPanel.WEST);
-        container.setCellWidth(display.asWidget(), "400px");
 
         BookTabView bookTabView = new BookTabView();
         bookTabPresenter = new BookTabPresenter(bookTabView, eventBus, bookWebService);
 
         SongTabView songTabView = new SongTabView();
         songTabPresenter = new SongTabPresenter(songTabView, eventBus, songWebService);
-
-        display.getTabPanel().addSelectionHandler(event -> {
+        //TODO восстановить функционал по выбору вкладок
+        /*display.getTabPanel().addSelectionHandler(event -> {
             switch (event.getSelectedItem()) {
                 case 0:
-                    eventBus.fireEvent(new ShowBooksEvent());
+                    //eventBus.fireEvent(new ShowLibraryEvent());
+                    //showBooks();
                     break;
                 case 1:
-                    eventBus.fireEvent(new ShowSongsEvent());
+                    //showSongs();
+                    //eventBus.fireEvent(new ShowUsersEvent());
                     break;
                 default:
 
             }
-        });
+        });*/
 
         display.getTabPanel().add(bookTabView, "Books");
         display.getTabPanel().add(songTabView, "Songs");
         display.getTabPanel().selectTab(0);
 
         bind();
-
-        bookTabPresenter.go(container);
-        songTabPresenter.go(container);
+    }
+    @Override
+    public void go(Panel container) {
+        container.add(display.asWidget());
     }
 
     private void bind() {
@@ -92,10 +85,10 @@ public class TabPanelPresenter implements Presenter {
             int x = display.getTabPanel().getTabBar().getSelectedTab();
             switch (x) {
                 case 0:
-                    eventBus.fireEvent(new AddBookEvent());
+                    new AddBookDialogPresenter(new AddBookDialogView(), bookWebService, bookTabPresenter, eventBus).go(RootPanel.get());
                     break;
                 case 1:
-                    eventBus.fireEvent(new AddSongEvent());
+                    new AddSongDialogPresenter(new AddSongDialogView(), songWebService, songTabPresenter, eventBus).go(RootPanel.get());
                     break;
                 default:
                     break;
@@ -170,21 +163,4 @@ public class TabPanelPresenter implements Presenter {
         });
     }
 
-    public BookTabPresenter getBookPresenter() {
-        return bookTabPresenter;
-    }
-
-    public SongTabPresenter getSongPresenter() {
-        return songTabPresenter;
-    }
-
-    public void showBooks() {
-        bookTabPresenter.loadData();
-        display.getTabPanel().selectTab(0);
-    }
-
-    public void showSongs() {
-        songTabPresenter.loadData();
-        display.getTabPanel().selectTab(1);
-    }
 }

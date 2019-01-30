@@ -5,10 +5,8 @@ import catalogApp.client.presenter.*;
 import catalogApp.client.services.AuthWebService;
 import catalogApp.client.services.BookWebService;
 import catalogApp.client.services.SongWebService;
-import catalogApp.client.view.dialogs.AddBookDialogView;
-import catalogApp.client.view.dialogs.AddSongDialogView;
-import catalogApp.client.view.dialogs.ProfilePopupView;
-import catalogApp.client.view.mainPage.ProfileBarView;
+import catalogApp.client.view.mainPage.ProfileView;
+import catalogApp.client.view.mainPage.MainPageView;
 import catalogApp.client.view.mainPage.TabPanelView;
 import catalogApp.client.view.mainPage.UserPanelView;
 import catalogApp.client.view.mainPage.tabs.BookTabView;
@@ -19,8 +17,8 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.*;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 
@@ -28,14 +26,12 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
 
     private static SimpleUser user;
 
-    private DockPanel container;
     private final HandlerManager eventBus;
     private final BookWebService bookWebService;
     private final SongWebService songWebService;
     private final AuthWebService authWebService;
-    private DockPanel dock = new DockPanel();
 
-    private TabPanelPresenter tabPanelPresenter;
+    private SimplePanel mainContainer;
 
     public CatalogController(HandlerManager eventBus, BookWebService bookService,
                              SongWebService songWebService, AuthWebService authWebService) {
@@ -53,71 +49,40 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
             @Override
             public void onSuccess(Method method, SimpleUser response) {
                 user = new SimpleUser(response.getId(), response.getUsername(), response.getRole());
-                go(dock);
+                go(RootPanel.get());
             }
         });
     }
-
-    public void go(DockPanel container) {
-        this.container = container;
+    @Override
+    public void go(Panel container) {
         bind();
 
+        MainPageView mainPageView = new MainPageView();
 
-        RootPanel.get().add(dock);
+        MainPagePresenter mainPagePresenter = new MainPagePresenter(mainPageView,  eventBus);
+        mainContainer = mainPagePresenter.getPanel();
 
-        dock.setSpacing(4);
-        dock.setWidth("100%");
-        dock.setHorizontalAlignment(DockPanel.ALIGN_CENTER);
-        dock.setBorderWidth(3);
-
-        ProfileBarPresenter profileBarPresenter = new ProfileBarPresenter(new ProfileBarView(), eventBus);
-        tabPanelPresenter = new TabPanelPresenter(new TabPanelView(), eventBus, bookWebService, songWebService);
-        profileBarPresenter.setData(user);
-        profileBarPresenter.go(container);
-
-        tabPanelPresenter.go(dock);
-
-        UserLibPanelPresenter userLibPanelPresenter = new UserLibPanelPresenter(new BookTabView(), new SongTabView(), bookWebService, songWebService);
-        userLibPanelPresenter.go(dock);
-
-        if (isAdmin()) {
-            UserPanelPresenter userPanelPresenter = new UserPanelPresenter(new UserPanelView(), authWebService);
-            userPanelPresenter.go(dock);
-        }
+        container.add(mainPageView);
     }
 
     private void bind() {
         History.addValueChangeHandler(this);
         eventBus.addHandler(ShowProfileEvent.TYPE, event -> doShowProfile());
-        eventBus.addHandler(AddBookEvent.TYPE, event -> doAddNewBook());
-        eventBus.addHandler(AddSongEvent.TYPE, event -> doAddNewSong());
-        eventBus.addHandler(ClosedDialogEvent.TYPE, event -> doClosedDialog());
-        eventBus.addHandler(ShowBooksEvent.TYPE, event -> doShowBooks());
-        eventBus.addHandler(ShowSongsEvent.TYPE, event -> doShowSongs());
+        eventBus.addHandler(ShowLibraryEvent.TYPE, event -> doShowLibrary());
+        eventBus.addHandler(ShowUsersEvent.TYPE, event -> doShowUsers());
     }
 
     private void doShowProfile() {
         History.newItem("profile");
     }
 
-    private void doAddNewBook() {
-        History.newItem("addBook");
+
+    private void doShowLibrary() {
+        History.newItem("library");
     }
 
-    private void doAddNewSong() {
-        History.newItem("addSong");
-    }
-
-    private void doClosedDialog() {
-        History.newItem("");
-    }
-
-    private void doShowBooks() {
-        History.newItem("showBooks");
-    }
-
-    private void doShowSongs() {
-        History.newItem("showSongs");
+    private void doShowUsers() {
+        History.newItem("users");
     }
 
     @Override
@@ -126,25 +91,22 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
         if (token != null) {
             Presenter presenter = null;
             switch (token) {
-                case "addBook":
-                    presenter = new AddBookDialogPresenter(new AddBookDialogView(), bookWebService, tabPanelPresenter.getBookPresenter() , eventBus);
+                case "library":
+                    presenter = new LibraryPresenter(bookWebService, songWebService, eventBus);
                     break;
-                case "addSong":
-                    presenter = new AddSongDialogPresenter(new AddSongDialogView(), songWebService, tabPanelPresenter.getSongPresenter(), eventBus);
-                    break;
-                case "showBooks":
-                    tabPanelPresenter.showBooks();
-                    break;
-                case "showSongs":
-                    tabPanelPresenter.showSongs();
+                case "users":
+                    if (isAdmin()) {
+                        presenter = new UserPanelPresenter(new UserPanelView(), authWebService);
+                    }
                     break;
                 case "profile":
-                    presenter = new ProfilePopupPresenter(new ProfilePopupView(), authWebService, eventBus);
+                    presenter = new ProfilePresenter(new ProfileView(), authWebService, eventBus);
+                    break;
                 default:
             }
 
             if (presenter != null) {
-                presenter.go(container);
+                presenter.go(mainContainer);
             }
         }
 

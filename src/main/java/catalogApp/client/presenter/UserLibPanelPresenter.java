@@ -7,6 +7,7 @@ import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.view.client.ListDataProvider;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
@@ -63,17 +64,18 @@ public class UserLibPanelPresenter implements Presenter {
     }
 
     @Override
-    public void go(DockPanel container) {
+    public void go(Panel container) {
         DockPanel dockPanel = new DockPanel();
         dockPanel.setBorderWidth(3);
         dockPanel.setSpacing(4);
-        bind();
         dockPanel.add(deleteSongs, DockPanel.WEST);
         dockPanel.add(songView.asWidget(), DockPanel.WEST);
         dockPanel.add(deleteBooks, DockPanel.EAST);
         dockPanel.add(bookView.asWidget(), DockPanel.EAST);
 
-        container.add(dockPanel, DockPanel.CENTER);
+        bind();
+
+        container.add(dockPanel);
     }
 
     private void bind() {

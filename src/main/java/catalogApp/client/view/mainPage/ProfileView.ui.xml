@@ -1,7 +1,7 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <g:HTMLPanel>
-        <g:DialogBox ui:field="dialogBox">
+        <g:DecoratorPanel>
             <g:VerticalPanel>
                 <g:cell horizontalAlignment="ALIGN_CENTER">
                     <g:Label ui:field="titleLabel">Your PROFILE</g:Label>
@@ -20,12 +20,9 @@
                         <g:cell>
                             <g:Button ui:field="submitButton" text="submit"/>
                         </g:cell>
-                        <g:cell>
-                            <g:Button ui:field="closeButton" text="Close"/>
-                        </g:cell>
                     </g:HorizontalPanel>
                 </g:cell>
             </g:VerticalPanel>
-        </g:DialogBox>
+        </g:DecoratorPanel>
     </g:HTMLPanel>
 </ui:UiBinder>

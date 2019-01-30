@@ -5,6 +5,7 @@ import catalogApp.shared.model.Book;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
@@ -37,24 +38,39 @@ public class BookTabPresenter implements Presenter {
         this.display = display;
         this.eventBus = eventBus;
         this.bookService = bookService;
+
+        bookService.getAllBooks(new MethodCallback<List<Book>>() {
+            @Override
+            public void onFailure(Method method, Throwable throwable) {
+                GWT.log("getAllBooks doesnt work", throwable);
+            }
+
+            @Override
+            public void onSuccess(Method method, List<Book> songs) {
+                bookListDataProvider.getList().addAll(songs);
+                loaded = true;
+            }
+        });
+
+        bind();
     }
 
     @Override
-    public void go(DockPanel container) {
-        bind();
+    public void go(Panel container) {
+
     }
 
     private void bind() {
         display.setDataProviderAndInitialize(bookListDataProvider);
     }
 
-    public List<Integer> getSelectedIDs(){
+    public List<Integer> getSelectedIDs() {
         List<Integer> tmp = new ArrayList<>();
         display.getSelectedItems().forEach(e -> tmp.add(e.getId()));
         return tmp;
     }
 
-    public Set<Book> getSelectedSet(){
+    public Set<Book> getSelectedSet() {
         return display.getSelectedItems();
     }
 

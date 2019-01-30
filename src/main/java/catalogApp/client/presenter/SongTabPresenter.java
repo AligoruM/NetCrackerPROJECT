@@ -5,6 +5,7 @@ import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
@@ -38,11 +39,26 @@ public class SongTabPresenter implements Presenter {
         this.display = display;
         this.eventBus = eventBus;
         this.songWebService = songWebService;
+
+        songWebService.getAllSongs(new MethodCallback<List<Song>>() {
+            @Override
+            public void onFailure(Method method, Throwable throwable) {
+                GWT.log("getAllSongs", throwable);
+            }
+
+            @Override
+            public void onSuccess(Method method, List<Song> songs) {
+                songListDataProvider.getList().addAll(songs);
+                loaded = true;
+            }
+        });
+
+        bind();
     }
 
     @Override
-    public void go(DockPanel container) {
-        bind();
+    public void go(Panel container) {
+
     }
 
     private void bind() {
@@ -50,13 +66,13 @@ public class SongTabPresenter implements Presenter {
 
     }
 
-    public List<Integer> getSelectedIDs(){
+    public List<Integer> getSelectedIDs() {
         List<Integer> tmp = new ArrayList<>();
         display.getSelectedItems().forEach(e -> tmp.add(e.getId()));
         return tmp;
     }
 
-    public Set<Song> getSelectedItems(){
+    public Set<Song> getSelectedItems() {
         return display.getSelectedItems();
     }
 

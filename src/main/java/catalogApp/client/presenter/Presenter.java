@@ -1,7 +1,8 @@
 package catalogApp.client.presenter;
 
 import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.Panel;
 
 public interface Presenter {
-    void go(final DockPanel container);
+    void go(final Panel container);
 }

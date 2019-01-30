@@ -3,10 +3,7 @@ package catalogApp.client.presenter;
 import catalogApp.client.services.SongWebService;
 import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.ListDataProvider;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
@@ -40,7 +37,7 @@ public class EditSongDialogPresenter implements Presenter {
     }
 
     @Override
-    public void go(DockPanel container) {
+    public void go(Panel container) {
         RootPanel.get().add(display.asWidget());
         genreBox.setEnabled(false);
         display.getTable().setWidget(2, 0, new Label("Genre"));

@@ -1,7 +1,6 @@
 package catalogApp.client.presenter;
 
 import catalogApp.client.CatalogController;
-import catalogApp.client.event.ClosedDialogEvent;
 import catalogApp.client.services.AuthWebService;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
@@ -13,14 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class ProfilePopupPresenter implements Presenter {
+public class ProfilePresenter implements Presenter {
     public interface Display{
-        FlexTable getFlexTable();
         Button getSubmitButton();
-        Button getCloseButton();
         Widget asWidget();
-        void hideDialog();
-        void showDialog();
         String getDescription();
         void setDescription(String text);
         String getUsername();
@@ -30,7 +25,7 @@ public class ProfilePopupPresenter implements Presenter {
         void setAvatarUrl(String url);
     }
 
-    private static String DEFAULT_AVATAR_URL = "http://ctv.swsu.ru/wp-content/uploads/2017/03/avatar.jpeg";
+    private static final String DEFAULT_AVATAR_URL = "http://ctv.swsu.ru/wp-content/uploads/2017/03/avatar.jpeg";
 
     private String oldDescription;
     private String oldAvatarUrl;
@@ -39,7 +34,7 @@ public class ProfilePopupPresenter implements Presenter {
     private AuthWebService authWebService;
     private HandlerManager eventBus;
 
-    public ProfilePopupPresenter(Display display, AuthWebService authWebService, HandlerManager eventBus) {
+    public ProfilePresenter(Display display, AuthWebService authWebService, HandlerManager eventBus) {
         this.display = display;
         this.authWebService = authWebService;
         this.eventBus = eventBus;
@@ -47,10 +42,11 @@ public class ProfilePopupPresenter implements Presenter {
     }
 
     @Override
-    public void go(DockPanel container) {
-        RootPanel.get().add(display.asWidget());
-        display.showDialog();
+    public void go(Panel container) {
+        container.clear();
+        container.add(display.asWidget());
     }
+
     private void bind(){
         display.setUsername(CatalogController.getUser().getUsername());
         display.setRole(CatalogController.getUser().getRole());
@@ -113,9 +109,5 @@ public class ProfilePopupPresenter implements Presenter {
             }
         });
 
-        display.getCloseButton().addClickHandler(event -> {
-            eventBus.fireEvent(new ClosedDialogEvent());
-            display.hideDialog();
-        });
     }
 }
