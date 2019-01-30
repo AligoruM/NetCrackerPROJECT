@@ -1,14 +1,9 @@
 package catalogApp.client.presenter;
 
-import catalogApp.client.CatalogController;
-import catalogApp.client.event.AddSongEvent;
 import catalogApp.client.services.SongWebService;
-import catalogApp.client.view.dialogs.EditDialogView;
 import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
@@ -55,10 +50,14 @@ public class SongTabPresenter implements Presenter {
 
     }
 
-    public List<Integer> getSelectedItems(){
+    public List<Integer> getSelectedIDs(){
         List<Integer> tmp = new ArrayList<>();
         display.getSelectedItems().forEach(e -> tmp.add(e.getId()));
         return tmp;
+    }
+
+    public Set<Song> getSelectedItems(){
+        return display.getSelectedItems();
     }
 
     public void loadData() {

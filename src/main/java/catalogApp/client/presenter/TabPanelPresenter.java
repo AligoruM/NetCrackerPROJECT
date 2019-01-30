@@ -1,6 +1,5 @@
 package catalogApp.client.presenter;
 
-import catalogApp.client.CatalogController;
 import catalogApp.client.event.AddBookEvent;
 import catalogApp.client.event.AddSongEvent;
 import catalogApp.client.event.ShowBooksEvent;
@@ -19,12 +18,11 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.ListDataProvider;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class TabPanelPresenter implements Presenter {
 
@@ -108,7 +106,7 @@ public class TabPanelPresenter implements Presenter {
             int x = display.getTabPanel().getTabBar().getSelectedTab();
             switch (x) {
                 case 0:
-                    List<Integer> selectedBooks = bookTabPresenter.getSelectedItems();
+                    List<Integer> selectedBooks = bookTabPresenter.getSelectedIDs();
                     if (!selectedBooks.isEmpty()) {
                         bookWebService.addBooksToUserLib(selectedBooks, new MethodCallback<Void>() {
                             @Override
@@ -121,12 +119,12 @@ public class TabPanelPresenter implements Presenter {
                                 Window.alert("Added to user's lib");
                             }
                         });
-                    }else{
+                    } else {
                         GWT.log("nothing selected");
                     }
                     break;
                 case 1:
-                    List<Integer> selectedSongs = songTabPresenter.getSelectedItems();
+                    List<Integer> selectedSongs = songTabPresenter.getSelectedIDs();
                     if (!selectedSongs.isEmpty()) {
                         songWebService.addSongsToUserLib(selectedSongs, new MethodCallback<Void>() {
                             @Override
@@ -139,7 +137,7 @@ public class TabPanelPresenter implements Presenter {
                                 Window.alert("Added to user's lib");
                             }
                         });
-                    }else {
+                    } else {
                         GWT.log("nothing selected");
                     }
                     break;
@@ -152,22 +150,31 @@ public class TabPanelPresenter implements Presenter {
             int x = display.getTabPanel().getTabBar().getSelectedTab();
             switch (x) {
                 case 0:
-                    new EditBookDialogPresenter(new EditDialogView(), bookWebService, bookTabPresenter.getBookListDataProvider()).go(null);
+                    Set<Book> selectedBooks = bookTabPresenter.getSelectedSet();
+                    if (selectedBooks.size() == 1) {
+                        new EditBookDialogPresenter(new EditDialogView(), bookWebService,
+                                bookTabPresenter.getBookListDataProvider(), (Book) selectedBooks.toArray()[0]).go(null);
+                    } else Window.alert("Select only one item!");
                     break;
                 case 1:
-                    new EditSongDialogPresenter(new EditDialogView(), songWebService, songTabPresenter.getSongListDataProvider()).go(null);
+                    Set<Song> selectedSongs = songTabPresenter.getSelectedItems();
+                    if (selectedSongs.size() == 1) {
+                        new EditSongDialogPresenter(new EditDialogView(), songWebService,
+                                songTabPresenter.getSongListDataProvider(), (Song) selectedSongs.toArray()[0]).go(null);
+                    } else Window.alert("Select only one item!");
                     break;
+
                 default:
                     break;
             }
         });
     }
 
-    public BookTabPresenter getBookPresenter(){
+    public BookTabPresenter getBookPresenter() {
         return bookTabPresenter;
     }
 
-    public SongTabPresenter getSongPresenter(){
+    public SongTabPresenter getSongPresenter() {
         return songTabPresenter;
     }
 

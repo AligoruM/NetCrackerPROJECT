@@ -29,14 +29,13 @@ public class EditBookDialogPresenter implements Presenter {
 
         void showData(BaseObject object);
 
-        void updateListBox(List<? extends BaseObject> list);
-
         String getNewName();
 
-        ListBox getListBox();
     }
 
     private ListDataProvider<Book> dataProvider;
+
+    private Book book;
 
     private Display display;
 
@@ -46,7 +45,8 @@ public class EditBookDialogPresenter implements Presenter {
 
     private String oldName;
 
-    public EditBookDialogPresenter(Display display, BookWebService bookWebService, ListDataProvider<Book> dataProvider) {
+    public EditBookDialogPresenter(Display display, BookWebService bookWebService, ListDataProvider<Book> dataProvider, Book book) {
+        this.book = book;
         this.dataProvider = dataProvider;
         this.display = display;
         this.bookWebService = bookWebService;
@@ -65,32 +65,19 @@ public class EditBookDialogPresenter implements Presenter {
     }
 
     private void bind() {
-        display.updateListBox(dataProvider.getList());
 
         if (!dataProvider.getList().isEmpty()) {
-            display.showData(dataProvider.getList().get(0));
-            authorBox.setText(dataProvider.getList().get(0).getAuthor().getName());
-            oldName = dataProvider.getList().get(0).getName();
+            display.showData(book);
+            authorBox.setText(book.getName());
+            oldName = book.getName();
         }
-
-        display.getListBox().addChangeHandler(event -> {
-            int selected_id = Integer.parseInt(display.getListBox().getSelectedValue());
-            for (Book x : dataProvider.getList()) {
-                if (x.getId() == selected_id) {
-                    oldName = x.getName();
-                    display.showData(x);
-                    authorBox.setText(x.getAuthor().getName());
-                    break;
-                }
-            }
-        });
 
         display.getSubmitButton().addClickHandler(event -> {
             String newName = display.getNewName().trim();
             if (!(oldName.equals(newName) || newName.isEmpty())) {
                 HashMap<String, String> tmp = new HashMap<>();
 
-                int selected_id = Integer.valueOf(display.getListBox().getSelectedValue());
+                int selected_id = book.getId();
                 tmp.put("name", newName);
 
                 bookWebService.updateBook(selected_id, tmp, new MethodCallback<Void>() {
@@ -101,14 +88,9 @@ public class EditBookDialogPresenter implements Presenter {
 
                     @Override
                     public void onSuccess(Method method, Void response) {
-                        for (Book x : dataProvider.getList()) {
-                            if (x.getId() == selected_id) {
-                                x.setName(newName);
-                                dataProvider.refresh();
-                                break;
-                            }
-                        }
-                        display.updateListBox(dataProvider.getList());
+                        book.setName(newName);
+                        dataProvider.refresh();
+                        display.hideDialog();
                     }
                 });
             }

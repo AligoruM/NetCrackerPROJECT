@@ -15,11 +15,13 @@ import java.util.HashMap;
 
 public class EditSongDialogPresenter implements Presenter {
 
-    ListDataProvider<Song> dataProvider;
+    private ListDataProvider<Song> dataProvider;
+
+    private Song song;
 
     EditBookDialogPresenter.Display display;
 
-    SongWebService songWebService;
+    private SongWebService songWebService;
 
     private TextBox genreBox = new TextBox();
 
@@ -29,7 +31,9 @@ public class EditSongDialogPresenter implements Presenter {
 
     private String oldDuration;
 
-    public EditSongDialogPresenter(EditBookDialogPresenter.Display display, SongWebService songWebService, ListDataProvider<Song> dataProvider) {
+    public EditSongDialogPresenter(EditBookDialogPresenter.Display display, SongWebService songWebService,
+                                   ListDataProvider<Song> dataProvider, Song song) {
+        this.song = song;
         this.dataProvider = dataProvider;
         this.display = display;
         this.songWebService = songWebService;
@@ -50,31 +54,16 @@ public class EditSongDialogPresenter implements Presenter {
     }
 
     private void bind(){
-        display.updateListBox(dataProvider.getList());
 
         if (!dataProvider.getList().isEmpty()) {
-            display.showData(dataProvider.getList().get(0));
+            display.showData(song);
 
-            genreBox.setText(dataProvider.getList().get(0).getGenre().getName());
-            durationBox.setText(String.valueOf(dataProvider.getList().get(0).getDuration()));
+            genreBox.setText(song.getGenre().getName());
+            durationBox.setText(String.valueOf(song.getDuration()));
 
-            oldName = dataProvider.getList().get(0).getName();
-            oldDuration = String.valueOf(dataProvider.getList().get(0).getDuration());
+            oldName = song.getName();
+            oldDuration = String.valueOf(song.getDuration());
         }
-
-        display.getListBox().addChangeHandler(event -> {
-            int selected_id = Integer.parseInt(display.getListBox().getSelectedValue());
-            for (Song x : dataProvider.getList()) {
-                if (x.getId() == selected_id) {
-                    oldName = x.getName();
-                    oldDuration = String.valueOf(x.getDuration());
-                    display.showData(x);
-                    genreBox.setText(x.getGenre().getName());
-                    durationBox.setText(String.valueOf(x.getDuration()));
-                    break;
-                }
-            }
-        });
 
         display.getSubmitButton().addClickHandler(event -> {
             String newName = display.getNewName().trim();
@@ -88,7 +77,7 @@ public class EditSongDialogPresenter implements Presenter {
             }
 
             if(!newValuesMap.isEmpty()){
-                int selected_id = Integer.valueOf(display.getListBox().getSelectedValue());
+                int selected_id = song.getId();
                 songWebService.updateSong(selected_id, newValuesMap, new MethodCallback<Void>() {
                     @Override
                     public void onFailure(Method method, Throwable exception) {
@@ -98,16 +87,12 @@ public class EditSongDialogPresenter implements Presenter {
 
                     @Override
                     public void onSuccess(Method method, Void response) {
-                        for (Song x : dataProvider.getList()) {
-                            if (x.getId() == selected_id) {
-                                if(newValuesMap.containsKey("name"))
-                                    x.setName(newValuesMap.get("name"));
-                                if(newValuesMap.containsKey("duration"))
-                                    x.setDuration(Integer.parseInt(newValuesMap.get("duration")));
-                                break;
-                            }
-                        }
-                        display.updateListBox(dataProvider.getList());
+                        if(newValuesMap.containsKey("name"))
+                            song.setName(newValuesMap.get("name"));
+                        if(newValuesMap.containsKey("duration"))
+                            song.setDuration(Integer.parseInt(newValuesMap.get("duration")));
+                        dataProvider.refresh();
+                        display.hideDialog();
                     }
                 });
             }

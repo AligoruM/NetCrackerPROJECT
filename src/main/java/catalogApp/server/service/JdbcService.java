@@ -1,7 +1,7 @@
 package catalogApp.server.service;
 
-import catalogApp.server.dao.UserDAO;
 import catalogApp.server.dao.IJdbcDAO;
+import catalogApp.server.dao.UserDAO;
 import catalogApp.server.dao.constants.Attribute;
 import catalogApp.shared.model.Book;
 import catalogApp.shared.model.SimpleUser;

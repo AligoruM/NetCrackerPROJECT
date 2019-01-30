@@ -1,8 +1,5 @@
 package catalogApp.server.dao.constants;
 
-import java.util.Arrays;
-import java.util.StringJoiner;
-
 public class SQLQuery {
     //BOOKS
     public static String ALL_BOOKS() {

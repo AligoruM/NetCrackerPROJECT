@@ -15,8 +15,6 @@ public class EditDialogView extends Composite implements EditBookDialogPresenter
     }
 
     @UiField
-    ListBox listBox;
-    @UiField
     FlexTable flexTable;
     @UiField
     DialogBox dialogPanel;
@@ -74,22 +72,9 @@ public class EditDialogView extends Composite implements EditBookDialogPresenter
     }
 
     @Override
-    public void updateListBox(List<? extends BaseObject> list) {
-        listBox.clear();
-        for (BaseObject x:list) {
-            listBox.addItem(x.getName(), String.valueOf(x.getId()));
-        }
-    }
-
-    @Override
     public String getNewName() {
         return nameBox.getText();
     }
 
-
-    @Override
-    public ListBox getListBox() {
-        return listBox;
-    }
 
 }

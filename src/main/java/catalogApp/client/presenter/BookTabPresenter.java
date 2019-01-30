@@ -1,14 +1,9 @@
 package catalogApp.client.presenter;
 
-import catalogApp.client.CatalogController;
-import catalogApp.client.event.AddBookEvent;
 import catalogApp.client.services.BookWebService;
-import catalogApp.client.view.dialogs.EditDialogView;
 import catalogApp.shared.model.Book;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
@@ -53,10 +48,14 @@ public class BookTabPresenter implements Presenter {
         display.setDataProviderAndInitialize(bookListDataProvider);
     }
 
-    public List<Integer> getSelectedItems(){
+    public List<Integer> getSelectedIDs(){
         List<Integer> tmp = new ArrayList<>();
         display.getSelectedItems().forEach(e -> tmp.add(e.getId()));
         return tmp;
+    }
+
+    public Set<Book> getSelectedSet(){
+        return display.getSelectedItems();
     }
 
     public void loadData() {

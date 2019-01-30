@@ -1,7 +1,6 @@
 package catalogApp.server.controllers;
 
 
-
 import catalogApp.server.service.IJdbcService;
 import catalogApp.shared.model.SimpleUser;
 import catalogApp.shared.model.User;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-
 import java.util.List;
 import java.util.Map;
 

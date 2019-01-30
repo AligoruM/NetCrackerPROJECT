@@ -1,23 +1,18 @@
 package catalogApp.server.security;
 
 import catalogApp.server.dao.UserDAO;
-import catalogApp.shared.model.SimpleUser;
 import catalogApp.shared.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {

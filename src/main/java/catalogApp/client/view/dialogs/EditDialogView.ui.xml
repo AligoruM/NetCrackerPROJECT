@@ -3,7 +3,6 @@
     <g:HTMLPanel>
         <g:DialogBox ui:field="dialogPanel" text="Editing">
             <g:HTMLPanel>
-                <g:ListBox ui:field="listBox"/>
                 <g:FlexTable ui:field="flexTable"/>
                 <g:HTMLPanel>
                     <table>

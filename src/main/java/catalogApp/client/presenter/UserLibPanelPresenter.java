@@ -5,11 +5,8 @@ import catalogApp.client.services.SongWebService;
 import catalogApp.shared.model.Book;
 import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
@@ -71,13 +68,11 @@ public class UserLibPanelPresenter implements Presenter {
         dockPanel.setBorderWidth(3);
         dockPanel.setSpacing(4);
         bind();
-        //HorizontalPanel horizontalPanel = new HorizontalPanel();
-        //horizontalPanel.add(deleteSongs);
-        //horizontalPanel.add(deleteBooks);
         dockPanel.add(deleteSongs, DockPanel.WEST);
         dockPanel.add(songView.asWidget(), DockPanel.WEST);
         dockPanel.add(deleteBooks, DockPanel.EAST);
         dockPanel.add(bookView.asWidget(), DockPanel.EAST);
+
         container.add(dockPanel, DockPanel.CENTER);
     }
 
