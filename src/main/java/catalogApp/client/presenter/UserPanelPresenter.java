@@ -26,12 +26,6 @@ public class UserPanelPresenter implements Presenter {
     public UserPanelPresenter(Display display, AuthWebService authWebService) {
         this.authWebService = authWebService;
         this.display = display;
-    }
-
-    @Override
-    public void go(Panel container) {
-        container.clear();
-        container.add(display.asWidget());
         authWebService.getAllUsers(new MethodCallback<List<User>>() {
             @Override
             public void onFailure(Method method, Throwable exception) {
@@ -44,5 +38,12 @@ public class UserPanelPresenter implements Presenter {
                 display.setDataProvider(dataProvider);
             }
         });
+    }
+
+    @Override
+    public void go(Panel container) {
+        container.clear();
+        container.add(display.asWidget());
+
     }
 }

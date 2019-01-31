@@ -33,12 +33,17 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
 
     private SimplePanel mainContainer;
 
+    private LibraryPresenter libraryPresenter = null;
+    private ProfilePresenter profilePresenter = null;
+    private UserPanelPresenter userPanelPresenter = null;
+
     public CatalogController(HandlerManager eventBus, BookWebService bookService,
                              SongWebService songWebService, AuthWebService authWebService) {
         this.authWebService = authWebService;
         this.songWebService = songWebService;
         this.bookWebService = bookService;
         this.eventBus = eventBus;
+
 
         authWebService.getSimpleUser(new MethodCallback<SimpleUser>() {
             @Override
@@ -48,18 +53,19 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
 
             @Override
             public void onSuccess(Method method, SimpleUser response) {
-                user = new SimpleUser(response.getId(), response.getUsername(), response.getRole());
+                user = response;
                 go(RootPanel.get());
             }
         });
     }
+
     @Override
     public void go(Panel container) {
         bind();
 
         MainPageView mainPageView = new MainPageView();
 
-        MainPagePresenter mainPagePresenter = new MainPagePresenter(mainPageView,  eventBus);
+        MainPagePresenter mainPagePresenter = new MainPagePresenter(mainPageView, eventBus);
         mainContainer = mainPagePresenter.getPanel();
 
         container.add(mainPageView);
@@ -76,7 +82,6 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
         History.newItem("profile");
     }
 
-
     private void doShowLibrary() {
         History.newItem("library");
     }
@@ -92,15 +97,24 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
             Presenter presenter = null;
             switch (token) {
                 case "library":
-                    presenter = new LibraryPresenter(bookWebService, songWebService, eventBus);
+                    if (libraryPresenter == null) {
+                        libraryPresenter = new LibraryPresenter(bookWebService, songWebService, eventBus);
+                    }
+                    presenter = libraryPresenter;
                     break;
                 case "users":
                     if (isAdmin()) {
-                        presenter = new UserPanelPresenter(new UserPanelView(), authWebService);
+                        if (userPanelPresenter == null) {
+                            userPanelPresenter = new UserPanelPresenter(new UserPanelView(), authWebService);
+                        }
+                        presenter = userPanelPresenter;
                     }
                     break;
                 case "profile":
-                    presenter = new ProfilePresenter(new ProfileView(), authWebService, eventBus);
+                    if (profilePresenter == null) {
+                        profilePresenter = new ProfilePresenter(new ProfileView(), authWebService, eventBus);
+                    }
+                    presenter = profilePresenter;
                     break;
                 default:
             }
@@ -113,7 +127,10 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
     }
 
     public static boolean isAdmin() {
-        return "ADMIN".equals(user.getRole());
+        if (user!=null) {
+            return "ADMIN".equals(user.getRole());
+        }
+        return false;
     }
 
     public static SimpleUser getUser() {

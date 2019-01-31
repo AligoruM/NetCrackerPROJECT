@@ -23,6 +23,9 @@ public class TabPanelPresenter implements Presenter {
 
     private Display display;
 
+    private boolean booksIsLoaded = false;
+    private boolean songsIsLoaded = false;
+
     public interface Display {
         Button getAddButton();
 
@@ -54,20 +57,24 @@ public class TabPanelPresenter implements Presenter {
         SongTabView songTabView = new SongTabView();
         songTabPresenter = new SongTabPresenter(songTabView, eventBus, songWebService);
         //TODO восстановить функционал по выбору вкладок
-        /*display.getTabPanel().addSelectionHandler(event -> {
+        display.getTabPanel().addSelectionHandler(event -> {
             switch (event.getSelectedItem()) {
                 case 0:
-                    //eventBus.fireEvent(new ShowLibraryEvent());
-                    //showBooks();
+                    if (!booksIsLoaded) {
+                        bookTabPresenter.loadData();
+                        booksIsLoaded = true;
+                    }
                     break;
                 case 1:
-                    //showSongs();
-                    //eventBus.fireEvent(new ShowUsersEvent());
+                    if (!songsIsLoaded) {
+                        songTabPresenter.loadData();
+                        songsIsLoaded = true;
+                    }
                     break;
                 default:
 
             }
-        });*/
+        });
 
         display.getTabPanel().add(bookTabView, "Books");
         display.getTabPanel().add(songTabView, "Songs");
@@ -75,6 +82,7 @@ public class TabPanelPresenter implements Presenter {
 
         bind();
     }
+
     @Override
     public void go(Panel container) {
         container.add(display.asWidget());

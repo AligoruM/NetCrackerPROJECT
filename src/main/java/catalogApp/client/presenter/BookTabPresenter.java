@@ -39,7 +39,7 @@ public class BookTabPresenter implements Presenter {
         this.eventBus = eventBus;
         this.bookService = bookService;
 
-        bookService.getAllBooks(new MethodCallback<List<Book>>() {
+        /*bookService.getAllBooks(new MethodCallback<List<Book>>() {
             @Override
             public void onFailure(Method method, Throwable throwable) {
                 GWT.log("getAllBooks doesnt work", throwable);
@@ -50,7 +50,7 @@ public class BookTabPresenter implements Presenter {
                 bookListDataProvider.getList().addAll(songs);
                 loaded = true;
             }
-        });
+        });*/
 
         bind();
     }

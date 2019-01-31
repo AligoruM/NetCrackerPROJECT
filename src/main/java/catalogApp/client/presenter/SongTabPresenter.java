@@ -40,7 +40,7 @@ public class SongTabPresenter implements Presenter {
         this.eventBus = eventBus;
         this.songWebService = songWebService;
 
-        songWebService.getAllSongs(new MethodCallback<List<Song>>() {
+        /*songWebService.getAllSongs(new MethodCallback<List<Song>>() {
             @Override
             public void onFailure(Method method, Throwable throwable) {
                 GWT.log("getAllSongs", throwable);
@@ -51,7 +51,7 @@ public class SongTabPresenter implements Presenter {
                 songListDataProvider.getList().addAll(songs);
                 loaded = true;
             }
-        });
+        });*/
 
         bind();
     }
