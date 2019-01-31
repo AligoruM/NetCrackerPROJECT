@@ -1,6 +1,5 @@
 package catalogApp.client.view.components;
 
-import catalogApp.client.view.components.utils.BaseCellTableColumns;
 import catalogApp.client.view.components.utils.SongCellTableColumns;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.view.client.ListDataProvider;

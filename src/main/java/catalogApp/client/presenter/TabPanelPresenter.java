@@ -56,7 +56,6 @@ public class TabPanelPresenter implements Presenter {
 
         SongTabView songTabView = new SongTabView();
         songTabPresenter = new SongTabPresenter(songTabView, eventBus, songWebService);
-        //TODO восстановить функционал по выбору вкладок
         display.getTabPanel().addSelectionHandler(event -> {
             switch (event.getSelectedItem()) {
                 case 0:

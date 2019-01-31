@@ -1,8 +1,6 @@
 package catalogApp.client.view.components.utils;
 
 import catalogApp.shared.model.BaseObject;
-import catalogApp.shared.model.Book;
-import catalogApp.shared.model.Song;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;

@@ -1,12 +1,10 @@
 package catalogApp.client.presenter;
 
-import catalogApp.client.event.ShowProfileEvent;
 import catalogApp.shared.model.SimpleUser;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 

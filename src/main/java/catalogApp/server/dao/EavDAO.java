@@ -95,7 +95,10 @@ public class EavDAO implements IJdbcDAO {
         songId = createObjectAndReturnNewId(name, Types.SONG);
         try {
             jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(String.valueOf(genreId), songId, Attribute.SONG_GENRE_ID));
-            jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(String.valueOf(duration), songId, Attribute.SONG_DURATION));
+            if (duration.isEmpty() || Integer.valueOf(duration) <= 0)
+                jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE("-1", songId, Attribute.SONG_DURATION));
+            else
+                jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(duration, songId, Attribute.SONG_DURATION));
             return jdbcTemplate.queryForObject(SQLQuery.SONG_BY_ID(songId), new SongMapper());
         } catch (DataAccessException ex) {
             ex.printStackTrace();
@@ -148,7 +151,7 @@ public class EavDAO implements IJdbcDAO {
 
     @Override
     public void deleteObjectFromUserLibrary(int id, List<Integer> ids, int attributeId) {
-        for (int x: ids) {
+        for (int x : ids) {
             jdbcTemplate.execute(SQLQuery.DELETE_ATTRIBUTE_VALUE_BY_ALL_FIELDS(String.valueOf(x), id, attributeId));
         }
     }

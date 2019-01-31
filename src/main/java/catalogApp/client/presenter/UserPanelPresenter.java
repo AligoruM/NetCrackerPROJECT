@@ -3,7 +3,6 @@ package catalogApp.client.presenter;
 import catalogApp.client.services.AuthWebService;
 import catalogApp.shared.model.User;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;

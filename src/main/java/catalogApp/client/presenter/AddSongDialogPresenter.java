@@ -13,7 +13,7 @@ import org.fusesource.restygwt.client.MethodCallback;
 
 import java.util.List;
 
-public class AddSongDialogPresenter implements Presenter{
+public class AddSongDialogPresenter implements Presenter {
 
     public interface Display {
         HasClickHandlers getSubmitButton();
@@ -36,7 +36,7 @@ public class AddSongDialogPresenter implements Presenter{
     private final SongWebService songWebService;
     private final SongTabPresenter songTabPresenter;
 
-    public AddSongDialogPresenter(Display display,  SongWebService songWebService, SongTabPresenter songTabPresenter, HandlerManager eventBus) {
+    public AddSongDialogPresenter(Display display, SongWebService songWebService, SongTabPresenter songTabPresenter, HandlerManager eventBus) {
         this.eventBus = eventBus;
         this.display = display;
         this.songWebService = songWebService;
@@ -50,7 +50,7 @@ public class AddSongDialogPresenter implements Presenter{
         display.showDialog();
     }
 
-    private void bind(){
+    private void bind() {
         songWebService.getGenreNames(new MethodCallback<List<String>>() {
             @Override
             public void onFailure(Method method, Throwable throwable) {
@@ -66,22 +66,25 @@ public class AddSongDialogPresenter implements Presenter{
         display.getSubmitButton().addClickHandler(event -> {
             //TODO validation
             List<String> tmp = display.getAddInfo();
-            songWebService.addSong(tmp, new MethodCallback<Song>() {
-                @Override
-                public void onFailure(Method method, Throwable throwable) {
-                    GWT.log("Adding song doesnt work", throwable);
-                }
+            if (tmp.size() >= 2 && tmp.size() <= 3) {
+                String name = tmp.get(0);
+                String genre = tmp.get(1);
+                if (name != null && !name.isEmpty() && genre != null && !genre.isEmpty())
+                    songWebService.addSong(tmp, new MethodCallback<Song>() {
+                        @Override
+                        public void onFailure(Method method, Throwable throwable) {
+                            GWT.log("Adding song doesnt work", throwable);
+                        }
 
-                @Override
-                public void onSuccess(Method method, Song song) {
-                    songTabPresenter.getSongListDataProvider().getList().add(song);
-                    display.hideDialog();
-                }
-            });
+                        @Override
+                        public void onSuccess(Method method, Song song) {
+                            songTabPresenter.getSongListDataProvider().getList().add(song);
+                            display.hideDialog();
+                        }
+                    });
+            }
         });
 
-        display.getCancelButton().addClickHandler(event -> {
-            display.hideDialog();
-        });
+        display.getCancelButton().addClickHandler(event -> display.hideDialog());
     }
 }

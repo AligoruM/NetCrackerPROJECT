@@ -1,24 +1,24 @@
 package catalogApp.client;
 
-import catalogApp.client.event.*;
+import catalogApp.client.event.ShowLibraryEvent;
+import catalogApp.client.event.ShowProfileEvent;
+import catalogApp.client.event.ShowUsersEvent;
 import catalogApp.client.presenter.*;
 import catalogApp.client.services.AuthWebService;
 import catalogApp.client.services.BookWebService;
 import catalogApp.client.services.SongWebService;
-import catalogApp.client.view.mainPage.ProfileView;
 import catalogApp.client.view.mainPage.MainPageView;
-import catalogApp.client.view.mainPage.TabPanelView;
+import catalogApp.client.view.mainPage.ProfileView;
 import catalogApp.client.view.mainPage.UserPanelView;
-import catalogApp.client.view.mainPage.tabs.BookTabView;
-import catalogApp.client.view.mainPage.tabs.SongTabView;
 import catalogApp.shared.model.SimpleUser;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 

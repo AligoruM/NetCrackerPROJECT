@@ -65,24 +65,27 @@ public class AddBookDialogPresenter implements Presenter {
         });
 
         display.getSubmitButton().addClickHandler(event -> {
-            //TODO validation
             List<String> tmp = display.getAddInfo();
-            bookService.addBook(tmp, new MethodCallback<Book>() {
-                @Override
-                public void onFailure(Method method, Throwable throwable) {
-                    GWT.log("Adding doesnt work", throwable);
-                }
+            if (tmp.size() == 2) {
+                String name = tmp.get(0);
+                String author = tmp.get(1);
+                if (name != null && !name.isEmpty() && author != null && !author.isEmpty())
+                    bookService.addBook(tmp, new MethodCallback<Book>() {
+                        @Override
+                        public void onFailure(Method method, Throwable throwable) {
+                            GWT.log("Adding doesnt work", throwable);
+                        }
 
-                @Override
-                public void onSuccess(Method method, Book book) {
-                    bookTabPresenter.getBookListDataProvider().getList().add(book);
-                    display.hideDialog();
-                }
-            });
+                        @Override
+                        public void onSuccess(Method method, Book book) {
+                            bookTabPresenter.getBookListDataProvider().getList().add(book);
+                            display.hideDialog();
+                        }
+                    });
+                else Window.alert("Fields cannot be empty!");
+            }
         });
 
-        display.getCancelButton().addClickHandler(event -> {
-            display.hideDialog();
-        });
+        display.getCancelButton().addClickHandler(event -> display.hideDialog());
     }
 }

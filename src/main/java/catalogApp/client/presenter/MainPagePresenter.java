@@ -4,16 +4,12 @@ import catalogApp.client.CatalogController;
 import catalogApp.client.event.ShowLibraryEvent;
 import catalogApp.client.event.ShowProfileEvent;
 import catalogApp.client.event.ShowUsersEvent;
-import catalogApp.client.services.AuthWebService;
-import catalogApp.client.services.BookWebService;
-import catalogApp.client.services.SongWebService;
 import catalogApp.client.view.mainPage.ProfileBarView;
-import catalogApp.client.view.mainPage.TabPanelView;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.ToggleButton;
 
 public class MainPagePresenter implements Presenter {
 
@@ -64,7 +60,6 @@ public class MainPagePresenter implements Presenter {
                 display.getSettingsButton().setDown(false);
                 display.getUsersButton().setDown(false);
                 eventBus.fireEvent(new ShowLibraryEvent());
-                //TODO обработка кнопки
             }
         });
 

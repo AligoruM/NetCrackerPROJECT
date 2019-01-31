@@ -10,7 +10,6 @@ import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class EditBookDialogPresenter implements Presenter {
 

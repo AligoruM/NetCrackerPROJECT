@@ -1,14 +1,11 @@
 package catalogApp.client.view.mainPage;
 
 import catalogApp.client.presenter.UserPanelPresenter;
-import catalogApp.client.view.components.AbstractCatalogCellTable;
 import catalogApp.client.view.components.UserCellTable;
 import catalogApp.shared.model.User;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.SimplePanel;

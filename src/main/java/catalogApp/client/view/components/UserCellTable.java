@@ -1,7 +1,6 @@
 package catalogApp.client.view.components;
 
 import catalogApp.shared.model.User;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.view.client.ListDataProvider;
 

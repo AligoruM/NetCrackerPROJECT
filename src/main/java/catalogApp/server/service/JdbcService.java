@@ -106,7 +106,10 @@ public class JdbcService implements IJdbcService {
             jdbcDAO.updateObjectName(id, params.get("name"));
         }
         if(params.containsKey("duration")){
-            jdbcDAO.updateAttributeValue(id, Attribute.SONG_DURATION, params.get("duration"));
+            String duration = params.get("duration");
+            if(duration.isEmpty() || Integer.valueOf(duration) <=0)
+                duration = "-1";
+            jdbcDAO.updateAttributeValue(id, Attribute.SONG_DURATION, duration);
         }
     }
 
