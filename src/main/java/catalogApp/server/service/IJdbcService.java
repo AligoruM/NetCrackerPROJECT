@@ -17,7 +17,7 @@ public interface IJdbcService {
 
     List<Book> getLibBooks();
 
-    void addBooksToLibrary(List<Integer> idList);
+    List<Book> addBooksToLibrary(List<Integer> idList);
 
     void deleteBooksFromLibrary(List<Integer> ids);
 
@@ -31,7 +31,7 @@ public interface IJdbcService {
 
     List<Song> getLibSongs();
 
-    void addSongsToLibrary(List<Integer> idList);
+    List<Song> addSongsToLibrary(List<Integer> idList);
 
     void deleteSongsFromLibrary(List<Integer> ids);
 

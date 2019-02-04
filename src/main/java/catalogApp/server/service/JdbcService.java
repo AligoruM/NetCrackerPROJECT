@@ -49,9 +49,10 @@ public class JdbcService implements IJdbcService {
     }
 
     @Override
-    public void addBooksToLibrary(List<Integer> idList) {
+    public List<Book> addBooksToLibrary(List<Integer> idList) {
         int user_id = userDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
         jdbcDAO.addObjectsToUserLibrary(user_id, idList, Attribute.LIKED_BOOK_ID);
+        return jdbcDAO.getBooksByIds(idList);
     }
 
     @Override
@@ -89,9 +90,10 @@ public class JdbcService implements IJdbcService {
     }
 
     @Override
-    public void addSongsToLibrary(List<Integer> idList) {
+    public List<Song> addSongsToLibrary(List<Integer> idList) {
         int userId = userDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
         jdbcDAO.addObjectsToUserLibrary(userId, idList, Attribute.LIKED_SONG_ID);
+        return jdbcDAO.getSongsByIds(idList);
     }
 
     @Override

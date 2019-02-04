@@ -1,5 +1,6 @@
 package catalogApp.client.presenter;
 
+import catalogApp.client.event.UpdateUserLibraryEvent;
 import catalogApp.client.services.BookWebService;
 import catalogApp.client.services.SongWebService;
 import catalogApp.client.view.dialogs.AddBookDialogView;
@@ -106,39 +107,41 @@ public class TabPanelPresenter implements Presenter {
             int x = display.getTabPanel().getTabBar().getSelectedTab();
             switch (x) {
                 case 0:
-                    List<Integer> selectedBooks = bookTabPresenter.getSelectedIDs();
-                    if (!selectedBooks.isEmpty()) {
-                        bookWebService.addBooksToUserLib(selectedBooks, new MethodCallback<Void>() {
+                    List<Integer> selectedBooksIDs = bookTabPresenter.getSelectedIDs();
+                    if (!selectedBooksIDs.isEmpty()) {
+                        bookWebService.addBooksToUserLib(selectedBooksIDs, new MethodCallback<List<Book>>() {
                             @Override
                             public void onFailure(Method method, Throwable exception) {
                                 GWT.log("addBookToLib doesnt work", exception);
                             }
 
                             @Override
-                            public void onSuccess(Method method, Void response) {
-                                Window.alert("Added to user's lib");
+                            public void onSuccess(Method method, List<Book> response) {
+                                GWT.log("Added to user's lib");
+                                eventBus.fireEvent(new UpdateUserLibraryEvent(UpdateUserLibraryEvent.ITEM_TYPE.BOOK, response));
                             }
                         });
                     } else {
-                        GWT.log("nothing selected");
+                        GWT.log("nothing selected or all items already are in library");
                     }
                     break;
                 case 1:
-                    List<Integer> selectedSongs = songTabPresenter.getSelectedIDs();
-                    if (!selectedSongs.isEmpty()) {
-                        songWebService.addSongsToUserLib(selectedSongs, new MethodCallback<Void>() {
+                    List<Integer> selectedSongsIDs = songTabPresenter.getSelectedIDs();
+                    if (!selectedSongsIDs.isEmpty()) {
+                        songWebService.addSongsToUserLib(selectedSongsIDs, new MethodCallback<List<Song>>() {
                             @Override
                             public void onFailure(Method method, Throwable exception) {
                                 GWT.log("addSongsToLib doesnt work", exception);
                             }
 
                             @Override
-                            public void onSuccess(Method method, Void response) {
-                                Window.alert("Added to user's lib");
+                            public void onSuccess(Method method, List<Song> response) {
+                                GWT.log("Added to user's lib");
+                                eventBus.fireEvent(new UpdateUserLibraryEvent(UpdateUserLibraryEvent.ITEM_TYPE.SONG, response));
                             }
                         });
                     } else {
-                        GWT.log("nothing selected");
+                        GWT.log("nothing selected or all items already are in library");
                     }
                     break;
                 default:
@@ -157,7 +160,7 @@ public class TabPanelPresenter implements Presenter {
                     } else Window.alert("Select only one item!");
                     break;
                 case 1:
-                    Set<Song> selectedSongs = songTabPresenter.getSelectedItems();
+                    Set<Song> selectedSongs = songTabPresenter.getSelectedSet();
                     if (selectedSongs.size() == 1) {
                         new EditSongDialogPresenter(new EditDialogView(), songWebService,
                                 songTabPresenter.getSongListDataProvider(), (Song) selectedSongs.toArray()[0]).go(null);

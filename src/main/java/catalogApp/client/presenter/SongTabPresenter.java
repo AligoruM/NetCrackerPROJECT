@@ -71,7 +71,7 @@ public class SongTabPresenter implements Presenter {
         return tmp;
     }
 
-    public Set<Song> getSelectedItems() {
+    public Set<Song> getSelectedSet() {
         return display.getSelectedItems();
     }
 

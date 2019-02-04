@@ -16,6 +16,8 @@ public interface IJdbcDAO {
 
     List<Book> getUsersBooks(int id);
 
+    List<Book> getBooksByIds(List<Integer> ids);
+
     //Songs
     List<Song> getAllSongs();
 
@@ -24,6 +26,8 @@ public interface IJdbcDAO {
     Song addSong(String name, String genreName, String duration);
 
     List<Song> getUsersSongs(int id);
+
+    List<Song> getSongsByIds(List<Integer> ids);
 
     void updateObjectName(int id, String name);
 

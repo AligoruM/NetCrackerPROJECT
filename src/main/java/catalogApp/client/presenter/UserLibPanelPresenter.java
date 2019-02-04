@@ -1,10 +1,12 @@
 package catalogApp.client.presenter;
 
+import catalogApp.client.event.UpdateUserLibraryEvent;
 import catalogApp.client.services.BookWebService;
 import catalogApp.client.services.SongWebService;
 import catalogApp.shared.model.Book;
 import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Panel;
@@ -25,16 +27,29 @@ public class UserLibPanelPresenter implements Presenter {
 
     private SongWebService songWebService;
     private BookWebService bookWebService;
+    private HandlerManager eventBus;
 
     private ListDataProvider<Book> bookListDataProvider = new ListDataProvider<>();
     private ListDataProvider<Song> songListDataProvider = new ListDataProvider<>();
 
+    private DockPanel dockPanel = new DockPanel();
+
     public UserLibPanelPresenter(BookTabPresenter.Display bookView, SongTabPresenter.Display songView,
-                                 BookWebService bookWebService, SongWebService songWebService) {
+                                 BookWebService bookWebService, SongWebService songWebService, HandlerManager eventBus) {
         this.bookView = bookView;
         this.songView = songView;
         this.songWebService = songWebService;
         this.bookWebService = bookWebService;
+        this.eventBus = eventBus;
+
+        dockPanel.setBorderWidth(3);
+        dockPanel.setSpacing(4);
+        dockPanel.add(deleteSongs, DockPanel.WEST);
+        dockPanel.add(songView.asWidget(), DockPanel.WEST);
+        dockPanel.add(deleteBooks, DockPanel.EAST);
+        dockPanel.add(bookView.asWidget(), DockPanel.EAST);
+
+        bind();
 
         this.bookWebService.getUserBooks(new MethodCallback<List<Book>>() {
             @Override
@@ -65,20 +80,29 @@ public class UserLibPanelPresenter implements Presenter {
 
     @Override
     public void go(Panel container) {
-        DockPanel dockPanel = new DockPanel();
-        dockPanel.setBorderWidth(3);
-        dockPanel.setSpacing(4);
-        dockPanel.add(deleteSongs, DockPanel.WEST);
-        dockPanel.add(songView.asWidget(), DockPanel.WEST);
-        dockPanel.add(deleteBooks, DockPanel.EAST);
-        dockPanel.add(bookView.asWidget(), DockPanel.EAST);
-
-        bind();
-
         container.add(dockPanel);
     }
 
     private void bind() {
+        eventBus.addHandler(UpdateUserLibraryEvent.TYPE, event -> {
+            switch (event.getType()) {
+                case BOOK: {
+                    for (Object x : event.getSelectedItems()) {
+                        if (!bookListDataProvider.getList().contains(x))
+                            bookListDataProvider.getList().add((Book) x);
+                    }
+                    break;
+                }
+                case SONG: {
+                    for (Object x : event.getSelectedItems()) {
+                        if (!songListDataProvider.getList().contains(x))
+                            songListDataProvider.getList().add((Song) x);
+                    }
+                    break;
+                }
+            }
+        });
+
         deleteBooks.addClickHandler(event -> {
             List<Integer> tmp = new ArrayList<>();
             bookView.getSelectedItems().forEach(e -> tmp.add(e.getId()));

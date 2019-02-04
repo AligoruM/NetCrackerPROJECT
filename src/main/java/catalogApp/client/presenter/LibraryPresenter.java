@@ -18,7 +18,7 @@ public class LibraryPresenter implements Presenter {
 
         TabPanelPresenter tabPanelPresenter = new TabPanelPresenter(new TabPanelView(), eventBus, bookWebService, songWebService);
         tabPanelPresenter.go(libraryPanel);
-        UserLibPanelPresenter userLibPanelPresenter = new UserLibPanelPresenter(new BookTabView(), new SongTabView(), bookWebService, songWebService);
+        UserLibPanelPresenter userLibPanelPresenter = new UserLibPanelPresenter(new BookTabView(), new SongTabView(), bookWebService, songWebService, eventBus);
         userLibPanelPresenter.go(libraryPanel);
     }
 

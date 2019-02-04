@@ -29,7 +29,7 @@ public interface BookWebService extends RestService {
     @POST
     @Path("rest/addBooksToUserLib")
     @Consumes(MediaType.APPLICATION_JSON)
-    void addBooksToUserLib(List<Integer> ids, MethodCallback<Void> callback);
+    void addBooksToUserLib(List<Integer> ids, MethodCallback<List<Book>> callback);
 
     @POST
     @Path("rest/getUserBooks")

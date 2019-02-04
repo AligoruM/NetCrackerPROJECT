@@ -1,5 +1,7 @@
 package catalogApp.shared.model;
 
+import java.util.Objects;
+
 public class BaseObject {
 
     private int id;
@@ -45,5 +47,18 @@ public class BaseObject {
                 ", name='" + name + '\'' +
                 ", type=" + type +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BaseObject that = (BaseObject) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

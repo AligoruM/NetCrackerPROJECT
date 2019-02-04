@@ -23,7 +23,7 @@ public interface SongWebService extends RestService {
 
     @POST
     @Path("rest/addSongsToUserLib")
-    void addSongsToUserLib(List<Integer> ids, MethodCallback<Void> callback);
+    void addSongsToUserLib(List<Integer> ids, MethodCallback<List<Song>> callback);
 
     @POST
     @Path("rest/getUserSongs")

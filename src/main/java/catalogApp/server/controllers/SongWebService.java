@@ -46,8 +46,8 @@ public class SongWebService {
     @POST
     @Path("/addSongsToUserLib")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void addSongsToUserLib(List<Integer> ids){
-        jdbcService.addSongsToLibrary(ids);
+    public List<Song> addSongsToUserLib(List<Integer> ids){
+        return jdbcService.addSongsToLibrary(ids);
     }
 
     @POST

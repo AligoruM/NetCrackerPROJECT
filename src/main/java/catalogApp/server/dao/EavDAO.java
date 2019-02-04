@@ -71,6 +71,13 @@ public class EavDAO implements IJdbcDAO {
     }
 
     @Override
+    public List<Book> getBooksByIds(List<Integer> ids) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("ids", ids);
+        return namedParameterJdbcTemplate.query(SQLQuery.BOOKS_BY_IDS("ids"), params, new BookMapper());
+    }
+
+    @Override
     public List<Song> getAllSongs() {
         return jdbcTemplate.query(SQLQuery.ALL_SONGS(), new SongMapper());
     }
@@ -109,6 +116,13 @@ public class EavDAO implements IJdbcDAO {
     @Override
     public List<Song> getUsersSongs(int id) {
         List<Integer> ids = getObjectsIdsByUserIdAndAttribute(id, Attribute.LIKED_SONG_ID);
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("ids", ids);
+        return namedParameterJdbcTemplate.query(SQLQuery.SONGS_BY_IDS("ids"), params, new SongMapper());
+    }
+
+    @Override
+    public List<Song> getSongsByIds(List<Integer> ids) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("ids", ids);
         return namedParameterJdbcTemplate.query(SQLQuery.SONGS_BY_IDS("ids"), params, new SongMapper());

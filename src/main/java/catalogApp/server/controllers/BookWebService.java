@@ -46,8 +46,8 @@ public class BookWebService {
     @POST
     @Path("/addBooksToUserLib")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void addBooksToUserLib(List<Integer> ids) {
-        jdbcService.addBooksToLibrary(ids);
+    public List<Book> addBooksToUserLib(List<Integer> ids) {
+        return jdbcService.addBooksToLibrary(ids);
     }
 
     @POST
@@ -56,6 +56,7 @@ public class BookWebService {
     public List<Book> getUserBookLib() {
         return jdbcService.getLibBooks();
     }
+
 
     @DELETE
     @Path("/book")
