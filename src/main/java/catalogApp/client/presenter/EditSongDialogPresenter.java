@@ -5,13 +5,15 @@ import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.view.client.ListDataProvider;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 
 import java.util.HashMap;
+
+import static catalogApp.client.view.constants.LibraryConstants.DURATION_LABEL;
+import static catalogApp.client.view.constants.LibraryConstants.GENRE_LABEL;
 
 public class EditSongDialogPresenter implements Presenter {
 
@@ -41,11 +43,10 @@ public class EditSongDialogPresenter implements Presenter {
 
     @Override
     public void go(Panel container) {
-        RootPanel.get().add(display.asWidget());
         genreBox.setEnabled(false);
-        display.getTable().setWidget(2, 0, new Label("Genre"));
+        display.getTable().setWidget(2, 0, new Label(GENRE_LABEL));
         display.getTable().setWidget(2, 1, genreBox);
-        display.getTable().setWidget(3, 0, new Label("Duration"));
+        display.getTable().setWidget(3, 0, new Label(DURATION_LABEL));
         display.getTable().setWidget(3, 1, durationBox);
 
         bind();
@@ -68,17 +69,12 @@ public class EditSongDialogPresenter implements Presenter {
         display.getSubmitButton().addClickHandler(event -> {
             String newName = display.getNewName().trim();
             String newDuration = durationBox.getText();
-            HashMap<String, String> newValuesMap = new HashMap<>();
-            if(!(newName.equals(oldName) || newName.isEmpty())){
-                newValuesMap.put("name", newName);
-            }
-            if(!(newDuration.equals(oldDuration)|| newDuration.isEmpty())){
-                newValuesMap.put("duration", newDuration);
-            }
+            Song newSong = new Song(song.getId(), newName);
 
-            if(!newValuesMap.isEmpty()){
-                int selected_id = song.getId();
-                songWebService.updateSong(selected_id, newValuesMap, new MethodCallback<Void>() {
+            newSong.setDuration(Integer.parseInt(newDuration));
+
+            if(!newSong.equals(song)){
+                songWebService.updateSong(newSong, new MethodCallback<Void>() {
                     @Override
                     public void onFailure(Method method, Throwable exception) {
                         GWT.log("updateSong doesnt work", exception);
@@ -87,10 +83,8 @@ public class EditSongDialogPresenter implements Presenter {
 
                     @Override
                     public void onSuccess(Method method, Void response) {
-                        if(newValuesMap.containsKey("name"))
-                            song.setName(newValuesMap.get("name"));
-                        if(newValuesMap.containsKey("duration"))
-                            song.setDuration(Integer.parseInt(newValuesMap.get("duration")));
+                        song.setName(newName);
+                        song.setDuration(Integer.parseInt(newDuration));
                         dataProvider.refresh();
                         display.hideDialog();
                     }

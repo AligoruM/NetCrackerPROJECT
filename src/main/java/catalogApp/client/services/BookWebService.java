@@ -41,7 +41,7 @@ public interface BookWebService extends RestService {
     void deleteBookFromLib(List<Integer> ids, MethodCallback<Void> callback);
 
     @PUT
-    @Path("rest/book/{id}")
+    @Path("rest/book")
     @Consumes(MediaType.APPLICATION_JSON)
-    void updateBook(@PathParam("id")int id, Map<String, String> params, MethodCallback<Void> callback);
+    void updateBook(Book newBook, MethodCallback<Void> callback);
 }

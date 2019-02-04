@@ -1,4 +1,4 @@
-package catalogApp.client.view.mainPage.tabs;
+package catalogApp.client.view.mainPage.library.tabs;
 
 import catalogApp.client.presenter.BookTabPresenter;
 import catalogApp.client.view.components.BookCellTable;
@@ -12,8 +12,6 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
-
-import java.util.Set;
 
 public class BookTabView extends Composite implements BookTabPresenter.Display {
 
@@ -35,7 +33,6 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
 
     private void initializeTable(ListDataProvider<Book> dataProvider) {
         table = new BookCellTable(dataProvider);
-        //table.setDataProvider(dataProvider);
         pager.setDisplay(table);
         simplePanel.add(table);
     }
@@ -52,8 +49,4 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
         return ((MultiSelectionModel<Book>) table.getSelectionModel());
     }
 
-    @Override
-    public Set<Book> getSelectedItems() {
-        return ((MultiSelectionModel<Book>) table.getSelectionModel()).getSelectedSet();
-    }
 }

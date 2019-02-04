@@ -12,7 +12,6 @@ public class ProfileBarPresenter implements Presenter {
     public interface Display {
         void setDataLabel(String username, String role);
         Button getLogoutButton();
-        //Button getProfileButton();
         Widget asWidget();
     }
 
@@ -30,13 +29,10 @@ public class ProfileBarPresenter implements Presenter {
         display.getLogoutButton().addClickHandler(event -> {
             Cookies.removeCookie("JSESSIONID");
             Window.Location.replace("/login");
-
         });
-
-        //display.getProfileButton().addClickHandler(event -> eventBus.fireEvent(new ShowProfileEvent()));
     }
 
     public void setData(SimpleUser simpleUser) {
-        display.setDataLabel(simpleUser.getUsername(), simpleUser.getRole());
+        display.setDataLabel(simpleUser.getName(), simpleUser.getRoles().toString());
     }
 }

@@ -7,6 +7,9 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 
+import static catalogApp.client.view.constants.LibraryConstants.ID_LABEL;
+import static catalogApp.client.view.constants.LibraryConstants.NAME_LABEL;
+
 public class EditDialogView extends Composite implements EditBookDialogPresenter.Display {
     interface EditDialogViewUiBinder extends UiBinder<HTMLPanel, EditDialogView> {
 
@@ -21,9 +24,9 @@ public class EditDialogView extends Composite implements EditBookDialogPresenter
     @UiField
     Button submitButton;
 
-    TextBox idBox = new TextBox();
+    private TextBox idBox = new TextBox();
 
-    TextBox nameBox = new TextBox();
+    private TextBox nameBox = new TextBox();
 
     private static EditDialogViewUiBinder ourUiBinder = GWT.create(EditDialogViewUiBinder.class);
 
@@ -32,9 +35,9 @@ public class EditDialogView extends Composite implements EditBookDialogPresenter
 
         idBox.setEnabled(false);
 
-        flexTable.setWidget(0, 0, new Label("ID"));
+        flexTable.setWidget(0, 0, new Label(ID_LABEL));
         flexTable.setWidget(0, 1, idBox);
-        flexTable.setWidget(1, 0, new Label("Name"));
+        flexTable.setWidget(1, 0, new Label(NAME_LABEL));
         flexTable.setWidget(1, 1, nameBox);
     }
 

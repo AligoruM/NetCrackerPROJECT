@@ -54,11 +54,13 @@ public class BaseObject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BaseObject that = (BaseObject) o;
-        return id == that.id;
+        return id == that.id &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(type, that.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, name, type);
     }
 }

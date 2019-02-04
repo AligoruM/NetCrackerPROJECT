@@ -4,7 +4,6 @@ package catalogApp.client.view.components;
 import catalogApp.client.CatalogController;
 import catalogApp.client.view.components.utils.BaseCellTableColumns;
 import catalogApp.shared.model.BaseObject;
-import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.uibinder.client.UiConstructor;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -16,46 +15,45 @@ import com.google.gwt.view.client.SelectionModel;
 
 import java.util.Comparator;
 
+import static catalogApp.client.view.constants.LibraryConstants.ID_LABEL;
+import static catalogApp.client.view.constants.LibraryConstants.NAME_LABEL;
+
 
 public class AbstractCatalogCellTable<T extends BaseObject> extends CellTable<T> {
 
-    private final SelectionModel<T> selectionModel = new MultiSelectionModel<>(element -> element.getId());
-    @UiConstructor
-    public AbstractCatalogCellTable(ListDataProvider<T> dataProvider) {
-        super(element->element.getId());
+    private ListDataProvider<T> dataProvider;
 
+    @UiConstructor
+    AbstractCatalogCellTable(ListDataProvider<T> dataProvider) {
+        super(element->element.getId());
+        this.dataProvider=dataProvider;
         dataProvider.addDataDisplay(this);
 
-        setWidth("400px", true);
+        SelectionModel<T> selectionModel = new MultiSelectionModel<>(element -> element.getId());
+
         setSelectionModel(selectionModel, DefaultSelectionEventManager.createCheckboxManager());
 
         setPageSize(3);
 
-        Column<T, Boolean> selectionColumn = new Column<T, Boolean>(new CheckboxCell()) {
-            @Override
-            public Boolean getValue(T object) {
-                return selectionModel.isSelected(object);
-            }
-        };
-        addColumn(selectionColumn);
-        setColumnWidth(selectionColumn, 40, com.google.gwt.dom.client.Style.Unit.PX);
-        Column<T, String> nameColumn;
-        boolean isAdmin = CatalogController.isAdmin();
-        if (isAdmin) {
-            Column<T, String> idColumn = new BaseCellTableColumns().getIdColumn();
-            addColumn(idColumn, "ID");
-            setColumnWidth(idColumn, 60, com.google.gwt.dom.client.Style.Unit.PX);
-            ColumnSortEvent.ListHandler<T> idSorter = new ColumnSortEvent.ListHandler<>(dataProvider.getList());
-            idSorter.setComparator(idColumn, Comparator.comparing(BaseObject::getId));
-            addColumnSortHandler(idSorter);
-            nameColumn = new BaseCellTableColumns().getNameColumn();
-        }else {
-            nameColumn = new BaseCellTableColumns().getNameColumn();
+        BaseCellTableColumns<T> baseCellTableColumns = new BaseCellTableColumns<>();
+
+        addColumn(baseCellTableColumns.getSelectionColumn(selectionModel));
+
+        if (CatalogController.isAdmin()) {
+            Column<T, String> idColumn = baseCellTableColumns.getIdColumn();
+            addColumn(idColumn, ID_LABEL);
+            addSorter(idColumn, Comparator.comparing(BaseObject::getId));
         }
-        addColumn(nameColumn, "Name");
-        ColumnSortEvent.ListHandler<T> nameSorter = new ColumnSortEvent.ListHandler<>(dataProvider.getList());
-        nameSorter.setComparator(nameColumn, Comparator.comparing(BaseObject::getName));
-        addColumnSortHandler(nameSorter);
+
+        Column<T, String> nameColumn = baseCellTableColumns.getNameColumn();
+        addColumn(nameColumn, NAME_LABEL);
+        addSorter(nameColumn, Comparator.comparing(BaseObject::getName));
+    }
+
+    void addSorter(Column<T, String> column, Comparator<T> comparator){
+        ColumnSortEvent.ListHandler<T> sorter = new ColumnSortEvent.ListHandler<>(dataProvider.getList());
+        sorter.setComparator(column, comparator);
+        addColumnSortHandler(sorter);
     }
 
 }

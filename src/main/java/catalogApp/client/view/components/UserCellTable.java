@@ -1,31 +1,24 @@
 package catalogApp.client.view.components;
 
-import catalogApp.shared.model.User;
-import com.google.gwt.user.cellview.client.TextColumn;
+import catalogApp.client.view.components.utils.UserCellTableColumns;
+import catalogApp.shared.model.SimpleUser;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.view.client.ListDataProvider;
 
-public class UserCellTable extends AbstractCatalogCellTable {
-    public UserCellTable(ListDataProvider dataProvider) {
+import java.util.Comparator;
+
+import static catalogApp.client.view.constants.UserConstants.AVATAR_LABEL;
+import static catalogApp.client.view.constants.UserConstants.ROLES_LABEL;
+
+public class UserCellTable extends AbstractCatalogCellTable <SimpleUser>{
+    public UserCellTable(ListDataProvider<SimpleUser> dataProvider) {
         super(dataProvider);
-        TextColumn<User> passColumn = new TextColumn<User>() {
-            @Override
-            public String getValue(User object) {
-                return object.getPassword();
-            }
-        };
 
-        TextColumn<User> roleColumn = new TextColumn<User>() {
-            @Override
-            public String getValue(User object) {
-                return object.getRole();
-            }
-        };
+        Column<SimpleUser, String> roleColumn = UserCellTableColumns.getUserRoleColumn(true);
+        Column<SimpleUser, String> avatarUrlColumn = UserCellTableColumns.getUserAvatarUrlColumn(false);
 
-        //getElement().getStyle().setBorderStyle(com.google.gwt.dom.client.Style.BorderStyle.SOLID);
-        //getElement().getStyle().setBorderWidth(1, com.google.gwt.dom.client.Style.Unit.PX);
-
-
-        addColumn(passColumn, "Password");
-        addColumn(roleColumn, "Role");
+        addColumn(roleColumn, ROLES_LABEL);
+        addSorter(roleColumn, Comparator.comparing(item->item.getRoles().toString()));
+        addColumn(avatarUrlColumn, AVATAR_LABEL);
     }
 }

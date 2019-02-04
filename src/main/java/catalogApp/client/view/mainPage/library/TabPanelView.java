@@ -1,10 +1,9 @@
-package catalogApp.client.view.mainPage;
+package catalogApp.client.view.mainPage.library;
 
 import catalogApp.client.presenter.TabPanelPresenter;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Panel;
@@ -13,7 +12,6 @@ import com.google.gwt.user.client.ui.TabPanel;
 
 public class TabPanelView extends Composite implements TabPanelPresenter.Display {
 
-    @UiTemplate("TabPanelView.ui.xml")
     interface TabPanelViewUiBinder extends UiBinder<Panel, TabPanelView> {
     }
 
@@ -31,7 +29,6 @@ public class TabPanelView extends Composite implements TabPanelPresenter.Display
 
     public TabPanelView() {
         initWidget(tabPanelViewUiBinder.createAndBindUi(this));
-        //tabPanel.setWidth("500px");
     }
 
     @Override

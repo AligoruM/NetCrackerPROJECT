@@ -1,7 +1,6 @@
 package catalogApp.server.security;
 
 import catalogApp.server.dao.UserDAO;
-import catalogApp.shared.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,11 +30,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try {
             User user = userDAO.getUser(username);
-            Set<GrantedAuthority> roles = new HashSet<>();
-            roles.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
-            if(user.getRole().equals("ADMIN"))
-                roles.add(new SimpleGrantedAuthority("ROLE_USER"));
-            return new org.springframework.security.core.userdetails.User(user.getName(), user.getPassword(), roles);
+            Set<String> roles = userDAO.getUserRoles(user.getId());
+            Set<GrantedAuthority> authorities = new HashSet<>();
+            roles.forEach(x -> authorities.add(new SimpleGrantedAuthority("ROLE_" + x)));
+            user.setRoles(authorities);
+            return user;
         } catch (EmptyResultDataAccessException ex) {
             throw new UsernameNotFoundException("User not found");
         }

@@ -1,9 +1,12 @@
 package catalogApp.client.presenter;
 
+import catalogApp.client.event.UpdateUserLibraryEvent;
 import catalogApp.client.services.SongWebService;
+import catalogApp.client.view.dialogs.EditDialogView;
 import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
@@ -22,12 +25,9 @@ public class SongTabPresenter implements Presenter {
 
         MultiSelectionModel<Song> getSelectionModel();
 
-        Set<Song> getSelectedItems();
-
         Widget asWidget();
     }
 
-    private boolean loaded = false;
     private final Display display;
     private final HandlerManager eventBus;
     private final SongWebService songWebService;
@@ -38,20 +38,6 @@ public class SongTabPresenter implements Presenter {
         this.display = display;
         this.eventBus = eventBus;
         this.songWebService = songWebService;
-
-        /*songWebService.getAllSongs(new MethodCallback<List<Song>>() {
-            @Override
-            public void onFailure(Method method, Throwable throwable) {
-                GWT.log("getAllSongs", throwable);
-            }
-
-            @Override
-            public void onSuccess(Method method, List<Song> songs) {
-                songListDataProvider.getList().addAll(songs);
-                loaded = true;
-            }
-        });*/
-
         bind();
     }
 
@@ -62,37 +48,61 @@ public class SongTabPresenter implements Presenter {
 
     private void bind() {
         display.setDataProviderAndInitialize(songListDataProvider);
-
     }
 
-    public List<Integer> getSelectedIDs() {
+    private List<Integer> getSelectedIDs() {
         List<Integer> tmp = new ArrayList<>();
-        display.getSelectedItems().forEach(e -> tmp.add(e.getId()));
+        display.getSelectionModel().getSelectedSet().forEach(e -> tmp.add(e.getId()));
         return tmp;
     }
 
-    public Set<Song> getSelectedSet() {
-        return display.getSelectedItems();
+    private Set<Song> getSelectedSet() {
+        return display.getSelectionModel().getSelectedSet();
     }
 
-    public void loadData() {
-        if (!loaded) {
-            songWebService.getAllSongs(new MethodCallback<List<Song>>() {
+    void loadData() {
+        songWebService.getAllSongs(new MethodCallback<List<Song>>() {
+            @Override
+            public void onFailure(Method method, Throwable throwable) {
+                GWT.log("getAllSongs", throwable);
+            }
+
+            @Override
+            public void onSuccess(Method method, List<Song> songs) {
+                songListDataProvider.getList().addAll(songs);
+            }
+        });
+    }
+
+    void doAddSongsToLib() {
+        List<Integer> selectedSongsIDs = getSelectedIDs();
+        if (!selectedSongsIDs.isEmpty()) {
+            songWebService.addSongsToUserLib(selectedSongsIDs, new MethodCallback<List<Song>>() {
                 @Override
-                public void onFailure(Method method, Throwable throwable) {
-                    GWT.log("getAllSongs", throwable);
+                public void onFailure(Method method, Throwable exception) {
+                    GWT.log("addSongsToLib doesnt work", exception);
                 }
 
                 @Override
-                public void onSuccess(Method method, List<Song> songs) {
-                    songListDataProvider.getList().addAll(songs);
-                    loaded = true;
+                public void onSuccess(Method method, List<Song> response) {
+                    GWT.log("Added to user's lib");
+                    eventBus.fireEvent(new UpdateUserLibraryEvent(UpdateUserLibraryEvent.ITEM_TYPE.SONG, response));
                 }
             });
+        } else {
+            GWT.log("nothing selected or all items already are in library");
         }
     }
 
-    public ListDataProvider<Song> getSongListDataProvider() {
+    void doEditSong() {
+        Set<Song> selectedSongs = getSelectedSet();
+        if (selectedSongs.size() == 1) {
+            new EditSongDialogPresenter(new EditDialogView(), songWebService,
+                    songListDataProvider, (Song) selectedSongs.toArray()[0]).go(null);
+        } else Window.alert("Select only one item!");
+    }
+
+    ListDataProvider<Song> getSongListDataProvider() {
         return songListDataProvider;
     }
 }

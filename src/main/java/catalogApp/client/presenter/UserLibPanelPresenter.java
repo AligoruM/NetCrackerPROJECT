@@ -8,9 +8,10 @@ import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
+import com.google.gwt.view.client.MultiSelectionModel;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 
@@ -18,13 +19,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserLibPanelPresenter implements Presenter {
+    public interface Display{
+        void setBookDataProvider(ListDataProvider<Book> dataProvider);
+        void setSongDataProvider(ListDataProvider<Song> dataProvider);
 
-    private BookTabPresenter.Display bookView;
-    private SongTabPresenter.Display songView;
+        MultiSelectionModel<Book> getSelectionBooksModel();
+        MultiSelectionModel<Song> getSelectionSongsModel();
 
-    private Button deleteBooks = new Button("Delete books from lib");
-    private Button deleteSongs = new Button("Delete songs from lib");
+        Button getDeleteBooksButton();
+        Button getDeleteSongsButton();
 
+        Widget asWidget();
+    }
+
+    private Display display;
     private SongWebService songWebService;
     private BookWebService bookWebService;
     private HandlerManager eventBus;
@@ -32,22 +40,12 @@ public class UserLibPanelPresenter implements Presenter {
     private ListDataProvider<Book> bookListDataProvider = new ListDataProvider<>();
     private ListDataProvider<Song> songListDataProvider = new ListDataProvider<>();
 
-    private DockPanel dockPanel = new DockPanel();
 
-    public UserLibPanelPresenter(BookTabPresenter.Display bookView, SongTabPresenter.Display songView,
-                                 BookWebService bookWebService, SongWebService songWebService, HandlerManager eventBus) {
-        this.bookView = bookView;
-        this.songView = songView;
+    public UserLibPanelPresenter(Display display, BookWebService bookWebService, SongWebService songWebService, HandlerManager eventBus) {
+        this.display = display;
         this.songWebService = songWebService;
         this.bookWebService = bookWebService;
         this.eventBus = eventBus;
-
-        dockPanel.setBorderWidth(3);
-        dockPanel.setSpacing(4);
-        dockPanel.add(deleteSongs, DockPanel.WEST);
-        dockPanel.add(songView.asWidget(), DockPanel.WEST);
-        dockPanel.add(deleteBooks, DockPanel.EAST);
-        dockPanel.add(bookView.asWidget(), DockPanel.EAST);
 
         bind();
 
@@ -60,7 +58,7 @@ public class UserLibPanelPresenter implements Presenter {
             @Override
             public void onSuccess(Method method, List<Book> response) {
                 bookListDataProvider.getList().addAll(response);
-                bookView.setDataProviderAndInitialize(bookListDataProvider);
+                display.setBookDataProvider(bookListDataProvider);
             }
         });
 
@@ -73,14 +71,14 @@ public class UserLibPanelPresenter implements Presenter {
             @Override
             public void onSuccess(Method method, List<Song> response) {
                 songListDataProvider.getList().addAll(response);
-                songView.setDataProviderAndInitialize(songListDataProvider);
+                display.setSongDataProvider(songListDataProvider);
             }
         });
     }
 
     @Override
     public void go(Panel container) {
-        container.add(dockPanel);
+        container.add(display.asWidget());
     }
 
     private void bind() {
@@ -103,11 +101,11 @@ public class UserLibPanelPresenter implements Presenter {
             }
         });
 
-        deleteBooks.addClickHandler(event -> {
-            List<Integer> tmp = new ArrayList<>();
-            bookView.getSelectedItems().forEach(e -> tmp.add(e.getId()));
-            if (!tmp.isEmpty()) {
-                bookWebService.deleteBookFromLib(tmp, new MethodCallback<Void>() {
+        display.getDeleteBooksButton().addClickHandler(event -> {
+            List<Integer> listOfSelectedBooksIds = new ArrayList<>();
+            display.getSelectionBooksModel().getSelectedSet().forEach(e -> listOfSelectedBooksIds.add(e.getId()));
+            if (!listOfSelectedBooksIds.isEmpty()) {
+                bookWebService.deleteBookFromLib(listOfSelectedBooksIds, new MethodCallback<Void>() {
                     @Override
                     public void onFailure(Method method, Throwable exception) {
                         GWT.log("delete book doesnt work", exception);
@@ -115,19 +113,19 @@ public class UserLibPanelPresenter implements Presenter {
 
                     @Override
                     public void onSuccess(Method method, Void response) {
-                        bookView.getSelectionModel().clear();
-                        bookListDataProvider.getList().removeIf(book -> tmp.contains(book.getId()));
-                        GWT.log("deleted book ids " + tmp.toString());
+                        display.getSelectionBooksModel().clear();
+                        bookListDataProvider.getList().removeIf(book -> listOfSelectedBooksIds.contains(book.getId()));
+                        GWT.log("deleted book ids " + listOfSelectedBooksIds.toString());
                     }
                 });
             }
         });
 
-        deleteSongs.addClickHandler(event -> {
-            List<Integer> tmp = new ArrayList<>();
-            songView.getSelectedItems().forEach(e -> tmp.add(e.getId()));
-            if (!tmp.isEmpty()) {
-                songWebService.deleteSongFromLib(tmp, new MethodCallback<Void>() {
+        display.getDeleteSongsButton().addClickHandler(event -> {
+            List<Integer> listOfSelectedSongsIds = new ArrayList<>();
+            display.getSelectionSongsModel().getSelectedSet().forEach(e -> listOfSelectedSongsIds.add(e.getId()));
+            if (!listOfSelectedSongsIds.isEmpty()) {
+                songWebService.deleteSongFromLib(listOfSelectedSongsIds, new MethodCallback<Void>() {
                     @Override
                     public void onFailure(Method method, Throwable exception) {
                         GWT.log("delete song doesnt work", exception);
@@ -135,9 +133,9 @@ public class UserLibPanelPresenter implements Presenter {
 
                     @Override
                     public void onSuccess(Method method, Void response) {
-                        songView.getSelectionModel().clear();
-                        songListDataProvider.getList().removeIf(song -> tmp.contains(song.getId()));
-                        GWT.log("deleted song ids " + tmp.toString());
+                        display.getSelectionSongsModel().clear();
+                        songListDataProvider.getList().removeIf(song -> listOfSelectedSongsIds.contains(song.getId()));
+                        GWT.log("deleted song ids " + listOfSelectedSongsIds.toString());
                     }
                 });
             }

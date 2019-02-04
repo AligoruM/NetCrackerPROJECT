@@ -6,7 +6,6 @@ import catalogApp.server.dao.constants.Attribute;
 import catalogApp.shared.model.Book;
 import catalogApp.shared.model.SimpleUser;
 import catalogApp.shared.model.Song;
-import catalogApp.shared.model.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -44,26 +43,26 @@ public class JdbcService implements IJdbcService {
 
     @Override
     public List<Book> getLibBooks() {
-        int user_id = userDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
-        return jdbcDAO.getUsersBooks(user_id);
+        int userId = getUserId();
+        return jdbcDAO.getUsersBooks(userId);
     }
 
     @Override
     public List<Book> addBooksToLibrary(List<Integer> idList) {
-        int user_id = userDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
-        jdbcDAO.addObjectsToUserLibrary(user_id, idList, Attribute.LIKED_BOOK_ID);
+        int userId = getUserId();
+        jdbcDAO.addObjectsToUserLibrary(userId, idList, Attribute.LIKED_BOOK_ID);
         return jdbcDAO.getBooksByIds(idList);
     }
 
     @Override
     public void deleteBooksFromLibrary(List<Integer> ids) {
-        int userId= userDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
+        int userId = getUserId();
         jdbcDAO.deleteObjectFromUserLibrary(userId, ids, Attribute.LIKED_BOOK_ID);
     }
 
     @Override
     public void updateBook(int id, Map<String, String> params) {
-        if(params.containsKey("name")){
+        if (params.containsKey("name")) {
             jdbcDAO.updateObjectName(id, params.get("name"));
         }
     }
@@ -85,60 +84,58 @@ public class JdbcService implements IJdbcService {
 
     @Override
     public List<Song> getLibSongs() {
-        int userId = userDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
+        int userId = getUserId();
         return jdbcDAO.getUsersSongs(userId);
     }
 
     @Override
     public List<Song> addSongsToLibrary(List<Integer> idList) {
-        int userId = userDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
+        int userId = getUserId();
         jdbcDAO.addObjectsToUserLibrary(userId, idList, Attribute.LIKED_SONG_ID);
         return jdbcDAO.getSongsByIds(idList);
     }
 
     @Override
     public void deleteSongsFromLibrary(List<Integer> ids) {
-        int userId= userDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
+        int userId = getUserId();
         jdbcDAO.deleteObjectFromUserLibrary(userId, ids, Attribute.LIKED_SONG_ID);
     }
 
     @Override
     public void updateSong(int id, Map<String, String> params) {
-        if(params.containsKey("name")) {
+        if (params.containsKey("name")) {
             jdbcDAO.updateObjectName(id, params.get("name"));
         }
-        if(params.containsKey("duration")){
+        if (params.containsKey("duration")) {
             String duration = params.get("duration");
-            if(duration.isEmpty() || Integer.valueOf(duration) <=0)
+            if (duration.isEmpty() || Integer.valueOf(duration) <= 0)
                 duration = "-1";
             jdbcDAO.updateAttributeValue(id, Attribute.SONG_DURATION, duration);
         }
     }
 
     @Override
-    public SimpleUser getUser() {
+    public SimpleUser getSimpleUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         SimpleUser user = userDAO.getSimpleUser(authentication.getName());
-        if(user!=null)
+        if (user != null)
             return user;
         else
             throw new UsernameNotFoundException("User not found");
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<SimpleUser> getAllUsers() {
         return userDAO.getAllUsers();
     }
 
     @Override
-    public void updateUserProfile(Map<String, String> params) {
-        int userId= userDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
-        userDAO.updateUserProfile(userId, params);
+    public void updateUser(SimpleUser simpleUser) {
+        userDAO.updateUserAttributes(simpleUser, getSimpleUser());
     }
 
-    @Override
-    public Map<String, String> getUserProfile() {
-        int userId= userDAO.getSimpleUser(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
-        return userDAO.getUserProfile(userId);
+    private int getUserId(){
+        return userDAO.getUserIdByName(SecurityContextHolder.getContext().getAuthentication().getName());
     }
+
 }

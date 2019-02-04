@@ -30,7 +30,7 @@
         <b:constructor-arg ref="userDAO"/>
     </b:bean>
 
-<!--    <b:bean id="authWebService" class="catalogApp.server.controllers.AuthWebService">
+<!--    <b:bean id="userWebService" class="catalogApp.server.controllers.UserWebService">
         <b:constructor-arg ref="userDAO"/>
     </b:bean>-->
 

@@ -34,6 +34,6 @@ public interface SongWebService extends RestService {
     void deleteSongFromLib(List<Integer> ids, MethodCallback<Void> callback);
 
     @PUT
-    @Path("rest/song/{id}")
-    void updateSong(@PathParam("id")int id, Map<String, String> params, MethodCallback<Void> callback);
+    @Path("rest/song")
+    void updateSong(Song newSong, MethodCallback<Void> callback);
 }

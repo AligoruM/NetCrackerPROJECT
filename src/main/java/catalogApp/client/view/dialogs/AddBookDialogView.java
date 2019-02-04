@@ -32,7 +32,6 @@ public class AddBookDialogView extends Composite implements AddBookDialogPresent
     public AddBookDialogView() {
         authorBox = new SuggestBox(wordSuggest);
         initWidget(ourUiBinder.createAndBindUi(this));
-        dialogPanel.setPopupPosition(100, 100);
         authorBox.setLimit(6);
     }
 

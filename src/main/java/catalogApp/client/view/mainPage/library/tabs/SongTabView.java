@@ -1,4 +1,4 @@
-package catalogApp.client.view.mainPage.tabs;
+package catalogApp.client.view.mainPage.library.tabs;
 
 import catalogApp.client.presenter.SongTabPresenter;
 import catalogApp.client.view.components.SongCellTable;
@@ -12,8 +12,6 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
-
-import java.util.Set;
 
 public class SongTabView extends Composite implements SongTabPresenter.Display {
 
@@ -35,7 +33,6 @@ public class SongTabView extends Composite implements SongTabPresenter.Display {
 
     private void initializeTable(ListDataProvider<Song> dataProvider) {
         table = new SongCellTable(dataProvider);
-        //table.setDataProvider(dataProvider);
         pager.setDisplay(table);
         simplePanel.add(table);
     }
@@ -46,11 +43,6 @@ public class SongTabView extends Composite implements SongTabPresenter.Display {
     @Override
     public void setDataProviderAndInitialize(ListDataProvider<Song> dataProvider) {
         initializeTable(dataProvider);
-    }
-
-    @Override
-    public Set<Song> getSelectedItems() {
-        return ((MultiSelectionModel<Song>) table.getSelectionModel()).getSelectedSet();
     }
 
     public MultiSelectionModel<Song> getSelectionModel(){

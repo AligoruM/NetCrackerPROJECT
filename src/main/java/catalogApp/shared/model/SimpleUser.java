@@ -1,40 +1,56 @@
 package catalogApp.shared.model;
 
-public class SimpleUser {
-    private int id;
-    private String username;
-    private String role;
+import catalogApp.server.dao.constants.Types;
+
+import java.util.Set;
+
+public class SimpleUser extends BaseObject{
+
+    private Set<String> roles;
+    private String description;
+    private String avatarUrl;
 
     public SimpleUser() {
     }
 
-    public SimpleUser(int id, String username, String role) {
-        this.id = id;
-        this.username = username;
-        this.role = role;
+    public SimpleUser(int id, String username) {
+        super(id, username, new Type(Types.USER, "User"));
     }
 
-    public int getId() {
-        return id;
+    public Set<String> getRoles() {
+        return roles;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
     }
 
-    public String getUsername() {
-        return username;
+    public String getDescription() {
+        return description;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getRole() {
-        return role;
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+
+    @Override
+    public String toString() {
+        return "SimpleUser{" +
+                "id=" + getId() +
+                ", name='" + getName() + '\'' +
+                ", type=" + getType() +
+                ", roles=" + roles +
+                ", description='" + description + '\'' +
+                ", avatarUrl='" + avatarUrl + '\'' +
+                '}';
     }
 }

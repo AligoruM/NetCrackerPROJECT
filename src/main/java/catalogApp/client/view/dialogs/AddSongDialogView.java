@@ -33,7 +33,6 @@ public class AddSongDialogView extends Composite implements AddSongDialogPresent
     public AddSongDialogView() {
         genreBox = new SuggestBox(wordSuggest);
         initWidget(ourUiBinder.createAndBindUi(this));
-        dialogPanel.setPopupPosition(100, 100);
         genreBox.setLimit(6);
     }
 

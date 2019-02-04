@@ -1,7 +1,7 @@
 package catalogApp.client.presenter;
 
-import catalogApp.client.services.AuthWebService;
-import catalogApp.shared.model.User;
+import catalogApp.client.services.UserWebService;
+import catalogApp.shared.model.SimpleUser;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
@@ -13,26 +13,26 @@ import java.util.List;
 
 public class UserPanelPresenter implements Presenter {
     public interface Display{
-        void setDataProvider(ListDataProvider<User> dataProvider);
+        void setDataProvider(ListDataProvider<SimpleUser> dataProvider);
         Widget asWidget();
     }
 
-    private ListDataProvider<User> dataProvider = new ListDataProvider<>();
+    private ListDataProvider<SimpleUser> dataProvider = new ListDataProvider<>();
 
-    private AuthWebService authWebService;
+    private UserWebService userWebService;
     private Display display;
 
-    public UserPanelPresenter(Display display, AuthWebService authWebService) {
-        this.authWebService = authWebService;
+    public UserPanelPresenter(Display display, UserWebService userWebService) {
+        this.userWebService = userWebService;
         this.display = display;
-        authWebService.getAllUsers(new MethodCallback<List<User>>() {
+        userWebService.getAllUsers(new MethodCallback<List<SimpleUser>>() {
             @Override
             public void onFailure(Method method, Throwable exception) {
                 GWT.log("getAllUsers doesnt work", exception);
             }
 
             @Override
-            public void onSuccess(Method method, List<User> response) {
+            public void onSuccess(Method method, List<SimpleUser> response) {
                 dataProvider.getList().addAll(response);
                 display.setDataProvider(dataProvider);
             }

@@ -1,31 +1,23 @@
 package catalogApp.client.presenter;
 
-import catalogApp.client.event.UpdateUserLibraryEvent;
 import catalogApp.client.services.BookWebService;
 import catalogApp.client.services.SongWebService;
 import catalogApp.client.view.dialogs.AddBookDialogView;
 import catalogApp.client.view.dialogs.AddSongDialogView;
-import catalogApp.client.view.dialogs.EditDialogView;
-import catalogApp.client.view.mainPage.tabs.BookTabView;
-import catalogApp.client.view.mainPage.tabs.SongTabView;
-import catalogApp.shared.model.Book;
-import catalogApp.shared.model.Song;
-import com.google.gwt.core.client.GWT;
+import catalogApp.client.view.mainPage.library.tabs.BookTabView;
+import catalogApp.client.view.mainPage.library.tabs.SongTabView;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.*;
-import org.fusesource.restygwt.client.Method;
-import org.fusesource.restygwt.client.MethodCallback;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.Widget;
 
-import java.util.List;
-import java.util.Set;
+import static catalogApp.client.view.constants.LibraryConstants.BOOK_LABEL;
+import static catalogApp.client.view.constants.LibraryConstants.SONG_LABEL;
+
 
 public class TabPanelPresenter implements Presenter {
 
-    private Display display;
-
-    private boolean booksIsLoaded = false;
-    private boolean songsIsLoaded = false;
 
     public interface Display {
         Button getAddButton();
@@ -38,6 +30,11 @@ public class TabPanelPresenter implements Presenter {
 
         Widget asWidget();
     }
+
+    private Display display;
+
+    private boolean booksIsLoaded;
+    private boolean songsIsLoaded;
 
     private BookTabPresenter bookTabPresenter;
     private SongTabPresenter songTabPresenter;
@@ -76,8 +73,8 @@ public class TabPanelPresenter implements Presenter {
             }
         });
 
-        display.getTabPanel().add(bookTabView, "Books");
-        display.getTabPanel().add(songTabView, "Songs");
+        display.getTabPanel().add(bookTabView, BOOK_LABEL);
+        display.getTabPanel().add(songTabView, SONG_LABEL);
         display.getTabPanel().selectTab(0);
 
         bind();
@@ -93,10 +90,10 @@ public class TabPanelPresenter implements Presenter {
             int x = display.getTabPanel().getTabBar().getSelectedTab();
             switch (x) {
                 case 0:
-                    new AddBookDialogPresenter(new AddBookDialogView(), bookWebService, bookTabPresenter, eventBus).go(RootPanel.get());
+                    new AddBookDialogPresenter(new AddBookDialogView(), bookWebService, bookTabPresenter, eventBus).go(null);
                     break;
                 case 1:
-                    new AddSongDialogPresenter(new AddSongDialogView(), songWebService, songTabPresenter, eventBus).go(RootPanel.get());
+                    new AddSongDialogPresenter(new AddSongDialogView(), songWebService, songTabPresenter, eventBus).go(null);
                     break;
                 default:
                     break;
@@ -107,42 +104,10 @@ public class TabPanelPresenter implements Presenter {
             int x = display.getTabPanel().getTabBar().getSelectedTab();
             switch (x) {
                 case 0:
-                    List<Integer> selectedBooksIDs = bookTabPresenter.getSelectedIDs();
-                    if (!selectedBooksIDs.isEmpty()) {
-                        bookWebService.addBooksToUserLib(selectedBooksIDs, new MethodCallback<List<Book>>() {
-                            @Override
-                            public void onFailure(Method method, Throwable exception) {
-                                GWT.log("addBookToLib doesnt work", exception);
-                            }
-
-                            @Override
-                            public void onSuccess(Method method, List<Book> response) {
-                                GWT.log("Added to user's lib");
-                                eventBus.fireEvent(new UpdateUserLibraryEvent(UpdateUserLibraryEvent.ITEM_TYPE.BOOK, response));
-                            }
-                        });
-                    } else {
-                        GWT.log("nothing selected or all items already are in library");
-                    }
+                    bookTabPresenter.doAddBooksToLib();
                     break;
                 case 1:
-                    List<Integer> selectedSongsIDs = songTabPresenter.getSelectedIDs();
-                    if (!selectedSongsIDs.isEmpty()) {
-                        songWebService.addSongsToUserLib(selectedSongsIDs, new MethodCallback<List<Song>>() {
-                            @Override
-                            public void onFailure(Method method, Throwable exception) {
-                                GWT.log("addSongsToLib doesnt work", exception);
-                            }
-
-                            @Override
-                            public void onSuccess(Method method, List<Song> response) {
-                                GWT.log("Added to user's lib");
-                                eventBus.fireEvent(new UpdateUserLibraryEvent(UpdateUserLibraryEvent.ITEM_TYPE.SONG, response));
-                            }
-                        });
-                    } else {
-                        GWT.log("nothing selected or all items already are in library");
-                    }
+                    songTabPresenter.doAddSongsToLib();
                     break;
                 default:
                     break;
@@ -153,20 +118,11 @@ public class TabPanelPresenter implements Presenter {
             int x = display.getTabPanel().getTabBar().getSelectedTab();
             switch (x) {
                 case 0:
-                    Set<Book> selectedBooks = bookTabPresenter.getSelectedSet();
-                    if (selectedBooks.size() == 1) {
-                        new EditBookDialogPresenter(new EditDialogView(), bookWebService,
-                                bookTabPresenter.getBookListDataProvider(), (Book) selectedBooks.toArray()[0]).go(null);
-                    } else Window.alert("Select only one item!");
+                    bookTabPresenter.doEditBook();
                     break;
                 case 1:
-                    Set<Song> selectedSongs = songTabPresenter.getSelectedSet();
-                    if (selectedSongs.size() == 1) {
-                        new EditSongDialogPresenter(new EditDialogView(), songWebService,
-                                songTabPresenter.getSongListDataProvider(), (Song) selectedSongs.toArray()[0]).go(null);
-                    } else Window.alert("Select only one item!");
+                    songTabPresenter.doEditSong();
                     break;
-
                 default:
                     break;
             }

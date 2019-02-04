@@ -1,9 +1,12 @@
 package catalogApp.client.presenter;
 
+import catalogApp.client.event.UpdateUserLibraryEvent;
 import catalogApp.client.services.BookWebService;
+import catalogApp.client.view.dialogs.EditDialogView;
 import catalogApp.shared.model.Book;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
@@ -22,35 +25,18 @@ public class BookTabPresenter implements Presenter {
 
         MultiSelectionModel<Book> getSelectionModel();
 
-        Set<Book> getSelectedItems();
-
         Widget asWidget();
     }
 
-    private boolean loaded = false;
     private final Display display;
     private final HandlerManager eventBus;
-    private final BookWebService bookService;
+    private final BookWebService bookWebService;
     private final static ListDataProvider<Book> bookListDataProvider = new ListDataProvider<>();
 
-    public BookTabPresenter(Display display, HandlerManager eventBus, BookWebService bookService) {
+    BookTabPresenter(Display display, HandlerManager eventBus, BookWebService bookWebService) {
         this.display = display;
         this.eventBus = eventBus;
-        this.bookService = bookService;
-
-        /*bookService.getAllBooks(new MethodCallback<List<Book>>() {
-            @Override
-            public void onFailure(Method method, Throwable throwable) {
-                GWT.log("getAllBooks doesnt work", throwable);
-            }
-
-            @Override
-            public void onSuccess(Method method, List<Book> songs) {
-                bookListDataProvider.getList().addAll(songs);
-                loaded = true;
-            }
-        });*/
-
+        this.bookWebService = bookWebService;
         bind();
     }
 
@@ -63,34 +49,61 @@ public class BookTabPresenter implements Presenter {
         display.setDataProviderAndInitialize(bookListDataProvider);
     }
 
-    public List<Integer> getSelectedIDs() {
+    private List<Integer> getSelectedIDs() {
         List<Integer> tmp = new ArrayList<>();
-        display.getSelectedItems().forEach(e -> tmp.add(e.getId()));
+        display.getSelectionModel().getSelectedSet().forEach(e -> tmp.add(e.getId()));
         return tmp;
     }
 
-    public Set<Book> getSelectedSet() {
-        return display.getSelectedItems();
+    private Set<Book> getSelectedSet() {
+        return display.getSelectionModel().getSelectedSet();
     }
 
-    public void loadData() {
-        if (!loaded) {
-            bookService.getAllBooks(new MethodCallback<List<Book>>() {
+    void loadData() {
+
+        bookWebService.getAllBooks(new MethodCallback<List<Book>>() {
+            @Override
+            public void onFailure(Method method, Throwable throwable) {
+                GWT.log("getAllBooks doesnt work", throwable);
+            }
+
+            @Override
+            public void onSuccess(Method method, List<Book> songs) {
+                bookListDataProvider.getList().addAll(songs);
+
+            }
+        });
+    }
+
+    void doAddBooksToLib() {
+        List<Integer> selectedBooksIDs = getSelectedIDs();
+        if (!selectedBooksIDs.isEmpty()) {
+            bookWebService.addBooksToUserLib(selectedBooksIDs, new MethodCallback<List<Book>>() {
                 @Override
-                public void onFailure(Method method, Throwable throwable) {
-                    GWT.log("getAllBooks doesnt work", throwable);
+                public void onFailure(Method method, Throwable exception) {
+                    GWT.log("addBookToLib doesnt work", exception);
                 }
 
                 @Override
-                public void onSuccess(Method method, List<Book> songs) {
-                    bookListDataProvider.getList().addAll(songs);
-                    loaded = true;
+                public void onSuccess(Method method, List<Book> response) {
+                    GWT.log("Added to user's lib");
+                    eventBus.fireEvent(new UpdateUserLibraryEvent(UpdateUserLibraryEvent.ITEM_TYPE.BOOK, response));
                 }
             });
+        } else {
+            GWT.log("nothing selected or all items already are in library");
         }
     }
 
-    public ListDataProvider<Book> getBookListDataProvider() {
+    void doEditBook() {
+        Set<Book> selectedBooks = getSelectedSet();
+        if (selectedBooks.size() == 1) {
+            new EditBookDialogPresenter(new EditDialogView(), bookWebService,
+                    bookListDataProvider, (Book) selectedBooks.toArray()[0]).go(null);
+        } else Window.alert("Select only one item!");
+    }
+
+    ListDataProvider<Book> getBookListDataProvider() {
         return bookListDataProvider;
     }
 }

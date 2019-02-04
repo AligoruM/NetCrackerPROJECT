@@ -65,10 +65,6 @@ public class SQLQuery {
     }
 
     //GENERAL
-    public static String CREATE_OBJECT() {
-        return "insert into Object (name, idType) values (?,?)";
-    }
-
     public static String UPDATE_OBJECT_NAME(int id, String name){
         return "update Object set name=\"" + name + "\" where idObject=" + id;
     }
@@ -95,25 +91,22 @@ public class SQLQuery {
 
     //USERS
     public static String USER_BY_NAME(String name) {
-        return "select O.idObject as idObject, O.name as objectName, AV.value as password, AV2.value as role, AV3.value as active from Object O" +
+        return "select O.idObject as idObject, O.name as objectName, AV.value as password, AV3.value as active from Object O" +
                 " join AttributeValue AV on O.idObject = AV.id_object and Av.id_attribute=" + Attribute.USER_PASSWORD +
-                " join AttributeValue AV2 on O.idObject = AV2.id_object and AV2.id_attribute=" + Attribute.USER_ROLE +
                 " join AttributeValue AV3 on O.idObject = AV3.id_object and AV3.id_attribute=" + Attribute.USER_ACTIVE +
                 " where objectName = \"" + name + "\"";
     }
+
+
     public static String ALL_USERS() {
-        return "select O.idObject as idObject, O.name as objectName, AV.value as password, AV2.value as role, AV3.value as active from Object O" +
-                " join AttributeValue AV on O.idObject = AV.id_object and Av.id_attribute=" + Attribute.USER_PASSWORD +
-                " join AttributeValue AV2 on O.idObject = AV2.id_object and AV2.id_attribute=" + Attribute.USER_ROLE +
-                " join AttributeValue AV3 on O.idObject = AV3.id_object and AV3.id_attribute=" + Attribute.USER_ACTIVE +
-                " where O.idType = " + Types.USER;
+        return "select O.idObject as idObject, O.name as objectName from Object O where O.idType = " + Types.USER;
     }
 
     public static String USER_ID_BY_NAME(String name) {
         return "select O.idObject as id from Object O where O.name=\"" + name + "\" and O.idType=" + Types.USER;
     }
 
-    public static String USER_ROLE_BY_ID(int id) {
+    public static String USER_ROLES_BY_ID(int id) {
         return "select AV.value as role from AttributeValue AV where AV.id_object=" + id + " and AV.id_attribute=" + Attribute.USER_ROLE;
     }
 }

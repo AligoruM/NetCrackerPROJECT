@@ -4,12 +4,12 @@ import catalogApp.client.event.ShowLibraryEvent;
 import catalogApp.client.event.ShowProfileEvent;
 import catalogApp.client.event.ShowUsersEvent;
 import catalogApp.client.presenter.*;
-import catalogApp.client.services.AuthWebService;
 import catalogApp.client.services.BookWebService;
 import catalogApp.client.services.SongWebService;
+import catalogApp.client.services.UserWebService;
 import catalogApp.client.view.mainPage.MainPageView;
-import catalogApp.client.view.mainPage.ProfileView;
-import catalogApp.client.view.mainPage.UserPanelView;
+import catalogApp.client.view.mainPage.profile.ProfileView;
+import catalogApp.client.view.mainPage.users.UserPanelView;
 import catalogApp.shared.model.SimpleUser;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -29,23 +29,23 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
     private final HandlerManager eventBus;
     private final BookWebService bookWebService;
     private final SongWebService songWebService;
-    private final AuthWebService authWebService;
+    private final UserWebService userWebService;
 
     private SimplePanel mainContainer;
 
-    private LibraryPresenter libraryPresenter = null;
-    private ProfilePresenter profilePresenter = null;
-    private UserPanelPresenter userPanelPresenter = null;
+    private LibraryPresenter libraryPresenter;
+    private ProfilePresenter profilePresenter;
+    private UserPanelPresenter userPanelPresenter;
 
     public CatalogController(HandlerManager eventBus, BookWebService bookService,
-                             SongWebService songWebService, AuthWebService authWebService) {
-        this.authWebService = authWebService;
+                             SongWebService songWebService, UserWebService userWebService) {
+        this.userWebService = userWebService;
         this.songWebService = songWebService;
         this.bookWebService = bookService;
         this.eventBus = eventBus;
 
 
-        authWebService.getSimpleUser(new MethodCallback<SimpleUser>() {
+        userWebService.getSimpleUser(new MethodCallback<SimpleUser>() {
             @Override
             public void onFailure(Method method, Throwable exception) {
                 GWT.log("simpleUser doesnt work", exception);
@@ -105,14 +105,14 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
                 case "users":
                     if (isAdmin()) {
                         if (userPanelPresenter == null) {
-                            userPanelPresenter = new UserPanelPresenter(new UserPanelView(), authWebService);
+                            userPanelPresenter = new UserPanelPresenter(new UserPanelView(), userWebService);
                         }
                         presenter = userPanelPresenter;
                     }
                     break;
                 case "profile":
                     if (profilePresenter == null) {
-                        profilePresenter = new ProfilePresenter(new ProfileView(), authWebService, eventBus);
+                        profilePresenter = new ProfilePresenter(new ProfileView(), userWebService);
                     }
                     presenter = profilePresenter;
                     break;
@@ -128,7 +128,7 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
 
     public static boolean isAdmin() {
         if (user!=null) {
-            return "ADMIN".equals(user.getRole());
+            return user.getRoles().contains("ADMIN");
         }
         return false;
     }

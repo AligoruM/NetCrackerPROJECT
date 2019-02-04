@@ -1,8 +1,10 @@
 package catalogApp.client.presenter;
 
 import catalogApp.client.services.BookWebService;
+import catalogApp.server.dao.constants.Types;
 import catalogApp.shared.model.BaseObject;
 import catalogApp.shared.model.Book;
+import catalogApp.shared.model.Type;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.ListDataProvider;
@@ -10,6 +12,8 @@ import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 
 import java.util.HashMap;
+
+import static catalogApp.client.view.constants.LibraryConstants.AUTHOR_LABEL;
 
 public class EditBookDialogPresenter implements Presenter {
 
@@ -53,9 +57,8 @@ public class EditBookDialogPresenter implements Presenter {
 
     @Override
     public void go(Panel container) {
-        RootPanel.get().add(display.asWidget());
         authorBox.setEnabled(false);
-        display.getTable().setWidget(2, 0, new Label("Author"));
+        display.getTable().setWidget(2, 0, new Label(AUTHOR_LABEL));
         display.getTable().setWidget(2, 1, authorBox);
 
         bind();
@@ -74,12 +77,9 @@ public class EditBookDialogPresenter implements Presenter {
         display.getSubmitButton().addClickHandler(event -> {
             String newName = display.getNewName().trim();
             if (!(oldName.equals(newName) || newName.isEmpty())) {
-                HashMap<String, String> tmp = new HashMap<>();
+                Book newBook = new Book(book.getId(), newName);
 
-                int selected_id = book.getId();
-                tmp.put("name", newName);
-
-                bookWebService.updateBook(selected_id, tmp, new MethodCallback<Void>() {
+                bookWebService.updateBook(newBook, new MethodCallback<Void>() {
                     @Override
                     public void onFailure(Method method, Throwable exception) {
                         GWT.log("updateBook doesnt work", exception);

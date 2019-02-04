@@ -1,5 +1,9 @@
 package catalogApp.shared.model;
 
+import catalogApp.server.dao.constants.Types;
+
+import java.util.Objects;
+
 public class Song extends BaseObject {
 
     private int duration;
@@ -8,8 +12,8 @@ public class Song extends BaseObject {
     public Song() {
     }
 
-    public Song(int id, String name, Type type) {
-        super(id, name, type);
+    public Song(int id, String name) {
+        super(id, name, new Type(Types.SONG, "Song"));
     }
 
     public int getDuration() {
@@ -36,5 +40,20 @@ public class Song extends BaseObject {
                 ", name='" + getName() + '\'' +
                 ", type=" + getType() +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Song song = (Song) o;
+        return duration == song.duration &&
+                Objects.equals(genre, song.genre);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), duration, genre);
     }
 }

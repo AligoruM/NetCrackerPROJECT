@@ -7,7 +7,6 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
@@ -47,7 +46,6 @@ public class AddBookDialogPresenter implements Presenter {
     @Override
     public void go(Panel container) {
         bind();
-        RootPanel.get().add(display.asWidget());
         display.showDialog();
     }
 
