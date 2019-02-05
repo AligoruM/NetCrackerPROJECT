@@ -61,9 +61,9 @@ public class JdbcService implements IJdbcService {
     }
 
     @Override
-    public void updateBook(int id, Map<String, String> params) {
-        if (params.containsKey("name")) {
-            jdbcDAO.updateObjectName(id, params.get("name"));
+    public void updateBook(Book newBook) {
+        if (newBook.getName()!=null){
+            jdbcDAO.updateObjectName(newBook.getId(), newBook.getName());
         }
     }
 
@@ -102,15 +102,15 @@ public class JdbcService implements IJdbcService {
     }
 
     @Override
-    public void updateSong(int id, Map<String, String> params) {
-        if (params.containsKey("name")) {
-            jdbcDAO.updateObjectName(id, params.get("name"));
+    public void updateSong(Song newSong) {
+        if (newSong.getName()!=null) {
+            jdbcDAO.updateObjectName(newSong.getId(), newSong.getName());
         }
-        if (params.containsKey("duration")) {
-            String duration = params.get("duration");
-            if (duration.isEmpty() || Integer.valueOf(duration) <= 0)
-                duration = "-1";
-            jdbcDAO.updateAttributeValue(id, Attribute.SONG_DURATION, duration);
+
+        if (newSong.getDuration()<=0) {
+            jdbcDAO.updateAttributeValue(newSong.getId(), Attribute.SONG_DURATION, "-1");
+        }else{
+            jdbcDAO.updateAttributeValue(newSong.getId(), Attribute.SONG_DURATION, String.valueOf(newSong.getDuration()));
         }
     }
 

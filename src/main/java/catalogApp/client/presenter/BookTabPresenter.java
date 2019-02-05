@@ -2,7 +2,7 @@ package catalogApp.client.presenter;
 
 import catalogApp.client.event.UpdateUserLibraryEvent;
 import catalogApp.client.services.BookWebService;
-import catalogApp.client.view.dialogs.EditDialogView;
+import catalogApp.client.view.dialogs.EditBookDialogView;
 import catalogApp.shared.model.Book;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
@@ -98,7 +98,7 @@ public class BookTabPresenter implements Presenter {
     void doEditBook() {
         Set<Book> selectedBooks = getSelectedSet();
         if (selectedBooks.size() == 1) {
-            new EditBookDialogPresenter(new EditDialogView(), bookWebService,
+            new EditBookDialogPresenter(new EditBookDialogView(), bookWebService,
                     bookListDataProvider, (Book) selectedBooks.toArray()[0]).go(null);
         } else Window.alert("Select only one item!");
     }

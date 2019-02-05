@@ -20,7 +20,7 @@ public interface IJdbcService {
 
     void deleteBooksFromLibrary(List<Integer> ids);
 
-    void updateBook(int id, Map<String, String> params);
+    void updateBook(Book newBook);
 
     List<Song> getAllSong();
 
@@ -34,7 +34,7 @@ public interface IJdbcService {
 
     void deleteSongsFromLibrary(List<Integer> ids);
 
-    void updateSong(int id, Map<String, String> params);
+    void updateSong(Song newSong);
 
     SimpleUser getSimpleUser();
 

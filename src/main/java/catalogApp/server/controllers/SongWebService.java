@@ -64,10 +64,10 @@ public class SongWebService {
     }
 
     @PUT
-    @Path("/song/{id}")
+    @Path("/song")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateSong(@PathParam("id")int id, Map<String, String> params){
-        jdbcService.updateSong(id, params);
+    public void updateSong(Song newSong){
+        jdbcService.updateSong(newSong);
     }
 
     public void setJdbcService(JdbcService service) {

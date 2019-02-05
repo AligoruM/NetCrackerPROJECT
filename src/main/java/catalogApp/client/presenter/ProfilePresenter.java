@@ -47,24 +47,26 @@ public class ProfilePresenter implements Presenter {
     private void bind() {
         display.updateData(simpleUser);
 
-        String oldDescription = simpleUser.getDescription();
-        String oldAvatarUrl = simpleUser.getAvatarUrl();
-
         display.getSubmitButton().addClickHandler(event -> {
 
-            SimpleUser updatedSimpleUser = new SimpleUser(simpleUser.getId(), simpleUser.getName());
+            SimpleUser updatedSimpleUser = new SimpleUser();
+            updatedSimpleUser.setId(simpleUser.getId());
 
             String newDescription = display.getDescription().trim();
             String newAvatarUrl = display.getAvatarUrl().trim();
             String newUsername = display.getUsername().trim();
 
-            if (!newUsername.isEmpty()) {
+            if (!newUsername.isEmpty() && !newUsername.equals(simpleUser.getName())) {
                 updatedSimpleUser.setName(newUsername);
             }
+            if(!newDescription.equals(simpleUser.getDescription())){
+                updatedSimpleUser.setDescription(newDescription);
+            }
 
-            updatedSimpleUser.setDescription(newDescription);
+            if(!newAvatarUrl.equals(simpleUser.getAvatarUrl())){
+                updatedSimpleUser.setAvatarUrl(newAvatarUrl);
+            }
 
-            updatedSimpleUser.setAvatarUrl(newAvatarUrl);
 
             userWebService.updateUser(updatedSimpleUser, new MethodCallback<Void>() {
                 @Override

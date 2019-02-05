@@ -65,10 +65,10 @@ public class BookWebService {
     }
 
     @PUT
-    @Path("/book/{id}")
+    @Path("/book")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateBook(@PathParam("id")int id, Map<String, String> params){
-        jdbcService.updateBook(id, params);
+    public void updateBook(Book newBook){
+        jdbcService.updateBook(newBook);
     }
 
     public void setJdbcService(JdbcService service) {

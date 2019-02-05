@@ -1,17 +1,18 @@
 package catalogApp.client.view.dialogs;
 
 import catalogApp.client.presenter.EditBookDialogPresenter;
-import catalogApp.shared.model.BaseObject;
+import catalogApp.shared.model.Book;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.*;
 
-import static catalogApp.client.view.constants.LibraryConstants.ID_LABEL;
-import static catalogApp.client.view.constants.LibraryConstants.NAME_LABEL;
+import static catalogApp.client.view.constants.LibraryConstants.*;
 
-public class EditDialogView extends Composite implements EditBookDialogPresenter.Display {
-    interface EditDialogViewUiBinder extends UiBinder<HTMLPanel, EditDialogView> {
+public class EditBookDialogView extends Composite implements EditBookDialogPresenter.Display {
+    @UiTemplate("EditDialogView.ui.xml")
+    interface EditBookDialogViewUiBinder extends UiBinder<HTMLPanel, EditBookDialogView> {
 
     }
 
@@ -28,9 +29,12 @@ public class EditDialogView extends Composite implements EditBookDialogPresenter
 
     private TextBox nameBox = new TextBox();
 
-    private static EditDialogViewUiBinder ourUiBinder = GWT.create(EditDialogViewUiBinder.class);
+    private TextBox authorBox = new TextBox();
 
-    public EditDialogView() {
+
+    private static EditBookDialogViewUiBinder ourUiBinder = GWT.create(EditBookDialogViewUiBinder.class);
+
+    public EditBookDialogView() {
         initWidget(ourUiBinder.createAndBindUi(this));
 
         idBox.setEnabled(false);
@@ -39,6 +43,10 @@ public class EditDialogView extends Composite implements EditBookDialogPresenter
         flexTable.setWidget(0, 1, idBox);
         flexTable.setWidget(1, 0, new Label(NAME_LABEL));
         flexTable.setWidget(1, 1, nameBox);
+
+        authorBox.setEnabled(false);
+        flexTable.setWidget(2, 0, new Label(AUTHOR_LABEL));
+        flexTable.setWidget(2, 1, authorBox);
     }
 
     @Override
@@ -61,16 +69,14 @@ public class EditDialogView extends Composite implements EditBookDialogPresenter
         dialogPanel.hide();
     }
 
-    @Override
-    public FlexTable getTable() {
-        return flexTable;
-    }
 
     @Override
-    public void showData(BaseObject object) {
+    public void showData(Book object) {
         idBox.setText(String.valueOf(object.getId()));
         nameBox.setText(object.getName());
+        authorBox.setText(object.getAuthor().getName());
     }
+
 
     @Override
     public String getNewName() {

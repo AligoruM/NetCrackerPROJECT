@@ -2,7 +2,8 @@ package catalogApp.client.presenter;
 
 import catalogApp.client.event.UpdateUserLibraryEvent;
 import catalogApp.client.services.SongWebService;
-import catalogApp.client.view.dialogs.EditDialogView;
+import catalogApp.client.view.dialogs.EditBookDialogView;
+import catalogApp.client.view.dialogs.EditSongDialogView;
 import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
@@ -97,7 +98,7 @@ public class SongTabPresenter implements Presenter {
     void doEditSong() {
         Set<Song> selectedSongs = getSelectedSet();
         if (selectedSongs.size() == 1) {
-            new EditSongDialogPresenter(new EditDialogView(), songWebService,
+            new EditSongDialogPresenter(new EditSongDialogView(), songWebService,
                     songListDataProvider, (Song) selectedSongs.toArray()[0]).go(null);
         } else Window.alert("Select only one item!");
     }

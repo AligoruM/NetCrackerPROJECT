@@ -26,11 +26,9 @@ public class EditBookDialogPresenter implements Presenter {
 
         void hideDialog();
 
-        FlexTable getTable();
-
         Widget asWidget();
 
-        void showData(BaseObject object);
+        void showData(Book object);
 
         String getNewName();
 
@@ -44,8 +42,6 @@ public class EditBookDialogPresenter implements Presenter {
 
     private BookWebService bookWebService;
 
-    private TextBox authorBox = new TextBox();
-
     private String oldName;
 
     public EditBookDialogPresenter(Display display, BookWebService bookWebService, ListDataProvider<Book> dataProvider, Book book) {
@@ -53,16 +49,11 @@ public class EditBookDialogPresenter implements Presenter {
         this.dataProvider = dataProvider;
         this.display = display;
         this.bookWebService = bookWebService;
+        bind();
     }
 
     @Override
     public void go(Panel container) {
-        authorBox.setEnabled(false);
-        display.getTable().setWidget(2, 0, new Label(AUTHOR_LABEL));
-        display.getTable().setWidget(2, 1, authorBox);
-
-        bind();
-
         display.showDialog();
     }
 
@@ -70,13 +61,12 @@ public class EditBookDialogPresenter implements Presenter {
 
         if (!dataProvider.getList().isEmpty()) {
             display.showData(book);
-            authorBox.setText(book.getName());
             oldName = book.getName();
         }
 
         display.getSubmitButton().addClickHandler(event -> {
             String newName = display.getNewName().trim();
-            if (!(oldName.equals(newName) || newName.isEmpty())) {
+            if (!oldName.equals(newName) && !newName.isEmpty()) {
                 Book newBook = new Book(book.getId(), newName);
 
                 bookWebService.updateBook(newBook, new MethodCallback<Void>() {
