@@ -112,12 +112,12 @@ public class SQLQuery {
     }
 
     public static String ALL_SIMPLE_USERS() {
-        return "select O.idObject as idObject, O.name as objectName, O.img as image, O.comment as comment, AV.value as description from Object O" +
+        return "select O.idObject as idObject, O.name as objectName, O.isArchived as archived, O.img as image, O.comment as comment, AV.value as description from Object O" +
                 " left join AttributeValue AV on O.idObject = AV.id_object and Av.id_attribute=" + Attribute.USER_DESCRIPTION +
                 " where O.idType=" + Types.USER;
     }
     public static String GET_SIMPLE_USER(int id){
-        return "select O.idObject as idObject, O.name as objectName, O.img as image, O.comment as comment, AV.value as description from Object O" +
+        return "select O.idObject as idObject, O.name as objectName, O.isArchived as archived, O.img as image, O.comment as comment, AV.value as description from Object O" +
                 " left join AttributeValue AV on O.idObject = AV.id_object and Av.id_attribute=" + Attribute.USER_DESCRIPTION +
                 " where O.idObject=" + id;
     }

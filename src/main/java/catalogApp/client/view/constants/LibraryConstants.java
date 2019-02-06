@@ -9,4 +9,7 @@ public class LibraryConstants {
     public static final String NAME_LABEL = "Name";
     public static final String ID_LABEL = "ID";
     public static final String ARCHIVED_LABEL = "In archive";
+    public static final String DEFAULT_OBJECT_IMAGE = "images/defaultObject.jpg";
+    public static final String EMPTY_COMMENT = "empty";
+    public static final String IMG_SIZE = "50px";
 }

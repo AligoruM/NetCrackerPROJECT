@@ -12,7 +12,7 @@ import com.google.gwt.view.client.SelectionModel;
 public class BaseCellTableColumns<T extends BaseObject> {
 
     public Column<T, String> getNameColumn() {
-        return new Column<T, String>(new TextCell()) {
+        return new Column<T, String>(new ClickableTextCell()) {
             @Override
             public String getValue(BaseObject object) {
                 return object.getName();
