@@ -2,12 +2,16 @@ package catalogApp.client.presenter;
 
 import catalogApp.client.CatalogController;
 import catalogApp.client.services.UserWebService;
+import catalogApp.client.view.components.FileUploader;
 import catalogApp.shared.model.SimpleUser;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
+
+import static catalogApp.shared.constants.FileServiceConstants.IMAGE_FIELD;
+import static catalogApp.shared.constants.FileServiceConstants.IMAGE_SERVICE_PATH;
 
 
 public class ProfilePresenter implements Presenter {
@@ -18,7 +22,7 @@ public class ProfilePresenter implements Presenter {
 
         Button getRefreshButton();
 
-        FormPanel getFormPanel();
+        FileUploader getFileUploader();
 
         Widget asWidget();
 
@@ -89,7 +93,7 @@ public class ProfilePresenter implements Presenter {
             userWebService.getSimpleUser(new MethodCallback<SimpleUser>() {
                 @Override
                 public void onFailure(Method method, Throwable exception) {
-                    GWT.log("something going wrong", exception);
+                    GWT.log("something goes wrong", exception);
                 }
 
                 @Override
@@ -102,21 +106,17 @@ public class ProfilePresenter implements Presenter {
     }
 
     private void initUploader(){
-        FileUpload fileUpload = new FileUpload();
-        fileUpload.setName("image");
 
-        FormPanel formPanel = display.getFormPanel();
-        formPanel.add(fileUpload);
-        formPanel.setMethod(FormPanel.METHOD_POST);
-        formPanel.setAction(GWT.getModuleBaseURL() + "rest/avatar");
-        formPanel.setEncoding(FormPanel.ENCODING_MULTIPART);
+        FileUploader fileUploader = display.getFileUploader();
+        fileUploader.setAction(GWT.getModuleBaseURL() + IMAGE_SERVICE_PATH);
+        fileUploader.setFileFieldName(IMAGE_FIELD);
 
         display.getUploadButton().addClickHandler(event -> {
-            String filename = fileUpload.getFilename();
+            String filename = fileUploader.getFileUpload().getFilename();
             if (filename.length() == 0) {
                 Window.alert("No File Specified!");
             } else {
-                formPanel.submit();
+                fileUploader.submit();
             }
         });
     }

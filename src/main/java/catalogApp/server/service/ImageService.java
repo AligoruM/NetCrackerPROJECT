@@ -7,31 +7,34 @@ import java.io.*;
 @Service
 public class ImageService implements IImageService {
 
-    private String uploadPath;
+    private String workDir;
 
-    public void setUploadPath(String uploadPath) {
-        this.uploadPath = uploadPath;
+    private String uploadDir;
+
+    public void setWorkDir(String workDir) {
+        this.workDir = workDir;
+    }
+
+    public void setUploadDir(String uploadDir) {
+        this.uploadDir = uploadDir;
     }
 
     @Override
-    public boolean saveImage(InputStream stream, String filename) {
+    public void saveImage(InputStream stream, String filename) {
         try
         {
             int read;
             byte[] bytes = new byte[1024];
-
-            OutputStream out = new FileOutputStream(new File(uploadPath + filename));
+            OutputStream out = new FileOutputStream(new File(workDir + uploadDir + filename));
             while ((read = stream.read(bytes)) != -1)
             {
                 out.write(bytes, 0, read);
             }
             out.flush();
             out.close();
-            return true;
         } catch (IOException e)
         {
             e.printStackTrace();
-            return false;
         }
     }
 }

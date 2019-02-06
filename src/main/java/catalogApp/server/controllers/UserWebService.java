@@ -22,6 +22,8 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.List;
 
+import static catalogApp.shared.constants.FileServiceConstants.IMAGE_FIELD;
+
 @Service
 @Controller
 @Path("/")
@@ -57,8 +59,8 @@ public class UserWebService {
     @POST
     @Path("/avatar")
     @Consumes({MediaType.MULTIPART_FORM_DATA})
-    public void uploadAvatar(@FormDataParam("image") InputStream fileInputStream,
-                             @FormDataParam("image") FormDataContentDisposition fileMetaData) {
+    public void uploadAvatar(@FormDataParam(IMAGE_FIELD) InputStream fileInputStream,
+                             @FormDataParam(IMAGE_FIELD) FormDataContentDisposition fileMetaData) {
         imageService.saveImage(fileInputStream, fileMetaData.getFileName());
         jdbcService.updateAvatar(fileMetaData.getFileName());
     }
@@ -70,7 +72,7 @@ public class UserWebService {
     }
 
 
-    public void setJdbcService(IJdbcService service) {
+    public static void setJdbcService(IJdbcService service) {
         jdbcService = service;
     }
 

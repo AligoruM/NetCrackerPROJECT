@@ -1,6 +1,7 @@
 package catalogApp.client.view.mainPage.profile;
 
 import catalogApp.client.presenter.ProfilePresenter;
+import catalogApp.client.view.components.FileUploader;
 import catalogApp.shared.model.SimpleUser;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
@@ -27,7 +28,7 @@ public class ProfileView extends Composite implements ProfilePresenter.Display {
     @UiField
     Button submitButton;
     @UiField
-    FormPanel formPanel;
+    FileUploader fileUploader;
     @UiField
     Button upload;
     @UiField
@@ -57,8 +58,6 @@ public class ProfileView extends Composite implements ProfilePresenter.Display {
         table.setWidget(2, 1, describeBox);
         avatarImg.setWidth(PROFILE_AVATAR_SIZE);
         table.getElement().getStyle().setPaddingLeft(20, Style.Unit.PX);
-
-
     }
 
 
@@ -78,8 +77,8 @@ public class ProfileView extends Composite implements ProfilePresenter.Display {
     }
 
     @Override
-    public FormPanel getFormPanel() {
-        return formPanel;
+    public FileUploader getFileUploader() {
+        return fileUploader;
     }
 
     @Override

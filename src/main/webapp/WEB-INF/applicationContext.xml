@@ -47,8 +47,9 @@
     </b:bean>
 
     <b:bean id="imageService" class="catalogApp.server.service.ImageService">
-        <!--<b:property name="uploadPath" value="C:\\apache-tomcat-9.0.13\\webapps\\ROOT\\images\\"/>-->
-        <b:property name="uploadPath" value="images\\"/>
+        <!--<b:property name="workDir" value="C:\\apache-tomcat-9.0.13\\webapps\\ROOT\\"/>-->
+        <b:property name="workDir" value=""/>
+        <b:property name="uploadDir" value="#{T(catalogApp.shared.constants.FileServiceConstants).IMAGE_SERVICE_DIR}\\"/>
     </b:bean>
 
     <b:bean id="jdbcService" class="catalogApp.server.service.JdbcService">
