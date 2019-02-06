@@ -33,8 +33,9 @@ public class UserWebService {
     @POST
     @Path("/UserProfile")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateUser(SimpleUser simpleUser){
+    public SimpleUser updateUser(SimpleUser simpleUser){
         jdbcService.updateUser(simpleUser);
+        return jdbcService.getSimpleUser();
     }
 
 

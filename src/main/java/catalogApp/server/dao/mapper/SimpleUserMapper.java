@@ -9,6 +9,9 @@ import java.sql.SQLException;
 public class SimpleUserMapper implements RowMapper<SimpleUser> {
     @Override
     public SimpleUser mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return new SimpleUser(rs.getInt("idObject"), rs.getString("objectName"));
+        SimpleUser simpleUser = new SimpleUser(rs.getInt("idObject"), rs.getString("objectName"));
+        simpleUser.setDescription(rs.getString("description"));
+        simpleUser.setAvatarUrl(rs.getString("avatar"));
+        return simpleUser;
     }
 }

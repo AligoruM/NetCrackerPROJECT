@@ -10,6 +10,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Request;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 public interface UserWebService extends RestService {
@@ -23,10 +24,14 @@ public interface UserWebService extends RestService {
 
     @POST
     @Path("rest/UserProfile")
-    void updateUser(SimpleUser simpleUser, MethodCallback<Void> callback);
+    void updateUser(SimpleUser simpleUser, MethodCallback<SimpleUser> callback);
 
     @GET
     @Path("rest/avatar/{id}")
     void getAvatarUrl(@PathParam("id") int id, MethodCallback<String> callback);
+
+    /*@POST
+    @Path("rest/avatar/{id}")
+    void uploadAvatar(@FormParam("image")OutputStream stream, MethodCallback<String> callback);*/
 
 }

@@ -16,6 +16,8 @@ public class ProfilePresenter implements Presenter {
 
         Button getUploadButton();
 
+        Button getRefreshButton();
+
         FormPanel getFormPanel();
 
         Widget asWidget();
@@ -66,22 +68,37 @@ public class ProfilePresenter implements Presenter {
             }
 
 
-            userWebService.updateUser(updatedSimpleUser, new MethodCallback<Void>() {
+            userWebService.updateUser(updatedSimpleUser, new MethodCallback<SimpleUser>() {
                 @Override
                 public void onFailure(Method method, Throwable exception) {
                     GWT.log("updateUser doesnt work", exception);
                 }
 
                 @Override
-                public void onSuccess(Method method, Void response) {
-                    simpleUser.setName(updatedSimpleUser.getName());
-                    simpleUser.setDescription(updatedSimpleUser.getDescription());
+                public void onSuccess(Method method, SimpleUser response) {
+                    simpleUser.setName(response.getName());
+                    simpleUser.setDescription(response.getDescription());
+                    simpleUser.setAvatarUrl(response.getAvatarUrl());
                     display.updateData(simpleUser);
                 }
             });
 
         });
 
+        display.getRefreshButton().addClickHandler(event -> {
+            userWebService.getSimpleUser(new MethodCallback<SimpleUser>() {
+                @Override
+                public void onFailure(Method method, Throwable exception) {
+                    GWT.log("something going wrong", exception);
+                }
+
+                @Override
+                public void onSuccess(Method method, SimpleUser response) {
+                    simpleUser.updateFiels(response);
+                    display.updateData(simpleUser);
+                }
+            });
+        });
     }
 
     private void initUploader(){
@@ -102,19 +119,5 @@ public class ProfilePresenter implements Presenter {
                 formPanel.submit();
             }
         });
-
-        formPanel.addSubmitCompleteHandler(event -> userWebService.getAvatarUrl(simpleUser.getId(), new MethodCallback<String>() {
-            @Override
-            public void onFailure(Method method, Throwable exception) {
-                GWT.log("getAvatarUrl doesnt work", exception);
-            }
-
-            @Override
-            public void onSuccess(Method method, String response) {
-                GWT.log(GWT.getModuleBaseURL() + response);
-                simpleUser.setAvatarUrl(GWT.getModuleBaseURL() + response);
-                display.updateData(simpleUser);
-            }
-        }));
     }
 }

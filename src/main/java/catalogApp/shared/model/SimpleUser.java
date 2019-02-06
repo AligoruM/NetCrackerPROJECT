@@ -41,6 +41,14 @@ public class SimpleUser extends BaseObject{
         this.avatarUrl = avatarUrl;
     }
 
+    public void updateFiels(SimpleUser user){
+        setId(user.getId());
+        setName(user.getName());
+        setRoles(user.getRoles());
+        setArchived(user.isArchived());
+        setAvatarUrl(user.getAvatarUrl());
+        setDescription(user.getDescription());
+    }
 
     @Override
     public String toString() {

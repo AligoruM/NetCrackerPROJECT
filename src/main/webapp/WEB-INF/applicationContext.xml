@@ -47,7 +47,8 @@
     </b:bean>
 
     <b:bean id="imageService" class="catalogApp.server.service.ImageService">
-        <b:property name="uploadPath" value="C:\\Users\\Сергей\\IdeaProjects\\NetCrackerPROJECT\\images\\"/>
+        <!--<b:property name="uploadPath" value="C:\\apache-tomcat-9.0.13\\webapps\\ROOT\\images\\"/>-->
+        <b:property name="uploadPath" value="images\\"/>
     </b:bean>
 
     <b:bean id="jdbcService" class="catalogApp.server.service.JdbcService">

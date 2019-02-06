@@ -30,6 +30,8 @@ public class ProfileView extends Composite implements ProfilePresenter.Display {
     FormPanel formPanel;
     @UiField
     Button upload;
+    @UiField
+    Button refresh;
 
     private TextBox usernameBox = new TextBox();
     private TextBox roleBox = new TextBox();
@@ -68,6 +70,11 @@ public class ProfileView extends Composite implements ProfilePresenter.Display {
     @Override
     public Button getUploadButton() {
         return upload;
+    }
+
+    @Override
+    public Button getRefreshButton() {
+        return refresh;
     }
 
     @Override

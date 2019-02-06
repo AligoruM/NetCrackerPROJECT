@@ -1,6 +1,5 @@
 package catalogApp.server.service;
 
-import catalogApp.server.dao.EavDAO;
 import catalogApp.server.dao.IJdbcDAO;
 import catalogApp.server.dao.UserDAO;
 import catalogApp.server.dao.constants.Attribute;
@@ -15,8 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
-import java.util.function.Predicate;
 
 
 @Service

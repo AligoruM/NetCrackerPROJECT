@@ -62,7 +62,6 @@ public class AddSongDialogPresenter implements Presenter {
         });
 
         display.getSubmitButton().addClickHandler(event -> {
-            //TODO validation
             List<String> tmp = display.getAddInfo();
             if (tmp.size() >= 2 && tmp.size() <= 3) {
                 String name = tmp.get(0);

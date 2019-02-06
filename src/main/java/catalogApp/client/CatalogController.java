@@ -54,7 +54,7 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
             @Override
             public void onSuccess(Method method, SimpleUser response) {
                 user = response;
-                user.setAvatarUrl(GWT.getModuleBaseURL() + response.getAvatarUrl());
+                user.setAvatarUrl(response.getAvatarUrl());
                 go(RootPanel.get());
             }
         });

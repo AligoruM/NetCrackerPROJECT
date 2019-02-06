@@ -51,10 +51,7 @@ public class UserDAO {
 
     public List<SimpleUser> getAllUsers() {
         List<SimpleUser> users = jdbcTemplate.query(SQLQuery.ALL_USERS(), new SimpleUserMapper());
-        users.forEach(user -> {
-            setAdditionDataInSimpleUser(user);
-            user.setRoles(getUserRoles(user.getId()));
-        });
+        users.forEach(user -> user.setRoles(getUserRoles(user.getId())));
         return users;
     }
 
@@ -65,7 +62,7 @@ public class UserDAO {
     public void updateUserAttributes(SimpleUser newSimpleUser, SimpleUser oldSimpleUser) {
         if (newSimpleUser.getId() == oldSimpleUser.getId()) {
             int id = oldSimpleUser.getId();
-            if (!newSimpleUser.getName().equals(oldSimpleUser.getName())) {
+            if (newSimpleUser.getName()!=null && !newSimpleUser.getName().equals(oldSimpleUser.getName())) {
                 String username = newSimpleUser.getName();
                 jdbcTemplate.update(SQLQuery.UPDATE_OBJECT_NAME(id, username));
                 //TODO something with it
@@ -74,13 +71,9 @@ public class UserDAO {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, credentials, nowAuthorities);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-            if (!newSimpleUser.getDescription().equals(oldSimpleUser.getDescription())) {
+            if (newSimpleUser.getDescription()!=null && !newSimpleUser.getDescription().equals(oldSimpleUser.getDescription())) {
                 String description = newSimpleUser.getDescription();
                 updateUserAttr(description, id, Attribute.USER_DESCRIPTION);
-            }
-            if (!newSimpleUser.getAvatarUrl().equals(oldSimpleUser.getAvatarUrl())) {
-                String avatarUrl = newSimpleUser.getAvatarUrl();
-                updateUserAttr(avatarUrl, id, Attribute.USER_AVATAR_URL);
             }
         }
     }

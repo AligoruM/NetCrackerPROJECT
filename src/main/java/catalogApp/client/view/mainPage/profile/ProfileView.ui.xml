@@ -19,7 +19,10 @@
                 <g:cell horizontalAlignment="ALIGN_RIGHT">
                     <g:HorizontalPanel>
                         <g:cell>
-                            <g:Button ui:field="submitButton" text="submit"/>
+                            <g:Button ui:field="refresh" text="Refresh"/>
+                        </g:cell>
+                        <g:cell>
+                            <g:Button ui:field="submitButton" text="Submit"/>
                         </g:cell>
                     </g:HorizontalPanel>
                 </g:cell>

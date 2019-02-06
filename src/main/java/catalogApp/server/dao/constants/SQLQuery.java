@@ -106,7 +106,10 @@ public class SQLQuery {
     }
 
     public static String ALL_USERS() {
-        return "select O.idObject as idObject, O.name as objectName, O.isArchived as archived from Object O where O.idType = " + Types.USER;
+        return "select O.idObject as idObject, O.name as objectName, AV2.value as avatar, AV.value as description from Object O" +
+                " left join AttributeValue AV on O.idObject = AV.id_object and Av.id_attribute=" + Attribute.USER_DESCRIPTION +
+                " left join AttributeValue AV2 on O.idObject = AV2.id_object and AV2.id_attribute=" + Attribute.USER_AVATAR_URL +
+                " where O.idType=" + Types.USER;
     }
 
     public static String USER_ID_BY_NAME(String name) {
