@@ -149,6 +149,7 @@ public class EavDAO implements IJdbcDAO {
                 .executeAndReturnKey(new HashMap<String, String>() {{
                     put("name", name);
                     put("idType", String.valueOf(type));
+                    put("IsArchived", "0");
                 }})
                 .intValue();
     }
@@ -170,7 +171,13 @@ public class EavDAO implements IJdbcDAO {
         }
     }
 
-
+    @Override
+    public void changeStateItems(List<Integer> ids, boolean state) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("ids", ids);
+        int iState = state ? 1 : 0;
+        namedParameterJdbcTemplate.update(SQLQuery.UPDATE_OBJECTS_STATE(iState, "ids"), params);
+    }
 }
 
 

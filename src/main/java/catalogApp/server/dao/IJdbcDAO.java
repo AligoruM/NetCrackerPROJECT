@@ -36,4 +36,6 @@ public interface IJdbcDAO {
     void addObjectsToUserLibrary(int id, List<Integer> objectIds, int attributeId);
 
     void deleteObjectFromUserLibrary(int id, List<Integer> ids, int attributeId);
+
+    void changeStateItems(List<Integer> ids, boolean state);
 }

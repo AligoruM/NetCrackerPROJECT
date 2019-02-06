@@ -9,15 +9,15 @@ import java.util.List;
 import java.util.Map;
 
 public interface SongWebService extends RestService {
-    @POST
+    @GET
     @Path("rest/song")
     void getAllSongs(MethodCallback<List<Song>> callback);
 
-    @POST
+    @GET
     @Path("rest/getGenre")
     void getGenreNames(MethodCallback<List<String>> callback);
 
-    @POST
+    @PUT
     @Path("rest/addSong")
     void addSong(List<String> params, MethodCallback<Song> callback);
 
@@ -25,7 +25,7 @@ public interface SongWebService extends RestService {
     @Path("rest/addSongsToUserLib")
     void addSongsToUserLib(List<Integer> ids, MethodCallback<List<Song>> callback);
 
-    @POST
+    @GET
     @Path("rest/getUserSongs")
     void getUserSongs(MethodCallback<List<Song>> callback);
 
@@ -33,7 +33,15 @@ public interface SongWebService extends RestService {
     @Path("rest/song")
     void deleteSongFromLib(List<Integer> ids, MethodCallback<Void> callback);
 
-    @PUT
+    @POST
     @Path("rest/song")
     void updateSong(Song newSong, MethodCallback<Void> callback);
+
+    @POST
+    @Path("rest/archiveSongs")
+    void archiveSongs(List<Integer> ids, MethodCallback<Void> callback);
+
+    @POST
+    @Path("rest/restoreSongs")
+    void restoreSongs(List<Integer> ids, MethodCallback<Void> callback);
 }

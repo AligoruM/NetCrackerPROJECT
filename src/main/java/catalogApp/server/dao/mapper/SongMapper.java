@@ -26,6 +26,7 @@ public class SongMapper implements RowMapper<Song> {
 
         song.setId(rs.getInt("idObject"));
         song.setName(rs.getString("name"));
+        song.setArchived(rs.getBoolean("archived"));
         song.setDuration(rs.getInt("duration"));
         song.setGenre(genre);
         song.setType(songType);

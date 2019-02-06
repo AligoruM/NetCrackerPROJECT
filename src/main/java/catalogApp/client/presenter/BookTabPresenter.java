@@ -103,6 +103,48 @@ public class BookTabPresenter implements Presenter {
         } else Window.alert("Select only one item!");
     }
 
+    void doArchiveBooks() {
+        List<Integer> selectedIds = getSelectedIDs();
+        if (selectedIds.size() > 0) {
+            bookWebService.archiveBooks(selectedIds, new MethodCallback<Void>() {
+                @Override
+                public void onFailure(Method method, Throwable exception) {
+                    GWT.log("restoreBooks doesnt work", exception);
+                }
+
+                @Override
+                public void onSuccess(Method method, Void response) {
+                    bookListDataProvider.getList().forEach(item -> {
+                        if (selectedIds.contains(item.getId()))
+                            item.setArchived(true);
+                        display.getSelectionModel().clear();
+                    });
+                }
+            });
+        }
+    }
+
+    void doRestoreBooks(){
+        List<Integer> selectedIds = getSelectedIDs();
+        if (selectedIds.size() > 0) {
+            bookWebService.restoreBooks(selectedIds, new MethodCallback<Void>() {
+                @Override
+                public void onFailure(Method method, Throwable exception) {
+                    GWT.log("restoreBooks doesnt work", exception);
+                }
+
+                @Override
+                public void onSuccess(Method method, Void response) {
+                    bookListDataProvider.getList().forEach(item -> {
+                        if (selectedIds.contains(item.getId()))
+                            item.setArchived(false);
+                        display.getSelectionModel().clear();
+                    });
+                }
+            });
+        }
+    }
+
     ListDataProvider<Book> getBookListDataProvider() {
         return bookListDataProvider;
     }

@@ -26,6 +26,10 @@ public class TabPanelPresenter implements Presenter {
 
         Button getEditButton();
 
+        Button getArchiveButton();
+
+        Button getRestoreButton();
+
         TabPanel getTabPanel();
 
         Widget asWidget();
@@ -122,6 +126,34 @@ public class TabPanelPresenter implements Presenter {
                     break;
                 case 1:
                     songTabPresenter.doEditSong();
+                    break;
+                default:
+                    break;
+            }
+        });
+
+        display.getArchiveButton().addClickHandler(event -> {
+            int x = display.getTabPanel().getTabBar().getSelectedTab();
+            switch (x) {
+                case 0:
+                    bookTabPresenter.doArchiveBooks();
+                    break;
+                case 1:
+                    songTabPresenter.doArchiveSongs();
+                    break;
+                default:
+                    break;
+            }
+        });
+
+        display.getRestoreButton().addClickHandler(event -> {
+            int x = display.getTabPanel().getTabBar().getSelectedTab();
+            switch (x) {
+                case 0:
+                    bookTabPresenter.doRestoreBooks();
+                    break;
+                case 1:
+                    songTabPresenter.doRestoreSongs();
                     break;
                 default:
                     break;

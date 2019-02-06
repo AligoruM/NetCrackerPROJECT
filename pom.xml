@@ -57,6 +57,11 @@
             <version>${jersey.version}</version>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-multipart</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
 
 
         <dependency>
@@ -190,11 +195,6 @@
 
         <!-- Хибернейт и SQLite-->
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>${hibernate.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
             <version>${sqlite.version}</version>
@@ -282,6 +282,10 @@
                         <resource>
                             <!-- this is relative to the pom.xml directory -->
                             <directory>DataBase</directory>
+                        </resource>
+                        <resource>
+                            <targetPath>images</targetPath>
+                            <directory>images</directory>
                         </resource>
                     </webResources>
                     <webXml>src\main\webapp\WEB-INF\web.xml</webXml>

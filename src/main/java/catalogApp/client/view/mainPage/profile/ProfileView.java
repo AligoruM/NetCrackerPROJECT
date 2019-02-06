@@ -4,8 +4,11 @@ import catalogApp.client.presenter.ProfilePresenter;
 import catalogApp.shared.model.SimpleUser;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 
 import static catalogApp.client.view.constants.ProfileConstants.*;
@@ -18,13 +21,15 @@ public class ProfileView extends Composite implements ProfilePresenter.Display {
     @UiField
     Label titleLabel;
     @UiField
-    TextBox avatarUrl;
-    @UiField
     FlexTable table;
     @UiField
     Image avatarImg;
     @UiField
     Button submitButton;
+    @UiField
+    FormPanel formPanel;
+    @UiField
+    Button upload;
 
     private TextBox usernameBox = new TextBox();
     private TextBox roleBox = new TextBox();
@@ -48,16 +53,26 @@ public class ProfileView extends Composite implements ProfilePresenter.Display {
 
         table.setWidget(2, 0, new Label(DESCRIPTION_LABEL));
         table.setWidget(2, 1, describeBox);
-        avatarUrl.setWidth(PROFILE_AVATAR_SIZE);
-        avatarUrl.addFocusHandler(event -> avatarUrl.selectAll());
         avatarImg.setWidth(PROFILE_AVATAR_SIZE);
         table.getElement().getStyle().setPaddingLeft(20, Style.Unit.PX);
+
+
     }
 
 
     @Override
     public Button getSubmitButton() {
         return submitButton;
+    }
+
+    @Override
+    public Button getUploadButton() {
+        return upload;
+    }
+
+    @Override
+    public FormPanel getFormPanel() {
+        return formPanel;
     }
 
     @Override
@@ -68,11 +83,6 @@ public class ProfileView extends Composite implements ProfilePresenter.Display {
     @Override
     public String getUsername() {
         return usernameBox.getText();
-    }
-
-    @Override
-    public String getAvatarUrl() {
-        return avatarUrl.getText();
     }
 
     @Override
@@ -107,10 +117,8 @@ public class ProfileView extends Composite implements ProfilePresenter.Display {
     private void setAvatarUrl(String url) {
         if(url!=null && !url.isEmpty()) {
             avatarImg.setUrl(url);
-            avatarUrl.setText(url);
         } else {
             avatarImg.setUrl(DEFAULT_AVATAR_URL);
-            avatarUrl.setText(DEFAULT_AVATAR_URL);
         }
     }
 }

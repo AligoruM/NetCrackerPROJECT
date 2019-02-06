@@ -42,4 +42,11 @@ public interface IJdbcService {
 
     void updateUser(SimpleUser simpleUser);
 
+    void updateAvatar(String filename);
+
+    String getUserAvatarPath(int id);
+
+    void archiveItems(List<Integer> ids);
+
+    void restoreItems(List<Integer> ids);
 }

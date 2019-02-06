@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.sql.ResultSet;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -82,6 +83,14 @@ public class UserDAO {
                 updateUserAttr(avatarUrl, id, Attribute.USER_AVATAR_URL);
             }
         }
+    }
+
+    public void updateAvatar(int id, String filepath){
+        updateUserAttr(filepath, id, Attribute.USER_AVATAR_URL);
+    }
+
+    public String getUserAvatarPath(int id){
+        return jdbcTemplate.queryForObject(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(id, Attribute.USER_AVATAR_URL), ResultSet::getString);
     }
 
     private void updateUserAttr(String value, int userId, int attributeId) {

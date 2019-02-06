@@ -10,18 +10,18 @@ import java.util.List;
 import java.util.Map;
 
 public interface BookWebService extends RestService {
-    @POST
+    @GET
     @Path("rest/book")
     @Produces(MediaType.APPLICATION_JSON)
     void getAllBooks(MethodCallback<List<Book>> callback);
 
-    @POST
+    @PUT
     @Path("rest/addBook")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     void addBook(List<String> params, MethodCallback<Book> callback);
 
-    @POST
+    @GET
     @Path("rest/getAuthor")
     @Produces(MediaType.APPLICATION_JSON)
     void getAllAuthor(MethodCallback<List<String>> callback);
@@ -31,7 +31,7 @@ public interface BookWebService extends RestService {
     @Consumes(MediaType.APPLICATION_JSON)
     void addBooksToUserLib(List<Integer> ids, MethodCallback<List<Book>> callback);
 
-    @POST
+    @GET
     @Path("rest/getUserBooks")
     @Produces(MediaType.APPLICATION_JSON)
     void getUserBooks(MethodCallback<List<Book>> callback);
@@ -40,8 +40,16 @@ public interface BookWebService extends RestService {
     @Path("rest/book")
     void deleteBookFromLib(List<Integer> ids, MethodCallback<Void> callback);
 
-    @PUT
+    @POST
     @Path("rest/book")
     @Consumes(MediaType.APPLICATION_JSON)
     void updateBook(Book newBook, MethodCallback<Void> callback);
+
+    @POST
+    @Path("rest/archiveBooks")
+    void archiveBooks(List<Integer> ids, MethodCallback<Void> callback);
+
+    @POST
+    @Path("rest/restoreBooks")
+    void restoreBooks(List<Integer> ids, MethodCallback<Void> callback);
 }

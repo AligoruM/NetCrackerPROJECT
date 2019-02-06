@@ -7,11 +7,19 @@ public class BaseObject {
     private int id;
     private String name;
     private Type type;
+    private boolean isArchived;
 
     public BaseObject(int id, String name, Type type) {
         this.id = id;
         this.name = name;
         this.type = type;
+    }
+
+    public BaseObject(int id, String name, Type type, boolean isArchived) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.isArchived = isArchived;
     }
 
     public BaseObject() {
@@ -39,6 +47,14 @@ public class BaseObject {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    public boolean isArchived() {
+        return isArchived;
+    }
+
+    public void setArchived(boolean archived) {
+        isArchived = archived;
     }
 
     @Override

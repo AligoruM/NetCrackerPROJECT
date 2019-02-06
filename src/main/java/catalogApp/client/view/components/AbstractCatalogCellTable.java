@@ -15,11 +15,10 @@ import com.google.gwt.view.client.SelectionModel;
 
 import java.util.Comparator;
 
-import static catalogApp.client.view.constants.LibraryConstants.ID_LABEL;
-import static catalogApp.client.view.constants.LibraryConstants.NAME_LABEL;
+import static catalogApp.client.view.constants.LibraryConstants.*;
 
 
-public class AbstractCatalogCellTable<T extends BaseObject> extends CellTable<T> {
+public abstract class AbstractCatalogCellTable<T extends BaseObject> extends CellTable<T> {
 
     private ListDataProvider<T> dataProvider;
 
@@ -41,6 +40,7 @@ public class AbstractCatalogCellTable<T extends BaseObject> extends CellTable<T>
 
         if (CatalogController.isAdmin()) {
             Column<T, String> idColumn = baseCellTableColumns.getIdColumn();
+            addColumn(baseCellTableColumns.getArchivedColumn(), ARCHIVED_LABEL);
             addColumn(idColumn, ID_LABEL);
             addSorter(idColumn, Comparator.comparing(BaseObject::getId));
         }

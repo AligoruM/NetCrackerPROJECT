@@ -2,7 +2,6 @@ package catalogApp.client.presenter;
 
 import catalogApp.client.event.UpdateUserLibraryEvent;
 import catalogApp.client.services.SongWebService;
-import catalogApp.client.view.dialogs.EditBookDialogView;
 import catalogApp.client.view.dialogs.EditSongDialogView;
 import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
@@ -101,6 +100,48 @@ public class SongTabPresenter implements Presenter {
             new EditSongDialogPresenter(new EditSongDialogView(), songWebService,
                     songListDataProvider, (Song) selectedSongs.toArray()[0]).go(null);
         } else Window.alert("Select only one item!");
+    }
+
+    void doArchiveSongs() {
+        List<Integer> selectedIds = getSelectedIDs();
+        if (selectedIds.size() > 0) {
+            songWebService.archiveSongs(selectedIds, new MethodCallback<Void>() {
+                @Override
+                public void onFailure(Method method, Throwable exception) {
+                    GWT.log("archiveSongs doesnt work", exception);
+                }
+
+                @Override
+                public void onSuccess(Method method, Void response) {
+                    songListDataProvider.getList().forEach(item -> {
+                        if (selectedIds.contains(item.getId()))
+                            item.setArchived(true);
+                        display.getSelectionModel().clear();
+                    });
+                }
+            });
+        }
+    }
+
+    void doRestoreSongs() {
+        List<Integer> selectedIds = getSelectedIDs();
+        if (selectedIds.size() > 0) {
+            songWebService.restoreSongs(selectedIds, new MethodCallback<Void>() {
+                @Override
+                public void onFailure(Method method, Throwable exception) {
+                    GWT.log("archiveSongs doesnt work", exception);
+                }
+
+                @Override
+                public void onSuccess(Method method, Void response) {
+                    songListDataProvider.getList().forEach(item -> {
+                        if (selectedIds.contains(item.getId()))
+                            item.setArchived(false);
+                        display.getSelectionModel().clear();
+                    });
+                }
+            });
+        }
     }
 
     ListDataProvider<Song> getSongListDataProvider() {

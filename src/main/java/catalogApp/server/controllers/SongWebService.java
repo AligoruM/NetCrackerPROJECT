@@ -18,14 +18,14 @@ public class SongWebService {
 
     private static IJdbcService jdbcService;
 
-    @POST
+    @GET
     @Path("/song")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Song> getAllSongs() {
         return jdbcService.getAllSong();
     }
 
-    @POST
+    @PUT
     @Path("/addSong")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -36,7 +36,7 @@ public class SongWebService {
         return jdbcService.addSong(name, genre, duration);
     }
 
-    @POST
+    @GET
     @Path("/getGenre")
     @Produces(MediaType.APPLICATION_JSON)
     public List<String> getGenreNames(){
@@ -50,7 +50,7 @@ public class SongWebService {
         return jdbcService.addSongsToLibrary(ids);
     }
 
-    @POST
+    @GET
     @Path("/getUserSongs")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Song> getUserSongs(){
@@ -63,11 +63,25 @@ public class SongWebService {
         jdbcService.deleteSongsFromLibrary(ids);
     }
 
-    @PUT
+    @POST
     @Path("/song")
     @Consumes(MediaType.APPLICATION_JSON)
     public void updateSong(Song newSong){
         jdbcService.updateSong(newSong);
+    }
+
+    @POST
+    @Path("/archiveSongs")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void archiveSongs(List<Integer> ids){
+        jdbcService.archiveItems(ids);
+    }
+
+    @POST
+    @Path("/restoreSongs")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void restoreSongs(List<Integer> ids){
+        jdbcService.restoreItems(ids);
     }
 
     public void setJdbcService(JdbcService service) {

@@ -8,4 +8,5 @@ public class LibraryConstants {
     public static final String DURATION_LABEL = "Duration";
     public static final String NAME_LABEL = "Name";
     public static final String ID_LABEL = "ID";
+    public static final String ARCHIVED_LABEL = "In archive";
 }

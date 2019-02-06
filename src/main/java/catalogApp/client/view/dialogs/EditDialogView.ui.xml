@@ -4,16 +4,12 @@
         <g:DialogBox ui:field="dialogPanel" text="Editing">
             <g:HTMLPanel>
                 <g:FlexTable ui:field="flexTable"/>
-                <g:HTMLPanel>
-                    <table>
-                        <tr>
-                            <td>
-                                <g:Button ui:field="submitButton" text="Submit"/>
-                                <g:Button ui:field="cancelButton" text="Cancel"/>
-                            </td>
-                        </tr>
-                    </table>
-                </g:HTMLPanel>
+                <g:VerticalPanel horizontalAlignment="ALIGN_RIGHT">
+                    <g:HorizontalPanel width="100%" horizontalAlignment="ALIGN_RIGHT">
+                        <g:Button ui:field="submitButton" text="Submit"/>
+                        <g:Button ui:field="cancelButton" text="Cancel"/>
+                    </g:HorizontalPanel>
+                </g:VerticalPanel>
             </g:HTMLPanel>
         </g:DialogBox>
     </g:HTMLPanel>

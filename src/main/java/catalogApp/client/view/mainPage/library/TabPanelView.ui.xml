@@ -7,6 +7,8 @@
                 <g:Button ui:field="addButton" text="Add item"/>
                 <g:Button ui:field="addToLib" text="Add item to lib"/>
                 <g:Button ui:field="editItem" text="Edit item"/>
+                <g:Button ui:field="archiveButton" text="To archive"/>
+                <g:Button ui:field="restoreButton" text="Restore"/>
             </g:HorizontalPanel>
             <g:TabPanel ui:field="tabPanel"/>
         </g:VerticalPanel>

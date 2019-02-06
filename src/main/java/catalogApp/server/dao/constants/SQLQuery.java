@@ -3,14 +3,15 @@ package catalogApp.server.dao.constants;
 public class SQLQuery {
     //BOOKS
     public static String ALL_BOOKS() {
-        return  "select O.idObject as idObject, O.name as objectName, AV2.idObject as authorId, AV2.name as authorName" +
+        return  "select O.idObject as idObject, O.name as objectName, O.isArchived as archived, AV2.idObject as authorId, AV2.name as authorName" +
                 " from Object O join AttributeValue AV on (O.idObject = AV.id_object and id_attribute=" + Attribute.BOOK_AUTHOR_ID + ")" +
                 " join (select idObject, name from Object where idType=" + Types.AUTHOR + ") AV2 on AV.value=AV2.idObject";
     }
 
     public static String BOOK_BY_ID(int id) {
-        return  "select O.idObject as idObject, O.name as objectName, AV2.idObject as authorId, AV2.name as authorName" +
-                " from Object O join AttributeValue AV on (O.idObject = AV.id_object and id_attribute=" + Attribute.BOOK_AUTHOR_ID + ")" +
+        return  "select O.idObject as idObject, O.name as objectName, O.isArchived as archived, AV2.idObject as authorId," +
+                " AV2.name as authorName from Object O " +
+                "join AttributeValue AV on (O.idObject = AV.id_object and id_attribute=" + Attribute.BOOK_AUTHOR_ID + ")" +
                 " join (select idObject, name from Object where idType=" + Types.AUTHOR + ") AV2 on AV.value=AV2.idObject" +
                 " where O.idObject=" + id;
     }
@@ -24,8 +25,8 @@ public class SQLQuery {
     }
 
     public static String BOOKS_BY_IDS(String paramName) {
-        return  "select O.idObject as idObject, O.name as objectName, AV2.idObject as authorId, AV2.name as authorName" +
-                " from Object O" +
+        return  "select O.idObject as idObject, O.name as objectName, O.isArchived as archived, AV2.idObject as authorId," +
+                " AV2.name as authorName from Object O" +
                 " join AttributeValue AV on (O.idObject = AV.id_object and id_attribute=" + Attribute.BOOK_AUTHOR_ID + ")" +
                 " join (select idObject, name from Object where idType=" + Types.AUTHOR + ") AV2 on AV.value=AV2.idObject" +
                 " where O.idObject in (:" + paramName + ")";
@@ -33,24 +34,26 @@ public class SQLQuery {
 
     //SONGS
     public static String ALL_SONGS() {
-        return  "select O.idObject as idObject, O.name as name, AV.value as duration, AV3.idObject as idGenre, AV3.name as genreName" +
-                " from Object O" +
+        return  "select O.idObject as idObject, O.name as name, O.isArchived as archived, AV.value as duration, AV3.idObject as idGenre," +
+                " AV3.name as genreName from Object O" +
                 " join AttributeValue AV on (O.idObject = AV.id_object and AV.id_attribute=" + Attribute.SONG_DURATION + ")" +
                 " join AttributeValue AV2 on (O.idObject=AV2.id_object and AV2.id_attribute=" + Attribute.SONG_GENRE_ID + ")" +
                 " join (select idObject, name from Object where idType=" + Types.SONG_GENRE + ") AV3 on AV2.value=AV3.idObject";
     }
 
     public static String SONG_BY_ID(int id) {
-        return "select O.idObject as idObject, O.name as name, AV.value as duration, AV3.idObject as idGenre, AV3.name as genreName" +
-                "  from Object O  join AttributeValue AV on (O.idObject = AV.id_object and AV.id_attribute=" + Attribute.SONG_DURATION + ")" +
+        return "select O.idObject as idObject, O.name as name, O.isArchived as archived, AV.value as duration, AV3.idObject as idGenre," +
+                " AV3.name as genreName from Object O" +
+                "  join AttributeValue AV on (O.idObject = AV.id_object and AV.id_attribute=" + Attribute.SONG_DURATION + ")" +
                 "  join AttributeValue AV2 on (O.idObject=AV2.id_object and AV2.id_attribute=" + Attribute.SONG_GENRE_ID + ")" +
                 "  join (select idObject, name from Object where idType=" + Types.SONG_GENRE + ") AV3 on AV2.value=AV3.idObject" +
                 "  where O.idObject=" + id;
     }
 
     public static String SONGS_BY_IDS(String paramName) {
-        return "select O.idObject as idObject, O.name as name, AV.value as duration, AV3.idObject as idGenre, AV3.name as genreName" +
-                "  from Object O  join AttributeValue AV on (O.idObject = AV.id_object and AV.id_attribute=" + Attribute.SONG_DURATION + ")" +
+        return "select O.idObject as idObject, O.name as name, O.isArchived as archived, AV.value as duration," +
+                "  AV3.idObject as idGenre, AV3.name as genreName from Object O" +
+                "  join AttributeValue AV on (O.idObject = AV.id_object and AV.id_attribute=" + Attribute.SONG_DURATION + ")" +
                 "  join AttributeValue AV2 on (O.idObject=AV2.id_object and AV2.id_attribute=" + Attribute.SONG_GENRE_ID + ")" +
                 "  join (select idObject, name from Object where idType=" + Types.SONG_GENRE + ") AV3 on AV2.value=AV3.idObject" +
                 "  where O.idObject in (:" + paramName + ")";
@@ -69,6 +72,10 @@ public class SQLQuery {
         return "update Object set name=\"" + name + "\" where idObject=" + id;
     }
 
+    public static String UPDATE_OBJECTS_STATE(int state, String paramName){
+        return "update Object set IsArchived=\"" + state + "\" where idObject in (:" + paramName + ")";
+    }
+
     public static String CREATE_ATTRIBUTE_VALUE(String value, int objectId, int attrId) {
         return "insert into AttributeValue (value, id_object, id_attribute) values (\"" + value + "\", " + objectId + ", " + attrId + ")";
     }
@@ -80,6 +87,7 @@ public class SQLQuery {
     public static String DELETE_ATTRIBUTE_VALUE_BY_ALL_FIELDS(String value, int objectId, int attId){
         return "delete from AttributeValue where id_object=" + objectId + " and id_attribute=" + attId + " and value=\"" + value + "\"";
     }
+
     public static String DELETE_ATTRIBUTE_VALUE_BY_KEYS(int objectId, int attId){
         return "delete from AttributeValue where id_object=" + objectId + " and id_attribute=" + attId;
     }
@@ -91,15 +99,14 @@ public class SQLQuery {
 
     //USERS
     public static String USER_BY_NAME(String name) {
-        return "select O.idObject as idObject, O.name as objectName, AV.value as password, AV3.value as active from Object O" +
+        return "select O.idObject as idObject, O.name as objectName, O.isArchived as archived, AV.value as password" +
+                " from Object O" +
                 " join AttributeValue AV on O.idObject = AV.id_object and Av.id_attribute=" + Attribute.USER_PASSWORD +
-                " join AttributeValue AV3 on O.idObject = AV3.id_object and AV3.id_attribute=" + Attribute.USER_ACTIVE +
                 " where objectName = \"" + name + "\"";
     }
 
-
     public static String ALL_USERS() {
-        return "select O.idObject as idObject, O.name as objectName from Object O where O.idType = " + Types.USER;
+        return "select O.idObject as idObject, O.name as objectName, O.isArchived as archived from Object O where O.idType = " + Types.USER;
     }
 
     public static String USER_ID_BY_NAME(String name) {

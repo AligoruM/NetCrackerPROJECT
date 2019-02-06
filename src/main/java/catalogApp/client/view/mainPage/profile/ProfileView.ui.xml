@@ -9,7 +9,8 @@
                 <g:HorizontalPanel width="100%" height="100%">
                     <g:VerticalPanel>
                         <g:Image ui:field="avatarImg"/>
-                        <g:TextBox ui:field="avatarUrl"/>
+                        <g:FormPanel ui:field="formPanel"/>
+                        <g:Button ui:field="upload" text="Upload"/>
                     </g:VerticalPanel>
                     <g:VerticalPanel>
                         <g:FlexTable ui:field="table"/>

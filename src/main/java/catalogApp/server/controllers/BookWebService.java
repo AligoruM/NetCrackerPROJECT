@@ -4,6 +4,7 @@ package catalogApp.server.controllers;
 import catalogApp.server.service.IJdbcService;
 import catalogApp.server.service.JdbcService;
 import catalogApp.shared.model.Book;
+import org.fusesource.restygwt.client.MethodCallback;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
@@ -19,14 +20,14 @@ public class BookWebService {
 
     private static IJdbcService jdbcService;
 
-    @POST
+    @GET
     @Path("/book")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Book> getAllBooks() {
         return jdbcService.getAllBooks();
     }
 
-    @POST
+    @PUT
     @Path("/addBook")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -36,7 +37,7 @@ public class BookWebService {
         return jdbcService.addBook(name, author);
     }
 
-    @POST
+    @GET
     @Path("/getAuthor")
     @Produces(MediaType.APPLICATION_JSON)
     public List<String> getAuthorsNames() {
@@ -50,7 +51,7 @@ public class BookWebService {
         return jdbcService.addBooksToLibrary(ids);
     }
 
-    @POST
+    @GET
     @Path("/getUserBooks")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Book> getUserBookLib() {
@@ -64,11 +65,25 @@ public class BookWebService {
         jdbcService.deleteBooksFromLibrary(ids);
     }
 
-    @PUT
+    @POST
     @Path("/book")
     @Consumes(MediaType.APPLICATION_JSON)
     public void updateBook(Book newBook){
         jdbcService.updateBook(newBook);
+    }
+
+    @POST
+    @Path("/archiveBooks")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void archiveBooks(List<Integer> ids){
+        jdbcService.archiveItems(ids);
+    }
+
+    @POST
+    @Path("/restoreBooks")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void restoreBooks(List<Integer> ids){
+        jdbcService.restoreItems(ids);
     }
 
     public void setJdbcService(JdbcService service) {

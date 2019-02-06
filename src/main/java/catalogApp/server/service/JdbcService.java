@@ -1,18 +1,22 @@
 package catalogApp.server.service;
 
+import catalogApp.server.dao.EavDAO;
 import catalogApp.server.dao.IJdbcDAO;
 import catalogApp.server.dao.UserDAO;
 import catalogApp.server.dao.constants.Attribute;
+import catalogApp.shared.model.BaseObject;
 import catalogApp.shared.model.Book;
 import catalogApp.shared.model.SimpleUser;
 import catalogApp.shared.model.Song;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 
 @Service
@@ -28,7 +32,11 @@ public class JdbcService implements IJdbcService {
 
     @Override
     public List<Book> getAllBooks() {
-        return jdbcDAO.getAllBooks();
+        List<Book> books = jdbcDAO.getAllBooks();
+        if(!SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))){
+            books.removeIf(BaseObject::isArchived);
+        }
+        return books;
     }
 
     @Override
@@ -69,7 +77,11 @@ public class JdbcService implements IJdbcService {
 
     @Override
     public List<Song> getAllSong() {
-        return jdbcDAO.getAllSongs();
+        List<Song> songs = jdbcDAO.getAllSongs();
+        if(!SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))){
+            songs.removeIf(BaseObject::isArchived);
+        }
+        return songs;
     }
 
     @Override
@@ -132,6 +144,27 @@ public class JdbcService implements IJdbcService {
     @Override
     public void updateUser(SimpleUser simpleUser) {
         userDAO.updateUserAttributes(simpleUser, getSimpleUser());
+    }
+
+    @Override
+    public void updateAvatar(String filename) {
+        String filepath = "images/" + filename;
+        userDAO.updateAvatar(getUserId(), filepath);
+    }
+
+    @Override
+    public String getUserAvatarPath(int id) {
+        return userDAO.getUserAvatarPath(id);
+    }
+
+    @Override
+    public void archiveItems(List<Integer> ids) {
+        jdbcDAO.changeStateItems(ids, true);
+    }
+
+    @Override
+    public void restoreItems(List<Integer> ids) {
+        jdbcDAO.changeStateItems(ids, false);
     }
 
     private int getUserId(){

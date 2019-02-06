@@ -4,9 +4,8 @@ import catalogApp.client.CatalogController;
 import catalogApp.client.services.UserWebService;
 import catalogApp.shared.model.SimpleUser;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.*;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 
@@ -15,13 +14,15 @@ public class ProfilePresenter implements Presenter {
     public interface Display {
         Button getSubmitButton();
 
+        Button getUploadButton();
+
+        FormPanel getFormPanel();
+
         Widget asWidget();
 
         String getDescription();
 
         String getUsername();
-
-        String getAvatarUrl();
 
         void updateData(SimpleUser simpleUser);
     }
@@ -47,13 +48,14 @@ public class ProfilePresenter implements Presenter {
     private void bind() {
         display.updateData(simpleUser);
 
+        initUploader();
+
         display.getSubmitButton().addClickHandler(event -> {
 
             SimpleUser updatedSimpleUser = new SimpleUser();
             updatedSimpleUser.setId(simpleUser.getId());
 
             String newDescription = display.getDescription().trim();
-            String newAvatarUrl = display.getAvatarUrl().trim();
             String newUsername = display.getUsername().trim();
 
             if (!newUsername.isEmpty() && !newUsername.equals(simpleUser.getName())) {
@@ -61,10 +63,6 @@ public class ProfilePresenter implements Presenter {
             }
             if(!newDescription.equals(simpleUser.getDescription())){
                 updatedSimpleUser.setDescription(newDescription);
-            }
-
-            if(!newAvatarUrl.equals(simpleUser.getAvatarUrl())){
-                updatedSimpleUser.setAvatarUrl(newAvatarUrl);
             }
 
 
@@ -78,12 +76,45 @@ public class ProfilePresenter implements Presenter {
                 public void onSuccess(Method method, Void response) {
                     simpleUser.setName(updatedSimpleUser.getName());
                     simpleUser.setDescription(updatedSimpleUser.getDescription());
-                    simpleUser.setAvatarUrl(updatedSimpleUser.getAvatarUrl());
                     display.updateData(simpleUser);
                 }
             });
 
         });
 
+    }
+
+    private void initUploader(){
+        FileUpload fileUpload = new FileUpload();
+        fileUpload.setName("image");
+
+        FormPanel formPanel = display.getFormPanel();
+        formPanel.add(fileUpload);
+        formPanel.setMethod(FormPanel.METHOD_POST);
+        formPanel.setAction(GWT.getModuleBaseURL() + "rest/avatar");
+        formPanel.setEncoding(FormPanel.ENCODING_MULTIPART);
+
+        display.getUploadButton().addClickHandler(event -> {
+            String filename = fileUpload.getFilename();
+            if (filename.length() == 0) {
+                Window.alert("No File Specified!");
+            } else {
+                formPanel.submit();
+            }
+        });
+
+        formPanel.addSubmitCompleteHandler(event -> userWebService.getAvatarUrl(simpleUser.getId(), new MethodCallback<String>() {
+            @Override
+            public void onFailure(Method method, Throwable exception) {
+                GWT.log("getAvatarUrl doesnt work", exception);
+            }
+
+            @Override
+            public void onSuccess(Method method, String response) {
+                GWT.log(GWT.getModuleBaseURL() + response);
+                simpleUser.setAvatarUrl(GWT.getModuleBaseURL() + response);
+                display.updateData(simpleUser);
+            }
+        }));
     }
 }
