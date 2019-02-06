@@ -8,6 +8,8 @@ public class BaseObject {
     private String name;
     private Type type;
     private boolean isArchived;
+    private String comment;
+    private String imagePath;
 
     public BaseObject(int id, String name, Type type) {
         this.id = id;
@@ -57,12 +59,20 @@ public class BaseObject {
         isArchived = archived;
     }
 
-    @Override
-    public String toString() {
-        return "BaseObject{" + "id=" + id +
-                ", name='" + name + '\'' +
-                ", type=" + type +
-                '}';
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     @Override
@@ -71,12 +81,28 @@ public class BaseObject {
         if (o == null || getClass() != o.getClass()) return false;
         BaseObject that = (BaseObject) o;
         return id == that.id &&
+                isArchived == that.isArchived &&
                 Objects.equals(name, that.name) &&
-                Objects.equals(type, that.type);
+                Objects.equals(type, that.type) &&
+                Objects.equals(comment, that.comment) &&
+                Objects.equals(imagePath, that.imagePath);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, type);
+        return Objects.hash(id, name, type, isArchived, comment, imagePath);
+    }
+
+    @Override
+    public String toString() {
+        return "BaseObject{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", type=" + type +
+                ", isArchived=" + isArchived +
+                ", comment='" + comment + '\'' +
+                ", imagePath='" + imagePath + '\'' +
+                ", archived=" + isArchived() +
+                '}';
     }
 }

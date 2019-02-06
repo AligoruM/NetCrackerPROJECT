@@ -28,6 +28,8 @@ public class SongMapper implements RowMapper<Song> {
         song.setName(rs.getString("name"));
         song.setArchived(rs.getBoolean("archived"));
         song.setDuration(rs.getInt("duration"));
+        song.setComment(rs.getString("comment"));
+        song.setImagePath(rs.getString("image"));
         song.setGenre(genre);
         song.setType(songType);
 

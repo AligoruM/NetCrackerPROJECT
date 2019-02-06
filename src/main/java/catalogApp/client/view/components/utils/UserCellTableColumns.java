@@ -23,7 +23,7 @@ public class UserCellTableColumns {
         return new TextColumn<SimpleUser>() {
             @Override
             public String getValue(SimpleUser object) {
-                return object.getAvatarUrl();
+                return object.getImagePath();
             }
 
             @Override

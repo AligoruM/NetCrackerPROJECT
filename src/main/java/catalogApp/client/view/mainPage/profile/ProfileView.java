@@ -96,7 +96,7 @@ public class ProfileView extends Composite implements ProfilePresenter.Display {
         setUsername(simpleUser.getName());
         setRole(simpleUser.getRoles().toString());
         setDescription(simpleUser.getDescription());
-        setAvatarUrl(simpleUser.getAvatarUrl());
+        setAvatarUrl(simpleUser.getImagePath());
     }
 
     private void setDescription(String text) {

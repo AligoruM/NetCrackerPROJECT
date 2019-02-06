@@ -32,13 +32,13 @@ public class UserDAO {
     }
 
     public SimpleUser getSimpleUser(String name) {
-        SimpleUser simpleUser = new SimpleUser();
         try {
             Integer id = jdbcTemplate.queryForObject(SQLQuery.USER_ID_BY_NAME(name), (rs, rowNum) -> rs.getInt("id"));
-            simpleUser.setId(id);
-            simpleUser.setName(name);
-            simpleUser.setRoles(getUserRoles(id));
-            setAdditionDataInSimpleUser(simpleUser);
+            SimpleUser simpleUser = jdbcTemplate.queryForObject(SQLQuery.GET_SIMPLE_USER(id), new SimpleUserMapper());
+            if(simpleUser!=null) {
+                simpleUser.setRoles(getUserRoles(id));
+                setAdditionDataInSimpleUser(simpleUser);
+            }else return null;
             return simpleUser;
         } catch (IncorrectResultSizeDataAccessException ex) {
             return null;
@@ -50,7 +50,7 @@ public class UserDAO {
     }
 
     public List<SimpleUser> getAllUsers() {
-        List<SimpleUser> users = jdbcTemplate.query(SQLQuery.ALL_USERS(), new SimpleUserMapper());
+        List<SimpleUser> users = jdbcTemplate.query(SQLQuery.ALL_SIMPLE_USERS(), new SimpleUserMapper());
         users.forEach(user -> user.setRoles(getUserRoles(user.getId())));
         return users;
     }
@@ -79,7 +79,7 @@ public class UserDAO {
     }
 
     public void updateAvatar(int id, String filepath){
-        updateUserAttr(filepath, id, Attribute.USER_AVATAR_URL);
+        jdbcTemplate.execute(SQLQuery.UPDATE_OBJECT_IMAGE(filepath, id));
     }
 
     public String getUserAvatarPath(int id){
@@ -102,13 +102,6 @@ public class UserDAO {
 
     private void setAdditionDataInSimpleUser(SimpleUser simpleUser) {
         int id = simpleUser.getId();
-        try {
-            String result = jdbcTemplate.queryForObject(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(id, Attribute.USER_AVATAR_URL)
-                    , (rs, rowNum) -> rs.getString("value"));
-            simpleUser.setAvatarUrl(result);
-        } catch (IncorrectResultSizeDataAccessException ignored) {
-        }
-
         try {
             String result = jdbcTemplate.queryForObject(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(id, Attribute.USER_DESCRIPTION)
                     , (rs, rowNum) -> rs.getString("value"));

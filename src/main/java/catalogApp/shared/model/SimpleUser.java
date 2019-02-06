@@ -8,7 +8,6 @@ public class SimpleUser extends BaseObject{
 
     private Set<String> roles;
     private String description;
-    private String avatarUrl;
 
     public SimpleUser() {
     }
@@ -33,32 +32,27 @@ public class SimpleUser extends BaseObject{
         this.description = description;
     }
 
-    public String getAvatarUrl() {
-        return avatarUrl;
-    }
-
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
-    }
-
-    public void updateFiels(SimpleUser user){
+    public void updateFields(SimpleUser user){
         setId(user.getId());
         setName(user.getName());
         setRoles(user.getRoles());
         setArchived(user.isArchived());
-        setAvatarUrl(user.getAvatarUrl());
+        setImagePath(user.getImagePath());
         setDescription(user.getDescription());
     }
+
 
     @Override
     public String toString() {
         return "SimpleUser{" +
-                "id=" + getId() +
+                "roles=" + roles +
+                ", description='" + description + '\'' +
+                ", id=" + getId() +
                 ", name='" + getName() + '\'' +
                 ", type=" + getType() +
-                ", roles=" + roles +
-                ", description='" + description + '\'' +
-                ", avatarUrl='" + avatarUrl + '\'' +
+                ", archived=" + isArchived() +
+                ", comment='" + getComment() + '\'' +
+                ", imagePath='" + getImagePath() + '\'' +
                 '}';
     }
 }

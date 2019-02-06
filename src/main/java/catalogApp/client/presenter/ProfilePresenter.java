@@ -82,7 +82,7 @@ public class ProfilePresenter implements Presenter {
                 public void onSuccess(Method method, SimpleUser response) {
                     simpleUser.setName(response.getName());
                     simpleUser.setDescription(response.getDescription());
-                    simpleUser.setAvatarUrl(response.getAvatarUrl());
+                    simpleUser.setImagePath(response.getImagePath());
                     display.updateData(simpleUser);
                 }
             });
@@ -98,7 +98,7 @@ public class ProfilePresenter implements Presenter {
 
                 @Override
                 public void onSuccess(Method method, SimpleUser response) {
-                    simpleUser.updateFiels(response);
+                    simpleUser.updateFields(response);
                     display.updateData(simpleUser);
                 }
             });

@@ -26,6 +26,8 @@ public class BookMapper implements RowMapper<Book> {
         book.setId(resultSet.getInt("idObject"));
         book.setName(resultSet.getString("objectName"));
         book.setArchived(resultSet.getBoolean("archived"));
+        book.setComment(resultSet.getString("comment"));
+        book.setImagePath(resultSet.getString("image"));
         book.setAuthor(author);
         book.setType(bookType);
 
