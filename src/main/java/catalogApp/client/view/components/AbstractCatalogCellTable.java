@@ -4,6 +4,7 @@ package catalogApp.client.view.components;
 import catalogApp.client.CatalogController;
 import catalogApp.client.view.components.utils.BaseCellTableColumns;
 import catalogApp.shared.model.BaseObject;
+import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiConstructor;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -27,8 +28,12 @@ public abstract class AbstractCatalogCellTable<T extends BaseObject> extends Cel
 
     private ListDataProvider<T> dataProvider;
 
+    private BaseCellTableColumns<T> baseCellTableColumns = new BaseCellTableColumns<>();
+
+    private Column<T, String> nameColumn = baseCellTableColumns.getNameColumn();
+
     @UiConstructor
-    AbstractCatalogCellTable(ListDataProvider<T> dataProvider) {
+    AbstractCatalogCellTable(ListDataProvider<T> dataProvider, boolean popupEnabled) {
         super(element->element.getId());
 
         ObjectPopup objectPopup = new ObjectPopup();
@@ -42,26 +47,26 @@ public abstract class AbstractCatalogCellTable<T extends BaseObject> extends Cel
 
         setPageSize(3);
 
-        BaseCellTableColumns<T> baseCellTableColumns = new BaseCellTableColumns<>();
 
         addColumn(baseCellTableColumns.getSelectionColumn(selectionModel));
 
         if (CatalogController.isAdmin()) {
             Column<T, String> idColumn = baseCellTableColumns.getIdColumn();
             addColumn(baseCellTableColumns.getArchivedColumn(), ARCHIVED_LABEL);
-            addColumn(idColumn, ID_LABEL);
+            addColumn(idColumn, ID_COL_LABEL);
             addSorter(idColumn, Comparator.comparing(BaseObject::getId));
         }
 
-        Column<T, String> nameColumn = baseCellTableColumns.getNameColumn();
-        nameColumn.setFieldUpdater((index, object, value) -> {
-            GWT.log("index " + index);
-            int left = getElement().getAbsoluteLeft();
-            int top = getElement().getAbsoluteTop();
-            objectPopup.setData(object);
-            objectPopup.setPopupPositionAndShow(left, top);
-        });
-        addColumn(nameColumn, NAME_LABEL);
+        if(popupEnabled) {
+            nameColumn.setFieldUpdater((index, object, value) -> {
+                int left = getElement().getAbsoluteLeft();
+                int top = getElement().getAbsoluteTop();
+                objectPopup.setData(object);
+                objectPopup.setPopupPositionAndShow(left, top);
+            });
+        }
+
+        addColumn(nameColumn, NAME_COL_LABEL);
         addSorter(nameColumn, Comparator.comparing(BaseObject::getName));
     }
 
@@ -69,6 +74,10 @@ public abstract class AbstractCatalogCellTable<T extends BaseObject> extends Cel
         ColumnSortEvent.ListHandler<T> sorter = new ColumnSortEvent.ListHandler<>(dataProvider.getList());
         sorter.setComparator(column, comparator);
         addColumnSortHandler(sorter);
+    }
+
+    public void setNameColumnFieldUpdater(FieldUpdater<T, String> fieldUpdater){
+        nameColumn.setFieldUpdater(fieldUpdater);
     }
 
     private class ObjectPopup {
@@ -85,7 +94,7 @@ public abstract class AbstractCatalogCellTable<T extends BaseObject> extends Cel
 
         void setData(T object){
             img.setUrl(object.getImagePath()!=null? object.getImagePath() : DEFAULT_OBJECT_IMAGE);
-            img.setSize(IMG_SIZE, IMG_SIZE);
+            img.setSize(POPUP_IMG_SIZE, POPUP_IMG_SIZE);
             contactInfo.setHTML(object.getComment()!=null ? object.getComment() : EMPTY_COMMENT);
         }
 

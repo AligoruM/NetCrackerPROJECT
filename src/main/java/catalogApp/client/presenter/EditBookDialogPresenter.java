@@ -1,19 +1,12 @@
 package catalogApp.client.presenter;
 
 import catalogApp.client.services.BookWebService;
-import catalogApp.server.dao.constants.Types;
-import catalogApp.shared.model.BaseObject;
 import catalogApp.shared.model.Book;
-import catalogApp.shared.model.Type;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.ListDataProvider;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
-
-import java.util.HashMap;
-
-import static catalogApp.client.view.constants.LibraryConstants.AUTHOR_LABEL;
 
 public class EditBookDialogPresenter implements Presenter {
 

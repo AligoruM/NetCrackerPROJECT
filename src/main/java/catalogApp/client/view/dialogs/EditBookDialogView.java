@@ -39,13 +39,13 @@ public class EditBookDialogView extends Composite implements EditBookDialogPrese
 
         idBox.setEnabled(false);
 
-        flexTable.setWidget(0, 0, new Label(ID_LABEL));
+        flexTable.setWidget(0, 0, new Label(ID_COL_LABEL));
         flexTable.setWidget(0, 1, idBox);
-        flexTable.setWidget(1, 0, new Label(NAME_LABEL));
+        flexTable.setWidget(1, 0, new Label(NAME_COL_LABEL));
         flexTable.setWidget(1, 1, nameBox);
 
         authorBox.setEnabled(false);
-        flexTable.setWidget(2, 0, new Label(AUTHOR_LABEL));
+        flexTable.setWidget(2, 0, new Label(AUTHOR_COL_LABEL));
         flexTable.setWidget(2, 1, authorBox);
     }
 

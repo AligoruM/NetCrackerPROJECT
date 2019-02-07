@@ -1,6 +1,7 @@
 package catalogApp.client.view.mainPage.library.tabs;
 
 import catalogApp.client.presenter.BookTabPresenter;
+import catalogApp.client.view.components.AbstractCatalogCellTable;
 import catalogApp.client.view.components.BookCellTable;
 import catalogApp.shared.model.Book;
 import com.google.gwt.core.client.GWT;
@@ -31,17 +32,20 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
         initWidget(ourUiBinder.createAndBindUi(this));
     }
 
-    private void initializeTable(ListDataProvider<Book> dataProvider) {
-        table = new BookCellTable(dataProvider);
+    private void initializeTable(ListDataProvider<Book> dataProvider, boolean popupEnabled) {
+        table = new BookCellTable(dataProvider, popupEnabled);
         pager.setDisplay(table);
         simplePanel.add(table);
     }
 
-
+    @Override
+    public AbstractCatalogCellTable<Book> getTable(){
+        return table;
+    }
 
     @Override
-    public void setDataProviderAndInitialize(ListDataProvider<Book> dataProvider) {
-        initializeTable(dataProvider);
+    public void setDataProviderAndInitialize(ListDataProvider<Book> dataProvider, boolean popupEnabled) {
+        initializeTable(dataProvider, popupEnabled);
     }
 
     @Override

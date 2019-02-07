@@ -12,8 +12,8 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import static catalogApp.client.view.constants.LibraryConstants.BOOK_LABEL;
-import static catalogApp.client.view.constants.LibraryConstants.SONG_LABEL;
+import static catalogApp.client.view.constants.LibraryConstants.BOOKS_LABEL;
+import static catalogApp.client.view.constants.LibraryConstants.SONGS_LABEL;
 
 
 public class TabPanelPresenter implements Presenter {
@@ -77,8 +77,8 @@ public class TabPanelPresenter implements Presenter {
             }
         });
 
-        display.getTabPanel().add(bookTabView, BOOK_LABEL);
-        display.getTabPanel().add(songTabView, SONG_LABEL);
+        display.getTabPanel().add(bookTabView, BOOKS_LABEL);
+        display.getTabPanel().add(songTabView, SONGS_LABEL);
         display.getTabPanel().selectTab(0);
 
         bind();

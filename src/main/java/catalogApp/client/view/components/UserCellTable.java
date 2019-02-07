@@ -12,7 +12,7 @@ import static catalogApp.client.view.constants.UserConstants.ROLES_LABEL;
 
 public class UserCellTable extends AbstractCatalogCellTable <SimpleUser>{
     public UserCellTable(ListDataProvider<SimpleUser> dataProvider) {
-        super(dataProvider);
+        super(dataProvider, true);
 
         Column<SimpleUser, String> roleColumn = UserCellTableColumns.getUserRoleColumn(true);
         Column<SimpleUser, String> avatarUrlColumn = UserCellTableColumns.getUserAvatarUrlColumn(false);

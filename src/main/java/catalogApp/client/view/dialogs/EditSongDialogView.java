@@ -9,7 +9,7 @@ import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.*;
 
 import static catalogApp.client.view.constants.LibraryConstants.*;
-import static catalogApp.client.view.constants.LibraryConstants.DURATION_LABEL;
+import static catalogApp.client.view.constants.LibraryConstants.DURATION_COL_LABEL;
 
 public class EditSongDialogView extends Composite implements EditSongDialogPresenter.Display {
     @UiTemplate("EditDialogView.ui.xml")
@@ -40,15 +40,15 @@ public class EditSongDialogView extends Composite implements EditSongDialogPrese
         initWidget(ourUiBinder.createAndBindUi(this));
         idBox.setEnabled(false);
 
-        flexTable.setWidget(0, 0, new Label(ID_LABEL));
+        flexTable.setWidget(0, 0, new Label(ID_COL_LABEL));
         flexTable.setWidget(0, 1, idBox);
-        flexTable.setWidget(1, 0, new Label(NAME_LABEL));
+        flexTable.setWidget(1, 0, new Label(NAME_COL_LABEL));
         flexTable.setWidget(1, 1, nameBox);
 
         genreBox.setEnabled(false);
-        flexTable.setWidget(2, 0, new Label(GENRE_LABEL));
+        flexTable.setWidget(2, 0, new Label(GENRE_COL_LABEL));
         flexTable.setWidget(2, 1, genreBox);
-        flexTable.setWidget(3, 0, new Label(DURATION_LABEL));
+        flexTable.setWidget(3, 0, new Label(DURATION_COL_LABEL));
         flexTable.setWidget(3, 1, durationBox);
     }
 

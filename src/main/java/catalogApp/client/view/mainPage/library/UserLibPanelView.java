@@ -1,6 +1,7 @@
 package catalogApp.client.view.mainPage.library;
 
 import catalogApp.client.presenter.UserLibPanelPresenter;
+import catalogApp.client.view.components.AbstractCatalogCellTable;
 import catalogApp.client.view.mainPage.library.tabs.BookTabView;
 import catalogApp.client.view.mainPage.library.tabs.SongTabView;
 import catalogApp.shared.model.Book;
@@ -9,9 +10,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 
@@ -29,22 +28,35 @@ public class UserLibPanelView extends Composite implements UserLibPanelPresenter
     Button deleteSongsButton;
     @UiField
     HTMLPanel mainPanel;
+    @UiField
+    SimplePanel objectContainer;
 
     private static UserLibPanelViewUiBinder ourUiBinder = GWT.create(UserLibPanelViewUiBinder.class);
 
     public UserLibPanelView() {
         initWidget(ourUiBinder.createAndBindUi(this));
         mainPanel.getElement().getStyle().setPaddingLeft(100, Style.Unit.PX);
+        objectContainer.getElement().getStyle().setPaddingLeft(50, Style.Unit.PX);
     }
 
     @Override
-    public void setBookDataProvider(ListDataProvider<Book> dataProvider) {
-        bookView.setDataProviderAndInitialize(dataProvider);
+    public void setBookDataProvider(ListDataProvider<Book> dataProvider, boolean popupEnabled) {
+        bookView.setDataProviderAndInitialize(dataProvider, popupEnabled);
     }
 
     @Override
-    public void setSongDataProvider(ListDataProvider<Song> dataProvider) {
-        songView.setDataProviderAndInitialize(dataProvider);
+    public void setSongDataProvider(ListDataProvider<Song> dataProvider, boolean popupEnabled) {
+        songView.setDataProviderAndInitialize(dataProvider, popupEnabled);
+    }
+
+    @Override
+    public AbstractCatalogCellTable<Book> getBookTable() {
+        return bookView.getTable();
+    }
+
+    @Override
+    public AbstractCatalogCellTable<Song> getSongTable() {
+        return songView.getTable();
     }
 
     @Override
@@ -65,5 +77,10 @@ public class UserLibPanelView extends Composite implements UserLibPanelPresenter
     @Override
     public Button getDeleteSongsButton() {
         return deleteSongsButton;
+    }
+
+    @Override
+    public SimplePanel getObjectContainer() {
+        return objectContainer;
     }
 }

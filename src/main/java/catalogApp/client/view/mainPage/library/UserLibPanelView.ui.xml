@@ -2,23 +2,27 @@
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
              xmlns:library="urn:import:catalogApp.client.view.mainPage.library">
     <g:HTMLPanel ui:field="mainPanel">
-        <p align="center">My library</p>
-        <g:DecoratorPanel>
-            <g:HorizontalPanel>
+        <g:HorizontalPanel>
+            <g:HTMLPanel>
+                <h3 align="center" style="margin: 13px;">My library</h3>
                 <g:DecoratorPanel>
-                    <g:VerticalPanel>
-                        <library:tabs.BookTabView ui:field="bookView"/>
-                        <g:Button ui:field="deleteBooksButton" text="Delete books from lib"/>
-                    </g:VerticalPanel>
+                    <g:HorizontalPanel>
+                        <g:DecoratorPanel>
+                            <g:VerticalPanel>
+                                <library:tabs.BookTabView ui:field="bookView"/>
+                                <g:Button ui:field="deleteBooksButton" text="Delete books from lib"/>
+                            </g:VerticalPanel>
+                        </g:DecoratorPanel>
+                        <g:DecoratorPanel>
+                            <g:VerticalPanel>
+                                <library:tabs.SongTabView ui:field="songView"/>
+                                <g:Button ui:field="deleteSongsButton" text="Delete songs from lib"/>
+                            </g:VerticalPanel>
+                        </g:DecoratorPanel>
+                    </g:HorizontalPanel>
                 </g:DecoratorPanel>
-                <g:DecoratorPanel>
-                    <g:VerticalPanel>
-                        <library:tabs.SongTabView ui:field="songView"/>
-                        <g:Button ui:field="deleteSongsButton" text="Delete songs from lib"/>
-                    </g:VerticalPanel>
-                </g:DecoratorPanel>
-            </g:HorizontalPanel>
-
-        </g:DecoratorPanel>
+            </g:HTMLPanel>
+            <g:SimplePanel ui:field="objectContainer"/>
+        </g:HorizontalPanel>
     </g:HTMLPanel>
 </ui:UiBinder>

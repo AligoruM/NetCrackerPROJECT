@@ -2,6 +2,7 @@ package catalogApp.client.presenter;
 
 import catalogApp.client.event.UpdateUserLibraryEvent;
 import catalogApp.client.services.BookWebService;
+import catalogApp.client.view.components.AbstractCatalogCellTable;
 import catalogApp.client.view.dialogs.EditBookDialogView;
 import catalogApp.shared.model.Book;
 import com.google.gwt.core.client.GWT;
@@ -21,7 +22,9 @@ import java.util.Set;
 public class BookTabPresenter implements Presenter {
     public interface Display {
 
-        void setDataProviderAndInitialize(ListDataProvider<Book> dataProvider);
+        AbstractCatalogCellTable getTable();
+
+        void setDataProviderAndInitialize(ListDataProvider<Book> dataProvider, boolean popupEnabled);
 
         MultiSelectionModel<Book> getSelectionModel();
 
@@ -46,7 +49,7 @@ public class BookTabPresenter implements Presenter {
     }
 
     private void bind() {
-        display.setDataProviderAndInitialize(bookListDataProvider);
+        display.setDataProviderAndInitialize(bookListDataProvider, true);
     }
 
     private List<Integer> getSelectedIDs() {

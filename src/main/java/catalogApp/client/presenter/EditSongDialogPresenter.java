@@ -1,18 +1,12 @@
 package catalogApp.client.presenter;
 
 import catalogApp.client.services.SongWebService;
-import catalogApp.shared.model.Book;
 import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.ListDataProvider;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
-
-import java.util.HashMap;
-
-import static catalogApp.client.view.constants.LibraryConstants.DURATION_LABEL;
-import static catalogApp.client.view.constants.LibraryConstants.GENRE_LABEL;
 
 public class EditSongDialogPresenter implements Presenter {
 
