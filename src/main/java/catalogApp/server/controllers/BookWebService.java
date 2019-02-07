@@ -67,7 +67,6 @@ public class BookWebService {
     @Path("/book")
     @Consumes(MediaType.APPLICATION_JSON)
     public Book updateBook(Book newBook){
-        System.out.println(newBook);
         return jdbcService.updateBook(newBook);
     }
 

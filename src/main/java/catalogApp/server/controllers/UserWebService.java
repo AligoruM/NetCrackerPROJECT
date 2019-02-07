@@ -4,9 +4,13 @@ package catalogApp.server.controllers;
 import catalogApp.server.service.IImageService;
 import catalogApp.server.service.IJdbcService;
 import catalogApp.shared.model.SimpleUser;
-import com.google.gwt.http.client.Response;
+import org.eclipse.jetty.http.HttpStatus;
+import org.eclipse.jetty.server.HttpChannel;
+import org.eclipse.jetty.server.HttpOutput;
+import org.eclipse.jetty.server.Response;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 

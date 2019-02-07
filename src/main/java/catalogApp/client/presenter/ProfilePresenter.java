@@ -57,16 +57,17 @@ public class ProfilePresenter implements Presenter {
         initUploader();
 
         display.getSubmitButton().addClickHandler(event -> {
-
+            boolean isChanged = false;
             SimpleUser updatedSimpleUser = new SimpleUser();
             updatedSimpleUser.setId(simpleUser.getId());
 
             String newDescription = display.getDescription().trim();
             if (!newDescription.equals(simpleUser.getDescription())) {
                 updatedSimpleUser.setDescription(newDescription);
+                isChanged=true;
             }
 
-            if (updatedSimpleUser.getImagePath() != null) {
+            if (updatedSimpleUser.getImagePath() != null || isChanged) {
                 userWebService.updateUser(updatedSimpleUser, new MethodCallback<SimpleUser>() {
                     @Override
                     public void onFailure(Method method, Throwable exception) {

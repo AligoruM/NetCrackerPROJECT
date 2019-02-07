@@ -38,8 +38,8 @@ public class UserLibPanelView extends Composite implements UserLibPanelPresenter
 
     public UserLibPanelView() {
         initWidget(ourUiBinder.createAndBindUi(this));
-        mainPanel.getElement().getStyle().setPaddingLeft(100, Style.Unit.PX);
-        objectContainer.getElement().getStyle().setPaddingLeft(50, Style.Unit.PX);
+        mainPanel.getElement().getStyle().setPaddingLeft(30, Style.Unit.PX);
+        objectContainer.getElement().getStyle().setPaddingLeft(30, Style.Unit.PX);
     }
 
     @Override

@@ -6,6 +6,7 @@ import catalogApp.client.view.components.AdditionalInfo;
 import catalogApp.client.view.components.FileUploader;
 import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
@@ -73,7 +74,10 @@ public class EditSongDialogPresenter implements Presenter {
 
         EditorInitializeHelper.initFileUploader(display.getAdditionalInfo().getUploadButton(), fileUploader);
 
-        fileUploader.addSubmitCompleteHandler(event -> isLoaded=true);
+        fileUploader.addSubmitCompleteHandler(event -> {
+            isLoaded = true;
+            Window.alert("loaded");
+        });
 
         display.getSubmitButton().addClickHandler(event -> {
             boolean isChanged = false;
