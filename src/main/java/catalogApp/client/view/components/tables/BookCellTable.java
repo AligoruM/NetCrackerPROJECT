@@ -1,8 +1,7 @@
-package catalogApp.client.view.components;
+package catalogApp.client.view.components.tables;
 
-import catalogApp.client.view.components.utils.BookCellTableColumns;
+import catalogApp.client.view.components.tables.utils.BookCellTableColumns;
 import catalogApp.shared.model.Book;
-import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.view.client.ListDataProvider;
 

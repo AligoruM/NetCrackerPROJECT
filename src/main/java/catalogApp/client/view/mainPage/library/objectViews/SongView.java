@@ -2,11 +2,7 @@ package catalogApp.client.view.mainPage.library.objectViews;
 
 import catalogApp.client.presenter.SongPresenter;
 import catalogApp.shared.model.Song;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiTemplate;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Label;
 
 import static catalogApp.client.view.constants.LibraryConstants.*;
 

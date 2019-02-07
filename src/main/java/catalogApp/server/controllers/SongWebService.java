@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Controller
@@ -66,8 +65,8 @@ public class SongWebService {
     @POST
     @Path("/song")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateSong(Song newSong){
-        jdbcService.updateSong(newSong);
+    public Song updateSong(Song newSong){
+        return jdbcService.updateSong(newSong);
     }
 
     @POST

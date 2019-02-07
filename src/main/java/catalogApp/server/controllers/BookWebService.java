@@ -4,14 +4,12 @@ package catalogApp.server.controllers;
 import catalogApp.server.service.IJdbcService;
 import catalogApp.server.service.JdbcService;
 import catalogApp.shared.model.Book;
-import org.fusesource.restygwt.client.MethodCallback;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Controller
@@ -68,8 +66,9 @@ public class BookWebService {
     @POST
     @Path("/book")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateBook(Book newBook){
-        jdbcService.updateBook(newBook);
+    public Book updateBook(Book newBook){
+        System.out.println(newBook);
+        return jdbcService.updateBook(newBook);
     }
 
     @POST

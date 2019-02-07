@@ -1,6 +1,7 @@
 package catalogApp.client.view.dialogs;
 
 import catalogApp.client.presenter.EditSongDialogPresenter;
+import catalogApp.client.view.components.AdditionalInfo;
 import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -9,7 +10,6 @@ import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.*;
 
 import static catalogApp.client.view.constants.LibraryConstants.*;
-import static catalogApp.client.view.constants.LibraryConstants.DURATION_COL_LABEL;
 
 public class EditSongDialogView extends Composite implements EditSongDialogPresenter.Display {
     @UiTemplate("EditDialogView.ui.xml")
@@ -25,6 +25,8 @@ public class EditSongDialogView extends Composite implements EditSongDialogPrese
     Button cancelButton;
     @UiField
     Button submitButton;
+    @UiField
+    AdditionalInfo additionalInfo;
 
     private TextBox genreBox = new TextBox();
 
@@ -34,7 +36,7 @@ public class EditSongDialogView extends Composite implements EditSongDialogPrese
 
     private TextBox nameBox = new TextBox();
 
-    EditSongDialogViewUiBinder ourUiBinder = GWT.create(EditSongDialogViewUiBinder.class);
+    private static EditSongDialogViewUiBinder ourUiBinder = GWT.create(EditSongDialogViewUiBinder.class);
 
     public EditSongDialogView() {
         initWidget(ourUiBinder.createAndBindUi(this));
@@ -53,6 +55,11 @@ public class EditSongDialogView extends Composite implements EditSongDialogPrese
     }
 
     @Override
+    public AdditionalInfo getAdditionalInfo() {
+        return additionalInfo;
+    }
+
+    @Override
     public Button getCancelButton() {
         return cancelButton;
     }
@@ -64,12 +71,12 @@ public class EditSongDialogView extends Composite implements EditSongDialogPrese
 
     @Override
     public void showDialog() {
-        dialogPanel.hide();
+        dialogPanel.center();
     }
 
     @Override
     public void hideDialog() {
-        dialogPanel.center();
+        dialogPanel.hide();
     }
 
     @Override
@@ -78,11 +85,12 @@ public class EditSongDialogView extends Composite implements EditSongDialogPrese
         nameBox.setText(object.getName());
         genreBox.setText(object.getGenre().getName());
         durationBox.setText(String.valueOf(object.getDuration()));
+        additionalInfo.setComment(object.getComment());
     }
 
     @Override
     public String getNewName() {
-        return nameBox.getText();
+        return nameBox.getText().trim();
     }
 
     @Override

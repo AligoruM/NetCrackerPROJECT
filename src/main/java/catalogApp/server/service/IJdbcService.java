@@ -19,7 +19,7 @@ public interface IJdbcService {
 
     void deleteBooksFromLibrary(List<Integer> ids);
 
-    void updateBook(Book newBook);
+    Book updateBook(Book newBook);
 
     List<Song> getAllSong();
 
@@ -33,7 +33,7 @@ public interface IJdbcService {
 
     void deleteSongsFromLibrary(List<Integer> ids);
 
-    void updateSong(Song newSong);
+    Song updateSong(Song newSong);
 
     SimpleUser getSimpleUser();
 

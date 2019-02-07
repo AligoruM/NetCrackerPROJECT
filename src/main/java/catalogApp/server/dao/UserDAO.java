@@ -5,7 +5,6 @@ import catalogApp.server.dao.constants.SQLQuery;
 import catalogApp.server.dao.mapper.SimpleUserMapper;
 import catalogApp.server.dao.mapper.UserMapper;
 import catalogApp.server.security.User;
-import catalogApp.server.service.ImageService;
 import catalogApp.shared.model.SimpleUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,11 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.sql.ResultSet;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -46,14 +42,16 @@ public class UserDAO {
     public SimpleUser getSimpleUser(String name) {
         try {
             Integer id = jdbcTemplate.queryForObject(SQLQuery.USER_ID_BY_NAME(name), (rs, rowNum) -> rs.getInt("id"));
-            SimpleUser simpleUser = jdbcTemplate.queryForObject(SQLQuery.GET_SIMPLE_USER(id), new SimpleUserMapper());
-            if(simpleUser!=null) {
-                simpleUser.setRoles(getUserRoles(id));
-                setAdditionDataInSimpleUser(simpleUser);
-            }else return null;
-            return simpleUser;
+            if(id!=null) {
+                SimpleUser simpleUser = jdbcTemplate.queryForObject(SQLQuery.GET_SIMPLE_USER(id), new SimpleUserMapper());
+                if (simpleUser != null) {
+                    simpleUser.setRoles(getUserRoles(id));
+                    setAdditionDataInSimpleUser(simpleUser);
+                } else return null;
+                return simpleUser;
+            }else throw new IncorrectResultSizeDataAccessException(1);
         } catch (IncorrectResultSizeDataAccessException ex) {
-            logger.error("Founded more, than one user with name " + name);
+            logger.error("Founded more, than one or not found user with name " + name);
             return null;
         }
     }

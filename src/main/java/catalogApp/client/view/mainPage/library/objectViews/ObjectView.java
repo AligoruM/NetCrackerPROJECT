@@ -8,7 +8,6 @@ import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.*;
 
 import static catalogApp.client.view.constants.LibraryConstants.*;
-import static catalogApp.client.view.constants.LibraryConstants.COMMENT_HEIGHT;
 
 public class ObjectView extends Composite {
     @UiTemplate("ObjectView.ui.xml")
@@ -22,7 +21,7 @@ public class ObjectView extends Composite {
     @UiField
     Image objectImage;
 
-    Label name = new Label();
+    private Label name = new Label();
     private DecoratorPanel comment = new DecoratorPanel();
     private HTML commentContainer = new HTML();
 
@@ -43,7 +42,6 @@ public class ObjectView extends Composite {
         comment.setWidget(commentContainer);
         table.setWidget(2, 0, comment);
         table.getFlexCellFormatter().setColSpan(2, 0, 2);
-
         commentContainer.setWidth(COMMENT_WIDTH);
         commentContainer.setHeight(COMMENT_HEIGHT);
     }

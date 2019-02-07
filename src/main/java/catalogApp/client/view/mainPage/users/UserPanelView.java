@@ -1,7 +1,7 @@
 package catalogApp.client.view.mainPage.users;
 
 import catalogApp.client.presenter.UserPanelPresenter;
-import catalogApp.client.view.components.UserCellTable;
+import catalogApp.client.view.components.tables.UserCellTable;
 import catalogApp.shared.model.SimpleUser;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -26,16 +26,9 @@ public class UserPanelView extends Composite implements UserPanelPresenter.Displ
         initWidget(ourUiBinder.createAndBindUi(this));
     }
 
-    private void initializeTable(){
-
-    }
-
     @Override
     public void setDataProvider(ListDataProvider<SimpleUser> dataProvider) {
         userTable=new UserCellTable(dataProvider);
-        initializeTable();
         simplePanel.add(userTable);
     }
-
-
 }

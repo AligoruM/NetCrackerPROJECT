@@ -6,7 +6,6 @@ import org.fusesource.restygwt.client.RestService;
 
 import javax.ws.rs.*;
 import java.util.List;
-import java.util.Map;
 
 public interface SongWebService extends RestService {
     @GET
@@ -35,7 +34,7 @@ public interface SongWebService extends RestService {
 
     @POST
     @Path("rest/song")
-    void updateSong(Song newSong, MethodCallback<Void> callback);
+    void updateSong(Song newSong, MethodCallback<Song> callback);
 
     @POST
     @Path("rest/archiveSongs")

@@ -1,6 +1,7 @@
 package catalogApp.client.view.dialogs;
 
 import catalogApp.client.presenter.EditBookDialogPresenter;
+import catalogApp.client.view.components.AdditionalInfo;
 import catalogApp.shared.model.Book;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -24,6 +25,8 @@ public class EditBookDialogView extends Composite implements EditBookDialogPrese
     Button cancelButton;
     @UiField
     Button submitButton;
+    @UiField
+    AdditionalInfo additionalInfo;
 
     private TextBox idBox = new TextBox();
 
@@ -36,7 +39,6 @@ public class EditBookDialogView extends Composite implements EditBookDialogPrese
 
     public EditBookDialogView() {
         initWidget(ourUiBinder.createAndBindUi(this));
-
         idBox.setEnabled(false);
 
         flexTable.setWidget(0, 0, new Label(ID_COL_LABEL));
@@ -69,19 +71,22 @@ public class EditBookDialogView extends Composite implements EditBookDialogPrese
         dialogPanel.hide();
     }
 
-
     @Override
     public void showData(Book object) {
         idBox.setText(String.valueOf(object.getId()));
         nameBox.setText(object.getName());
         authorBox.setText(object.getAuthor().getName());
+        additionalInfo.setComment(object.getComment());
     }
 
 
     @Override
     public String getNewName() {
-        return nameBox.getText();
+        return nameBox.getText().trim();
     }
 
-
+    @Override
+    public AdditionalInfo getAdditionalInfo(){
+        return additionalInfo;
+    }
 }

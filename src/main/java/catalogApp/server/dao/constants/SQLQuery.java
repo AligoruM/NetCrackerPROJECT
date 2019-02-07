@@ -82,6 +82,10 @@ public class SQLQuery {
         return "update Object set img=\"" + imgPath + "\" where idObject=" + id;
     }
 
+    public static String UPDATE_OBJECT_COMMENT(String comment, int id){
+        return "update Object set comment=\"" + comment + "\" where idObject=" + id;
+    }
+
     public static String CREATE_ATTRIBUTE_VALUE(String value, int objectId, int attrId) {
         return "insert into AttributeValue (value, id_object, id_attribute) values (\"" + value + "\", " + objectId + ", " + attrId + ")";
     }

@@ -7,7 +7,6 @@ import org.fusesource.restygwt.client.RestService;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
-import java.util.Map;
 
 public interface BookWebService extends RestService {
     @GET
@@ -43,7 +42,7 @@ public interface BookWebService extends RestService {
     @POST
     @Path("rest/book")
     @Consumes(MediaType.APPLICATION_JSON)
-    void updateBook(Book newBook, MethodCallback<Void> callback);
+    void updateBook(Book newBook, MethodCallback<Book> callback);
 
     @POST
     @Path("rest/archiveBooks")

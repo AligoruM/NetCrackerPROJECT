@@ -5,7 +5,6 @@ import catalogApp.server.dao.constants.SQLQuery;
 import catalogApp.server.dao.constants.Types;
 import catalogApp.server.dao.mapper.BookMapper;
 import catalogApp.server.dao.mapper.SongMapper;
-import catalogApp.server.service.ImageService;
 import catalogApp.shared.model.Book;
 import catalogApp.shared.model.Song;
 import org.slf4j.Logger;
@@ -87,6 +86,11 @@ public class EavDAO implements IJdbcDAO {
     }
 
     @Override
+    public Book getBookById(int id) {
+        return jdbcTemplate.queryForObject(SQLQuery.BOOK_BY_ID(id), new BookMapper());
+    }
+
+    @Override
     public List<Song> getAllSongs() {
         return jdbcTemplate.query(SQLQuery.ALL_SONGS(), new SongMapper());
     }
@@ -142,8 +146,23 @@ public class EavDAO implements IJdbcDAO {
     }
 
     @Override
+    public Song getSongById(int id) {
+        return jdbcTemplate.queryForObject(SQLQuery.SONG_BY_ID(id), new SongMapper());
+    }
+
+    @Override
     public void updateObjectName(int id, String name) {
         jdbcTemplate.execute(SQLQuery.UPDATE_OBJECT_NAME(id, name));
+    }
+
+    @Override
+    public void updateObjectImage(int id, String filepath) {
+        jdbcTemplate.execute(SQLQuery.UPDATE_OBJECT_IMAGE(filepath, id));
+    }
+
+    @Override
+    public void updateObjectComment(int id, String comment) {
+        jdbcTemplate.execute(SQLQuery.UPDATE_OBJECT_COMMENT(comment, id));
     }
 
     @Override

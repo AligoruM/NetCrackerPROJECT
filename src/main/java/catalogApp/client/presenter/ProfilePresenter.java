@@ -6,12 +6,14 @@ import catalogApp.client.view.components.FileUploader;
 import catalogApp.shared.model.SimpleUser;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.Widget;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 
 import static catalogApp.shared.constants.FileServiceConstants.IMAGE_FIELD;
-import static catalogApp.shared.constants.FileServiceConstants.IMAGE_SERVICE_PATH;
+import static catalogApp.shared.constants.FileServiceConstants.AVATAR_SERVICE_PATH;
 
 
 public class ProfilePresenter implements Presenter {
@@ -102,7 +104,7 @@ public class ProfilePresenter implements Presenter {
     private void initUploader() {
 
         FileUploader fileUploader = display.getFileUploader();
-        fileUploader.setAction(GWT.getModuleBaseURL() + IMAGE_SERVICE_PATH);
+        fileUploader.setAction(GWT.getModuleBaseURL() + AVATAR_SERVICE_PATH);
         fileUploader.setFileFieldName(IMAGE_FIELD);
 
         display.getUploadButton().addClickHandler(event -> {

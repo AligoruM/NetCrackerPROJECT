@@ -1,8 +1,8 @@
 package catalogApp.client.view.mainPage.library.tabs;
 
 import catalogApp.client.presenter.SongTabPresenter;
-import catalogApp.client.view.components.AbstractCatalogCellTable;
-import catalogApp.client.view.components.SongCellTable;
+import catalogApp.client.view.components.tables.AbstractCatalogCellTable;
+import catalogApp.client.view.components.tables.SongCellTable;
 import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;

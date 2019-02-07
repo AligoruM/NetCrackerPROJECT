@@ -1,4 +1,4 @@
-package catalogApp.client.view.components.utils;
+package catalogApp.client.view.components.tables.utils;
 
 import catalogApp.shared.model.SimpleUser;
 import com.google.gwt.user.cellview.client.Column;

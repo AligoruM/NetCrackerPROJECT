@@ -18,6 +18,8 @@ public interface IJdbcDAO {
 
     List<Book> getBooksByIds(List<Integer> ids);
 
+    Book getBookById(int id);
+
     //Songs
     List<Song> getAllSongs();
 
@@ -29,7 +31,14 @@ public interface IJdbcDAO {
 
     List<Song> getSongsByIds(List<Integer> ids);
 
+    Song getSongById(int id);
+
+    //General
     void updateObjectName(int id, String name);
+
+    void updateObjectImage(int id, String filepath);
+
+    void updateObjectComment(int id, String comment);
 
     void updateAttributeValue(int id, int attributeId, String value);
 

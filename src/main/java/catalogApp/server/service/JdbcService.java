@@ -7,14 +7,14 @@ import catalogApp.shared.model.BaseObject;
 import catalogApp.shared.model.Book;
 import catalogApp.shared.model.SimpleUser;
 import catalogApp.shared.model.Song;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import jersey.repackaged.com.google.common.collect.Lists;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static catalogApp.shared.constants.FileServiceConstants.IMAGE_SERVICE_DIR;
@@ -72,10 +72,9 @@ public class JdbcService implements IJdbcService {
     }
 
     @Override
-    public void updateBook(Book newBook) {
-        if (newBook.getName()!=null){
-            jdbcDAO.updateObjectName(newBook.getId(), newBook.getName());
-        }
+    public Book updateBook(Book newBook) {
+        updateBaseObjectFields(newBook);
+        return jdbcDAO.getBookById(newBook.getId());
     }
 
     @Override
@@ -117,16 +116,15 @@ public class JdbcService implements IJdbcService {
     }
 
     @Override
-    public void updateSong(Song newSong) {
-        if (newSong.getName()!=null) {
-            jdbcDAO.updateObjectName(newSong.getId(), newSong.getName());
-        }
-
-        if (newSong.getDuration()<=0) {
-            jdbcDAO.updateAttributeValue(newSong.getId(), Attribute.SONG_DURATION, "-1");
+    public Song updateSong(Song newSong) {
+        int id = newSong.getId();
+        updateBaseObjectFields(newSong);
+        if (newSong.getDuration()<0) {
+            jdbcDAO.updateAttributeValue(id, Attribute.SONG_DURATION, "-1");
         }else{
-            jdbcDAO.updateAttributeValue(newSong.getId(), Attribute.SONG_DURATION, String.valueOf(newSong.getDuration()));
+            jdbcDAO.updateAttributeValue(id, Attribute.SONG_DURATION, String.valueOf(newSong.getDuration()));
         }
+        return jdbcDAO.getSongById(id);
     }
 
     @Override
@@ -172,6 +170,20 @@ public class JdbcService implements IJdbcService {
 
     private int getUserId(){
         return userDAO.getUserIdByName(SecurityContextHolder.getContext().getAuthentication().getName());
+    }
+
+    private void updateBaseObjectFields(BaseObject object){
+        int id = object.getId();
+        if (object.getName()!=null) {
+            jdbcDAO.updateObjectName(id, object.getName());
+        }
+        if(object.getComment()!=null){
+            jdbcDAO.updateObjectComment(id, object.getComment());
+        }
+        if(object.getImagePath()!=null){
+            String filepath = IMAGE_SERVICE_DIR + "/" + object.getImagePath();
+            jdbcDAO.updateObjectImage(id, filepath);
+        }
     }
 
 }

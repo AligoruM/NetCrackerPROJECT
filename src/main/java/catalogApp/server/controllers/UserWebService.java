@@ -4,22 +4,15 @@ package catalogApp.server.controllers;
 import catalogApp.server.service.IImageService;
 import catalogApp.server.service.IJdbcService;
 import catalogApp.shared.model.SimpleUser;
-import org.fusesource.restygwt.client.MethodCallback;
+import com.google.gwt.http.client.Response;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.InputStream;
 import java.util.List;
 
 import static catalogApp.shared.constants.FileServiceConstants.IMAGE_FIELD;
@@ -63,6 +56,15 @@ public class UserWebService {
                              @FormDataParam(IMAGE_FIELD) FormDataContentDisposition fileMetaData) {
         imageService.saveImage(fileInputStream, fileMetaData.getFileName());
         jdbcService.updateAvatar(fileMetaData.getFileName());
+    }
+
+    @POST
+    @Path("/image")
+    @Consumes({MediaType.MULTIPART_FORM_DATA})
+    public Integer uploadImage(@FormDataParam(IMAGE_FIELD) InputStream fileInputStream,
+                                @FormDataParam(IMAGE_FIELD) FormDataContentDisposition fileMetaData) {
+        imageService.saveImage(fileInputStream, fileMetaData.getFileName());
+        return 200;
     }
 
     @GET

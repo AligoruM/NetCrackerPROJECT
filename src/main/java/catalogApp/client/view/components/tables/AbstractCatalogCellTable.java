@@ -1,11 +1,10 @@
-package catalogApp.client.view.components;
+package catalogApp.client.view.components.tables;
 
 
 import catalogApp.client.CatalogController;
-import catalogApp.client.view.components.utils.BaseCellTableColumns;
+import catalogApp.client.view.components.tables.utils.BaseCellTableColumns;
 import catalogApp.shared.model.BaseObject;
 import com.google.gwt.cell.client.FieldUpdater;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiConstructor;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -17,7 +16,6 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
-import com.google.gwt.view.client.SelectionModel;
 
 import java.util.Comparator;
 
@@ -36,17 +34,14 @@ public abstract class AbstractCatalogCellTable<T extends BaseObject> extends Cel
     AbstractCatalogCellTable(ListDataProvider<T> dataProvider, boolean popupEnabled) {
         super(element->element.getId());
 
-        ObjectPopup objectPopup = new ObjectPopup();
-
         this.dataProvider=dataProvider;
         dataProvider.addDataDisplay(this);
 
-        SelectionModel<T> selectionModel = new MultiSelectionModel<>(element -> element.getId());
+        MultiSelectionModel<T> selectionModel = new MultiSelectionModel<>(element -> element.getId());
 
         setSelectionModel(selectionModel, DefaultSelectionEventManager.createCheckboxManager());
 
         setPageSize(3);
-
 
         addColumn(baseCellTableColumns.getSelectionColumn(selectionModel));
 
@@ -58,6 +53,7 @@ public abstract class AbstractCatalogCellTable<T extends BaseObject> extends Cel
         }
 
         if(popupEnabled) {
+            ObjectPopup objectPopup = new ObjectPopup();
             nameColumn.setFieldUpdater((index, object, value) -> {
                 int left = getElement().getAbsoluteLeft();
                 int top = getElement().getAbsoluteTop();
@@ -82,20 +78,26 @@ public abstract class AbstractCatalogCellTable<T extends BaseObject> extends Cel
 
     private class ObjectPopup {
         final PopupPanel contactPopup = new PopupPanel(true, false);
-        final HTML contactInfo = new HTML();
+        final HTML comment = new HTML();
         final Image img = new Image();
         ObjectPopup(){
-            HorizontalPanel contactPopupContainer  = new HorizontalPanel();
-            contactPopupContainer.setSpacing(5);
-            contactPopupContainer.add(img);
-            contactPopupContainer.add(contactInfo);
-            contactPopup.setWidget(contactPopupContainer);
+            HorizontalPanel popupContainer  = new HorizontalPanel();
+            popupContainer.setSpacing(5);
+            popupContainer.add(img);
+            popupContainer.add(comment);
+            contactPopup.setWidget(popupContainer);
         }
 
         void setData(T object){
-            img.setUrl(object.getImagePath()!=null? object.getImagePath() : DEFAULT_OBJECT_IMAGE);
+            if (object.getImagePath() != null) {
+                if (!img.getUrl().contains(object.getImagePath())) {
+                    img.setUrl(object.getImagePath());
+                }
+            } else if(!img.getUrl().contains(DEFAULT_OBJECT_IMAGE)) {
+                img.setUrl(DEFAULT_OBJECT_IMAGE);
+            }
             img.setSize(POPUP_IMG_SIZE, POPUP_IMG_SIZE);
-            contactInfo.setHTML(object.getComment()!=null ? object.getComment() : EMPTY_COMMENT);
+            comment.setHTML(object.getComment()!=null ? object.getComment() : EMPTY_COMMENT);
         }
 
         void setPopupPositionAndShow(int left, int top){

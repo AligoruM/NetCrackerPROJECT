@@ -1,8 +1,8 @@
 package catalogApp.client.view.mainPage.library.tabs;
 
 import catalogApp.client.presenter.BookTabPresenter;
-import catalogApp.client.view.components.AbstractCatalogCellTable;
-import catalogApp.client.view.components.BookCellTable;
+import catalogApp.client.view.components.tables.AbstractCatalogCellTable;
+import catalogApp.client.view.components.tables.BookCellTable;
 import catalogApp.shared.model.Book;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;

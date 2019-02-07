@@ -2,9 +2,10 @@ package catalogApp.client.view.mainPage.library.objectViews;
 
 import catalogApp.client.presenter.BookPresenter;
 import catalogApp.shared.model.Book;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Label;
 
-import static catalogApp.client.view.constants.LibraryConstants.*;
+import static catalogApp.client.view.constants.LibraryConstants.AUTHOR_LABEL;
+import static catalogApp.client.view.constants.LibraryConstants.BOOK_LABEL;
 
 public class BookView extends ObjectView implements BookPresenter.Display {
 
@@ -26,7 +27,6 @@ public class BookView extends ObjectView implements BookPresenter.Display {
     @Override
     public void setData(Book book){
         super.setData(book);
-        name.setText(book.getName());
         authorLabel.setText(book.getAuthor().getName());
     }
 }

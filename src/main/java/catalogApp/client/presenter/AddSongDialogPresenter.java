@@ -6,7 +6,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.Widget;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 
@@ -24,8 +23,6 @@ public class AddSongDialogPresenter implements Presenter {
         void hideDialog();
 
         List<String> getAddInfo();
-
-        Widget asWidget();
 
         void setSuggestions(List<String> suggestions);
     }

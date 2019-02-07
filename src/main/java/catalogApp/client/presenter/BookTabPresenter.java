@@ -2,7 +2,7 @@ package catalogApp.client.presenter;
 
 import catalogApp.client.event.UpdateUserLibraryEvent;
 import catalogApp.client.services.BookWebService;
-import catalogApp.client.view.components.AbstractCatalogCellTable;
+import catalogApp.client.view.components.tables.AbstractCatalogCellTable;
 import catalogApp.client.view.dialogs.EditBookDialogView;
 import catalogApp.shared.model.Book;
 import com.google.gwt.core.client.GWT;
