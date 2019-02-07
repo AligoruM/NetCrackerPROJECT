@@ -1,11 +1,15 @@
 package catalogApp.server.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 
 @Service
 public class ImageService implements IImageService {
+
+    private final Logger logger = LoggerFactory.getLogger(ImageService.class);
 
     private String workDir;
 
@@ -34,7 +38,7 @@ public class ImageService implements IImageService {
             out.close();
         } catch (IOException e)
         {
-            e.printStackTrace();
+            logger.error("IOException in imageService", e);
         }
     }
 }

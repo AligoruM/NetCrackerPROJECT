@@ -5,8 +5,11 @@ import catalogApp.server.dao.constants.SQLQuery;
 import catalogApp.server.dao.constants.Types;
 import catalogApp.server.dao.mapper.BookMapper;
 import catalogApp.server.dao.mapper.SongMapper;
+import catalogApp.server.service.ImageService;
 import catalogApp.shared.model.Book;
 import catalogApp.shared.model.Song;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -21,6 +24,10 @@ import java.util.List;
 
 @Transactional
 public class EavDAO implements IJdbcDAO {
+
+    private final Logger logger = LoggerFactory.getLogger(EavDAO.class);
+
+
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -43,6 +50,7 @@ public class EavDAO implements IJdbcDAO {
     @Override
     public Book addBook(String name, String authorName) {
         if (name.trim().isEmpty() || authorName.trim().isEmpty()) {
+            logger.info("Incoming params is empty. Book cannot be created.");
             return null;
         }
         Integer authorId;
@@ -51,13 +59,14 @@ public class EavDAO implements IJdbcDAO {
             authorId = jdbcTemplate.queryForObject(SQLQuery.AUTHOR_ID_BY_NAME(authorName), (rs, rowNum) -> rs.getInt("idObject"));
         } catch (IncorrectResultSizeDataAccessException exception) {
             authorId = createObjectAndReturnNewId(authorName, Types.AUTHOR);
+            logger.info("Author(" + authorName +") not found. Created.");
         }
         bookId = createObjectAndReturnNewId(name, Types.BOOK);
         try {
             jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(String.valueOf(authorId), bookId, Attribute.BOOK_AUTHOR_ID));
             return jdbcTemplate.queryForObject(SQLQuery.BOOK_BY_ID(bookId), new BookMapper());
         } catch (DataAccessException ex) {
-            ex.printStackTrace();
+            logger.error("Problem with access to DataBase", ex);
             return null;
         }
     }
@@ -90,6 +99,7 @@ public class EavDAO implements IJdbcDAO {
     @Override
     public Song addSong(String name, String genreName, String duration) {
         if (name.trim().isEmpty() || genreName.trim().isEmpty()) {
+            logger.info("Incoming params is empty. Song cannot be created.");
             return null;
         }
         Integer genreId;
@@ -98,17 +108,20 @@ public class EavDAO implements IJdbcDAO {
             genreId = jdbcTemplate.queryForObject(SQLQuery.GENRE_ID_BY_NAME(genreName), (rs, rowNum) -> rs.getInt("idObject"));
         } catch (IncorrectResultSizeDataAccessException ex) {
             genreId = createObjectAndReturnNewId(genreName, Types.SONG_GENRE);
+            logger.info("Genre(" + genreName +") not found. Created.");
         }
         songId = createObjectAndReturnNewId(name, Types.SONG);
         try {
             jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(String.valueOf(genreId), songId, Attribute.SONG_GENRE_ID));
-            if (duration.isEmpty() || Integer.valueOf(duration) <= 0)
+            if (duration.isEmpty() || Integer.valueOf(duration) <= 0) {
                 jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE("-1", songId, Attribute.SONG_DURATION));
+                logger.info("Incoming duration is empty or isn't positive.");
+            }
             else
                 jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(duration, songId, Attribute.SONG_DURATION));
             return jdbcTemplate.queryForObject(SQLQuery.SONG_BY_ID(songId), new SongMapper());
         } catch (DataAccessException ex) {
-            ex.printStackTrace();
+            logger.error("Problem with access to DataBase", ex);
             return null;
         }
     }

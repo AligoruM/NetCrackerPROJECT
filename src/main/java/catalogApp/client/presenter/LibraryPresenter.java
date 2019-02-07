@@ -1,5 +1,6 @@
 package catalogApp.client.presenter;
 
+import catalogApp.client.CatalogController;
 import catalogApp.client.services.BookWebService;
 import catalogApp.client.services.SongWebService;
 import catalogApp.client.view.mainPage.library.TabPanelView;
@@ -15,8 +16,10 @@ public class LibraryPresenter implements Presenter {
     public LibraryPresenter(BookWebService bookWebService, SongWebService songWebService, HandlerManager eventBus) {
         TabPanelPresenter tabPanelPresenter = new TabPanelPresenter(new TabPanelView(), eventBus, bookWebService, songWebService);
         tabPanelPresenter.go(libraryPanel);
-        UserLibPanelPresenter userLibPanelPresenter = new UserLibPanelPresenter(new UserLibPanelView(), bookWebService, songWebService, eventBus);
-        userLibPanelPresenter.go(libraryPanel);
+        if(!CatalogController.isAdmin()) {
+            UserLibPanelPresenter userLibPanelPresenter = new UserLibPanelPresenter(new UserLibPanelView(), bookWebService, songWebService, eventBus);
+            userLibPanelPresenter.go(libraryPanel);
+        }
     }
 
     @Override

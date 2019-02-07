@@ -35,6 +35,7 @@ public class CustomAuthenticationProviderTest {
 
         when(userDetails.getUsername()).thenReturn("admin");
         when(userDetails.getPassword()).thenReturn("admin");
+        when(userDetails.isEnabled()).thenReturn(true);
 
         when(userDetailsService.loadUserByUsername("admin")).thenReturn(userDetails);
         //authenticationProvider.authenticate(authentication);
@@ -55,6 +56,7 @@ public class CustomAuthenticationProviderTest {
 
         when(userDetails.getUsername()).thenReturn("admin");
         when(userDetails.getPassword()).thenReturn("admin");
+        when(userDetails.isEnabled()).thenReturn(true);
 
         when(userDetailsService.loadUserByUsername("admin")).thenReturn(userDetails);
         authenticationProvider.authenticate(authentication);
@@ -71,6 +73,7 @@ public class CustomAuthenticationProviderTest {
 
         when(userDetails.getUsername()).thenReturn("admin");
         when(userDetails.getPassword()).thenReturn("admin");
+        when(userDetails.isEnabled()).thenReturn(true);
 
         when(userDetailsService.loadUserByUsername("dfgdfgdf")).thenThrow(new UsernameNotFoundException("User not found"));
 

@@ -25,12 +25,14 @@ public class MainPagePresenter implements Presenter {
     private HandlerManager eventBus;
     Display display;
 
+    private ProfileBarPresenter profileBarPresenter;
+
     public MainPagePresenter(Display display, HandlerManager eventBus) {
         this.eventBus = eventBus;
 
         this.display = display;
 
-        ProfileBarPresenter profileBarPresenter = new ProfileBarPresenter(new ProfileBarView(), eventBus);
+        profileBarPresenter = new ProfileBarPresenter(new ProfileBarView(), eventBus);
 
         profileBarPresenter.setData(CatalogController.getUser());
         profileBarPresenter.go(display.getProfilePanel());
@@ -79,5 +81,9 @@ public class MainPagePresenter implements Presenter {
 
     public SimplePanel getPanel(){
         return display.getMainPanel();
+    }
+
+    public void updateData(){
+        profileBarPresenter.setData(CatalogController.getUser());
     }
 }

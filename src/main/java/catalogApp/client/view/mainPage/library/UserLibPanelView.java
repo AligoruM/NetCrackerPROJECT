@@ -6,6 +6,7 @@ import catalogApp.client.view.mainPage.library.tabs.SongTabView;
 import catalogApp.shared.model.Book;
 import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Button;
@@ -26,10 +27,14 @@ public class UserLibPanelView extends Composite implements UserLibPanelPresenter
     Button deleteBooksButton;
     @UiField
     Button deleteSongsButton;
+    @UiField
+    HTMLPanel mainPanel;
+
     private static UserLibPanelViewUiBinder ourUiBinder = GWT.create(UserLibPanelViewUiBinder.class);
 
     public UserLibPanelView() {
         initWidget(ourUiBinder.createAndBindUi(this));
+        mainPanel.getElement().getStyle().setPaddingLeft(100, Style.Unit.PX);
     }
 
     @Override

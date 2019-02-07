@@ -28,8 +28,6 @@ public class ProfilePresenter implements Presenter {
 
         String getDescription();
 
-        String getUsername();
-
         void updateData(SimpleUser simpleUser);
     }
 
@@ -62,30 +60,26 @@ public class ProfilePresenter implements Presenter {
             updatedSimpleUser.setId(simpleUser.getId());
 
             String newDescription = display.getDescription().trim();
-            String newUsername = display.getUsername().trim();
-
-            if (!newUsername.isEmpty() && !newUsername.equals(simpleUser.getName())) {
-                updatedSimpleUser.setName(newUsername);
-            }
-            if(!newDescription.equals(simpleUser.getDescription())){
+            if (!newDescription.equals(simpleUser.getDescription())) {
                 updatedSimpleUser.setDescription(newDescription);
             }
 
+            if (updatedSimpleUser.getImagePath() != null) {
+                userWebService.updateUser(updatedSimpleUser, new MethodCallback<SimpleUser>() {
+                    @Override
+                    public void onFailure(Method method, Throwable exception) {
+                        GWT.log("updateUser doesnt work", exception);
+                    }
 
-            userWebService.updateUser(updatedSimpleUser, new MethodCallback<SimpleUser>() {
-                @Override
-                public void onFailure(Method method, Throwable exception) {
-                    GWT.log("updateUser doesnt work", exception);
-                }
-
-                @Override
-                public void onSuccess(Method method, SimpleUser response) {
-                    simpleUser.setName(response.getName());
-                    simpleUser.setDescription(response.getDescription());
-                    simpleUser.setImagePath(response.getImagePath());
-                    display.updateData(simpleUser);
-                }
-            });
+                    @Override
+                    public void onSuccess(Method method, SimpleUser response) {
+                        simpleUser.setName(response.getName());
+                        simpleUser.setDescription(response.getDescription());
+                        simpleUser.setImagePath(response.getImagePath());
+                        display.updateData(simpleUser);
+                    }
+                });
+            }
 
         });
 
@@ -105,7 +99,7 @@ public class ProfilePresenter implements Presenter {
         });
     }
 
-    private void initUploader(){
+    private void initUploader() {
 
         FileUploader fileUploader = display.getFileUploader();
         fileUploader.setAction(GWT.getModuleBaseURL() + IMAGE_SERVICE_PATH);

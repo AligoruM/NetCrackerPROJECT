@@ -5,7 +5,10 @@ import catalogApp.server.dao.constants.SQLQuery;
 import catalogApp.server.dao.mapper.SimpleUserMapper;
 import catalogApp.server.dao.mapper.UserMapper;
 import catalogApp.server.security.User;
+import catalogApp.server.service.ImageService;
 import catalogApp.shared.model.SimpleUser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -20,6 +23,10 @@ import java.util.List;
 import java.util.Set;
 
 public class UserDAO {
+
+    private final Logger logger = LoggerFactory.getLogger(UserDAO.class);
+
+
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -27,8 +34,13 @@ public class UserDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public User getUser(String name) throws EmptyResultDataAccessException {
-        return jdbcTemplate.queryForObject(SQLQuery.USER_BY_NAME(name), new UserMapper());
+    public User getUser(String name) {
+        try {
+            return jdbcTemplate.queryForObject(SQLQuery.USER_BY_NAME(name), new UserMapper());
+        }catch (EmptyResultDataAccessException ex){
+            logger.warn("Incorrect authorization. User: " + name + ". User not found");
+            return null;
+        }
     }
 
     public SimpleUser getSimpleUser(String name) {
@@ -41,6 +53,7 @@ public class UserDAO {
             }else return null;
             return simpleUser;
         } catch (IncorrectResultSizeDataAccessException ex) {
+            logger.error("Founded more, than one user with name " + name);
             return null;
         }
     }
@@ -62,15 +75,6 @@ public class UserDAO {
     public void updateUserAttributes(SimpleUser newSimpleUser, SimpleUser oldSimpleUser) {
         if (newSimpleUser.getId() == oldSimpleUser.getId()) {
             int id = oldSimpleUser.getId();
-            if (newSimpleUser.getName()!=null && !newSimpleUser.getName().equals(oldSimpleUser.getName())) {
-                String username = newSimpleUser.getName();
-                jdbcTemplate.update(SQLQuery.UPDATE_OBJECT_NAME(id, username));
-                //TODO something with it
-                Collection nowAuthorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-                Object credentials = SecurityContextHolder.getContext().getAuthentication().getCredentials();
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, credentials, nowAuthorities);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
             if (newSimpleUser.getDescription()!=null && !newSimpleUser.getDescription().equals(oldSimpleUser.getDescription())) {
                 String description = newSimpleUser.getDescription();
                 updateUserAttr(description, id, Attribute.USER_DESCRIPTION);
@@ -89,13 +93,13 @@ public class UserDAO {
     private void updateUserAttr(String value, int userId, int attributeId) {
         if (value.isEmpty()) {
             jdbcTemplate.execute(SQLQuery.DELETE_ATTRIBUTE_VALUE_BY_KEYS(userId, attributeId));
-            System.out.println("deleted attribute " + attributeId);
+            logger.info("Deleted attribute " + attributeId + ", value = " + value + ", object id = " + userId);
         } else {
             if (jdbcTemplate.update(SQLQuery.UPDATE_ATTRIBUTE_VALUE(value, userId, attributeId)) == 0) {
                 jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(value, userId, attributeId));
-                System.out.println("created attribute " + attributeId);
+                logger.info("Created attribute " + attributeId + ", value = " + value + ", object id = " + userId);
             } else {
-                System.out.println("updated attribute " + attributeId);
+                logger.info("Updated attribute " + attributeId + ", value = " + value + ", object id = " + userId);
             }
         }
     }
@@ -106,7 +110,8 @@ public class UserDAO {
             String result = jdbcTemplate.queryForObject(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(id, Attribute.USER_DESCRIPTION)
                     , (rs, rowNum) -> rs.getString("value"));
             simpleUser.setDescription(result);
-        } catch (IncorrectResultSizeDataAccessException ignored) {
+        } catch (IncorrectResultSizeDataAccessException ex) {
+            logger.warn("Founded more, than one instance of " + Attribute.USER_DESCRIPTION + "th attribute");
         }
     }
 }

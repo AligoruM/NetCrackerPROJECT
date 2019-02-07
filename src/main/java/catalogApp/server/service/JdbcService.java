@@ -7,6 +7,8 @@ import catalogApp.shared.model.BaseObject;
 import catalogApp.shared.model.Book;
 import catalogApp.shared.model.SimpleUser;
 import catalogApp.shared.model.Song;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +22,8 @@ import static catalogApp.shared.constants.FileServiceConstants.IMAGE_SERVICE_DIR
 
 @Service
 public class JdbcService implements IJdbcService {
+
+
 
     private IJdbcDAO jdbcDAO;
     private UserDAO userDAO;

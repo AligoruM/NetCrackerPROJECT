@@ -43,6 +43,7 @@ public class ProfileView extends Composite implements ProfilePresenter.Display {
     public ProfileView() {
         initWidget(ourUiBinder.createAndBindUi(this));
         usernameBox.setWidth(PROFILE_FIELDS_WIDTH);
+        usernameBox.setEnabled(false);
         table.setWidget(0, 0, new Label(USER_LABEL));
         table.setWidget(0, 1, usernameBox);
         roleBox.setEnabled(false);
@@ -84,11 +85,6 @@ public class ProfileView extends Composite implements ProfilePresenter.Display {
     @Override
     public String getDescription() {
         return describeBox.getText();
-    }
-
-    @Override
-    public String getUsername() {
-        return usernameBox.getText();
     }
 
     @Override
