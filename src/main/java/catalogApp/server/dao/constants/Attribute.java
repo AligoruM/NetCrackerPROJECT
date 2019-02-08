@@ -9,5 +9,4 @@ public class Attribute {
     public static final int LIKED_BOOK_ID = 10;
     public static final int LIKED_SONG_ID = 11;
     public static final int USER_DESCRIPTION=14;
-    public static final int USER_AVATAR_URL=15;
 }

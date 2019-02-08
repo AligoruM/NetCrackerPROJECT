@@ -18,6 +18,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static catalogApp.server.dao.constants.Tables.ROLE_ALIAS;
+import static catalogApp.shared.constants.FileServiceConstants.IMAGE_SERVICE_DIR;
+
 public class UserDAO {
 
     private final Logger logger = LoggerFactory.getLogger(UserDAO.class);
@@ -67,7 +70,7 @@ public class UserDAO {
     }
 
     public Set<String> getUserRoles(int id){
-        return new HashSet<>(jdbcTemplate.query(SQLQuery.USER_ROLES_BY_ID(id), (rs, rowNum) -> rs.getString("role")));
+        return new HashSet<>(jdbcTemplate.query(SQLQuery.USER_ROLES_BY_ID(id), (rs, rowNum) -> rs.getString(ROLE_ALIAS)));
     }
 
     public void updateUserAttributes(SimpleUser newSimpleUser, SimpleUser oldSimpleUser) {
@@ -77,15 +80,15 @@ public class UserDAO {
                 String description = newSimpleUser.getDescription();
                 updateUserAttr(description, id, Attribute.USER_DESCRIPTION);
             }
+            if(newSimpleUser.getImagePath()!=null && !oldSimpleUser.getImagePath().contains(newSimpleUser.getImagePath())){
+                String filepath = IMAGE_SERVICE_DIR + "/" + newSimpleUser.getImagePath();
+                updateAvatar(id, filepath);
+            }
         }
     }
 
-    public void updateAvatar(int id, String filepath){
+    private void updateAvatar(int id, String filepath){
         jdbcTemplate.execute(SQLQuery.UPDATE_OBJECT_IMAGE(filepath, id));
-    }
-
-    public String getUserAvatarPath(int id){
-        return jdbcTemplate.queryForObject(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(id, Attribute.USER_AVATAR_URL), ResultSet::getString);
     }
 
     private void updateUserAttr(String value, int userId, int attributeId) {

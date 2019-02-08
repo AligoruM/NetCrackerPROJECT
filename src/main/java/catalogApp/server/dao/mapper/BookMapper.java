@@ -1,5 +1,6 @@
 package catalogApp.server.dao.mapper;
 
+import catalogApp.server.dao.constants.Tables;
 import catalogApp.server.dao.constants.Types;
 import catalogApp.shared.model.Author;
 import catalogApp.shared.model.Book;
@@ -9,6 +10,8 @@ import org.springframework.jdbc.core.RowMapper;
 import javax.annotation.Nonnull;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import static catalogApp.server.dao.constants.Tables.*;
 
 public class BookMapper implements RowMapper<Book> {
 
@@ -20,14 +23,14 @@ public class BookMapper implements RowMapper<Book> {
         Book book = new Book();
         Author author = new Author();
 
-        author.setId(resultSet.getInt("authorId"));
-        author.setName(resultSet.getString("authorName"));
+        author.setId(resultSet.getInt(ID_AUTHOR_ALIAS));
+        author.setName(resultSet.getString(NAME_AUTHOR_ALIAS));
         author.setType(authorType);
-        book.setId(resultSet.getInt("idObject"));
-        book.setName(resultSet.getString("objectName"));
-        book.setArchived(resultSet.getBoolean("archived"));
-        book.setComment(resultSet.getString("comment"));
-        book.setImagePath(resultSet.getString("image"));
+        book.setId(resultSet.getInt(ID_OBJ_ALIAS));
+        book.setName(resultSet.getString(NAME_OBJ_ALIAS));
+        book.setArchived(resultSet.getBoolean(ARCHIVED_OBJ_ALIAS));
+        book.setComment(resultSet.getString(COMMENT_OBJ_ALIAS));
+        book.setImagePath(resultSet.getString(IMG_OBJ_ALIAS));
         book.setAuthor(author);
         book.setType(bookType);
 

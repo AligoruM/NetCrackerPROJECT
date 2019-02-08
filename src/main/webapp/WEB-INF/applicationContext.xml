@@ -1,8 +1,8 @@
 <b:beans xmlns="http://www.springframework.org/schema/security"
          xmlns:b="http://www.springframework.org/schema/beans"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:g="http://www.springframework.org/schema/util"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
     <authentication-manager>
         <authentication-provider ref="authenticationProvider"/>
@@ -20,8 +20,14 @@
         <intercept-url pattern="/catalogApp/rest/addBook" access="hasRole('ADMIN')"/>
         <intercept-url pattern="/catalogApp/rest/addSong" access="hasRole('ADMIN')"/>
         <intercept-url pattern="/catalogApp/rest/allUsers" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/catalogApp/rest/book" method="POST" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/catalogApp/rest/song" method="POST" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/catalogApp/rest/archiveBooks" method="POST" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/catalogApp/rest/archiveSongs" method="POST" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/catalogApp/rest/restoreBooks" method="POST" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/catalogApp/rest/restoreSongs" method="POST" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/catalogApp/rest/image" method="POST" access="hasRole('ADMIN')"/>
         <intercept-url pattern="/catalogApp/rest/**" access="hasRole('USER')"/>
-        <!--<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
         <logout logout-success-url="/j_spring_security_check"/>
     </http>
 
@@ -29,30 +35,26 @@
         <b:constructor-arg ref="userDAO"/>
     </b:bean>
 
-<!--    <b:bean id="userWebService" class="catalogApp.server.controllers.UserWebService">
-        <b:constructor-arg ref="userDAO"/>
-    </b:bean>-->
-
-    <b:bean id="userWebService" class="catalogApp.server.controllers.UserWebService">
-        <b:property name="jdbcService" ref="jdbcService"/>
-        <b:property name="imageService" ref="imageService"/>
+    <b:bean id="userWebService" class="catalogApp.server.webServices.UserWebService">
+        <b:property name="jdbcService" ref="jdbcServiceImpl"/>
+        <b:property name="imageService" ref="imageServiceImpl"/>
     </b:bean>
 
-    <b:bean id="bookWebService" class="catalogApp.server.controllers.BookWebService">
-        <b:property name="jdbcService" ref="jdbcService"/>
+    <b:bean id="bookWebService" class="catalogApp.server.webServices.BookWebService">
+        <b:property name="jdbcService" ref="jdbcServiceImpl"/>
     </b:bean>
 
-    <b:bean id="songWebService" class="catalogApp.server.controllers.SongWebService" >
-        <b:property name="jdbcService" ref="jdbcService"/>
+    <b:bean id="songWebService" class="catalogApp.server.webServices.SongWebService" >
+        <b:property name="jdbcService" ref="jdbcServiceImpl"/>
     </b:bean>
 
-    <b:bean id="imageService" class="catalogApp.server.service.ImageService">
+    <b:bean id="imageServiceImpl" class="catalogApp.server.service.ImageService">
         <!--<b:property name="workDir" value="C:\\apache-tomcat-9.0.13\\webapps\\ROOT\\"/>-->
         <b:property name="workDir" value=""/>
         <b:property name="uploadDir" value="#{T(catalogApp.shared.constants.FileServiceConstants).IMAGE_SERVICE_DIR}\\"/>
     </b:bean>
 
-    <b:bean id="jdbcService" class="catalogApp.server.service.JdbcService">
+    <b:bean id="jdbcServiceImpl" class="catalogApp.server.service.JdbcService">
         <b:constructor-arg ref="jdbcEavDAO"/>
         <b:constructor-arg ref="userDAO"/>
     </b:bean>

@@ -1,16 +1,11 @@
-package catalogApp.server.controllers;
+package catalogApp.server.webServices;
 
 
 import catalogApp.server.service.IImageService;
 import catalogApp.server.service.IJdbcService;
 import catalogApp.shared.model.SimpleUser;
-import org.eclipse.jetty.http.HttpStatus;
-import org.eclipse.jetty.server.HttpChannel;
-import org.eclipse.jetty.server.HttpOutput;
-import org.eclipse.jetty.server.Response;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +27,7 @@ public class UserWebService {
     @POST
     @Path("/UserProfile")
     @Consumes(MediaType.APPLICATION_JSON)
-    public SimpleUser updateUser(SimpleUser simpleUser){
+    public SimpleUser updateUser(SimpleUser simpleUser) {
         jdbcService.updateUser(simpleUser);
         return jdbcService.getSimpleUser();
     }
@@ -48,7 +43,7 @@ public class UserWebService {
     @GET
     @Path("/allUsers")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<SimpleUser> getAllUsers(){
+    public List<SimpleUser> getAllUsers() {
         return jdbcService.getAllUsers();
     }
 
@@ -56,25 +51,21 @@ public class UserWebService {
     @POST
     @Path("/avatar")
     @Consumes({MediaType.MULTIPART_FORM_DATA})
-    public void uploadAvatar(@FormDataParam(IMAGE_FIELD) InputStream fileInputStream,
-                             @FormDataParam(IMAGE_FIELD) FormDataContentDisposition fileMetaData) {
-        imageService.saveImage(fileInputStream, fileMetaData.getFileName());
-        jdbcService.updateAvatar(fileMetaData.getFileName());
+    public Integer uploadAvatar(@FormDataParam(IMAGE_FIELD) InputStream fileInputStream,
+                                @FormDataParam(IMAGE_FIELD) FormDataContentDisposition fileMetaData) {
+        if(imageService.saveImage(fileInputStream, fileMetaData.getFileName()))
+            return 200;
+        else return 500;
     }
 
     @POST
     @Path("/image")
     @Consumes({MediaType.MULTIPART_FORM_DATA})
     public Integer uploadImage(@FormDataParam(IMAGE_FIELD) InputStream fileInputStream,
-                                @FormDataParam(IMAGE_FIELD) FormDataContentDisposition fileMetaData) {
-        imageService.saveImage(fileInputStream, fileMetaData.getFileName());
-        return 200;
-    }
-
-    @GET
-    @Path("avatar/{id}")
-    public String getAvatar(@PathParam("id") int id){
-        return jdbcService.getUserAvatarPath(id);
+                               @FormDataParam(IMAGE_FIELD) FormDataContentDisposition fileMetaData) {
+        if (imageService.saveImage(fileInputStream, fileMetaData.getFileName()))
+            return 200;
+        else return 500;
     }
 
 

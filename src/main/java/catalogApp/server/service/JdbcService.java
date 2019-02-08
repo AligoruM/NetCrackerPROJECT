@@ -7,7 +7,6 @@ import catalogApp.shared.model.BaseObject;
 import catalogApp.shared.model.Book;
 import catalogApp.shared.model.SimpleUser;
 import catalogApp.shared.model.Song;
-import jersey.repackaged.com.google.common.collect.Lists;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -147,16 +146,6 @@ public class JdbcService implements IJdbcService {
         userDAO.updateUserAttributes(simpleUser, getSimpleUser());
     }
 
-    @Override
-    public void updateAvatar(String filename) {
-        String filepath = IMAGE_SERVICE_DIR + "/" + filename;
-        userDAO.updateAvatar(getUserId(), filepath);
-    }
-
-    @Override
-    public String getUserAvatarPath(int id) {
-        return userDAO.getUserAvatarPath(id);
-    }
 
     @Override
     public void archiveItems(List<Integer> ids) {

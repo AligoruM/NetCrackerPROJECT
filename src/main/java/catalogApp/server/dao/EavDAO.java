@@ -21,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 
+import static catalogApp.server.dao.constants.Tables.*;
+
 @Transactional
 public class EavDAO implements IJdbcDAO {
 
@@ -43,7 +45,7 @@ public class EavDAO implements IJdbcDAO {
 
     @Override
     public List<String> getAllAuthorNames() {
-        return jdbcTemplate.query(SQLQuery.ALL_AUTHORS_NAMES(), (resultSet, i) -> resultSet.getString("name"));
+        return jdbcTemplate.query(SQLQuery.ALL_AUTHORS_NAMES(), (resultSet, i) -> resultSet.getString(NAME_OBJ));
     }
 
     @Override
@@ -55,7 +57,7 @@ public class EavDAO implements IJdbcDAO {
         Integer authorId;
         int bookId;
         try {
-            authorId = jdbcTemplate.queryForObject(SQLQuery.AUTHOR_ID_BY_NAME(authorName), (rs, rowNum) -> rs.getInt("idObject"));
+            authorId = jdbcTemplate.queryForObject(SQLQuery.AUTHOR_ID_BY_NAME(authorName), (rs, rowNum) -> rs.getInt(ID_OBJ));
         } catch (IncorrectResultSizeDataAccessException exception) {
             authorId = createObjectAndReturnNewId(authorName, Types.AUTHOR);
             logger.info("Author(" + authorName +") not found. Created.");
@@ -97,7 +99,7 @@ public class EavDAO implements IJdbcDAO {
 
     @Override
     public List<String> getAllGenreNames() {
-        return jdbcTemplate.query(SQLQuery.ALL_GENRES_NAMES(), (rs, rowNum) -> rs.getString("name"));
+        return jdbcTemplate.query(SQLQuery.ALL_GENRES_NAMES(), (rs, rowNum) -> rs.getString(NAME_OBJ));
     }
 
     @Override
@@ -109,7 +111,7 @@ public class EavDAO implements IJdbcDAO {
         Integer genreId;
         int songId;
         try {
-            genreId = jdbcTemplate.queryForObject(SQLQuery.GENRE_ID_BY_NAME(genreName), (rs, rowNum) -> rs.getInt("idObject"));
+            genreId = jdbcTemplate.queryForObject(SQLQuery.GENRE_ID_BY_NAME(genreName), (rs, rowNum) -> rs.getInt(ID_OBJ));
         } catch (IncorrectResultSizeDataAccessException ex) {
             genreId = createObjectAndReturnNewId(genreName, Types.SONG_GENRE);
             logger.info("Genre(" + genreName +") not found. Created.");
@@ -171,17 +173,17 @@ public class EavDAO implements IJdbcDAO {
     }
 
     private List<Integer> getObjectsIdsByUserIdAndAttribute(int id, int idAttribute) {
-        return jdbcTemplate.query(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(id, idAttribute), (rs, rowNum) -> rs.getInt("value"));
+        return jdbcTemplate.query(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(id, idAttribute), (rs, rowNum) -> rs.getInt(VALUE_AV));
     }
 
     private int createObjectAndReturnNewId(String name, int type) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
-        return jdbcInsert.withTableName("Object")
-                .usingGeneratedKeyColumns("idObject")
+        return jdbcInsert.withTableName(OBJECT_TABLE)
+                .usingGeneratedKeyColumns(ID_OBJ)
                 .executeAndReturnKey(new HashMap<String, String>() {{
-                    put("name", name);
-                    put("idType", String.valueOf(type));
-                    put("IsArchived", "0");
+                    put(NAME_OBJ, name);
+                    put(ID_TYPE_OBJ, String.valueOf(type));
+                    put(ARCHIVED_OBJ, "0");
                 }})
                 .intValue();
     }

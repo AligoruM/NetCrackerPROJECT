@@ -1,8 +1,9 @@
-package catalogApp.server.controllers;
+package catalogApp.server.webServices;
+
 
 import catalogApp.server.service.IJdbcService;
 import catalogApp.server.service.JdbcService;
-import catalogApp.shared.model.Song;
+import catalogApp.shared.model.Book;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
@@ -13,73 +14,73 @@ import java.util.List;
 @Service
 @Controller
 @Path("/")
-public class SongWebService {
+public class BookWebService {
 
     private static IJdbcService jdbcService;
 
     @GET
-    @Path("/song")
+    @Path("/book")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Song> getAllSongs() {
-        return jdbcService.getAllSong();
+    public List<Book> getAllBooks() {
+        return jdbcService.getAllBooks();
     }
 
     @PUT
-    @Path("/addSong")
+    @Path("/addBook")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Song addSong(List params){
+    public Book addBook(List params) {
         String name = (String) params.get(0);
-        String genre = (String) params.get(1);
-        String duration = (String) params.get(2);
-        return jdbcService.addSong(name, genre, duration);
+        String author = (String) params.get(1);
+        return jdbcService.addBook(name, author);
     }
 
     @GET
-    @Path("/getGenre")
+    @Path("/getAuthor")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<String> getGenreNames(){
-        return  jdbcService.getAllGenresNames();
+    public List<String> getAuthorsNames() {
+        return jdbcService.getAllAuthorsNames();
     }
 
     @POST
-    @Path("/addSongsToUserLib")
+    @Path("/addBooksToUserLib")
     @Consumes(MediaType.APPLICATION_JSON)
-    public List<Song> addSongsToUserLib(List<Integer> ids){
-        return jdbcService.addSongsToLibrary(ids);
+    public List<Book> addBooksToUserLib(List<Integer> ids) {
+        return jdbcService.addBooksToLibrary(ids);
     }
 
     @GET
-    @Path("/getUserSongs")
+    @Path("/getUserBooks")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Song> getUserSongs(){
-        return jdbcService.getLibSongs();
+    public List<Book> getUserBookLib() {
+        return jdbcService.getLibBooks();
     }
+
 
     @DELETE
-    @Path("/song")
+    @Path("/book")
     public void deleteBooksFromUserLibs(List<Integer> ids){
-        jdbcService.deleteSongsFromLibrary(ids);
+        jdbcService.deleteBooksFromLibrary(ids);
     }
 
     @POST
-    @Path("/song")
+    @Path("/book")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Song updateSong(Song newSong){
-        return jdbcService.updateSong(newSong);
+    public Book updateBook(Book newBook){
+        return jdbcService.updateBook(newBook);
     }
 
     @POST
-    @Path("/archiveSongs")
+    @Path("/archiveBooks")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void archiveSongs(List<Integer> ids){
+    public void archiveBooks(List<Integer> ids){
         jdbcService.archiveItems(ids);
     }
 
     @POST
-    @Path("/restoreSongs")
+    @Path("/restoreBooks")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void restoreSongs(List<Integer> ids){
+    public void restoreBooks(List<Integer> ids){
         jdbcService.restoreItems(ids);
     }
 

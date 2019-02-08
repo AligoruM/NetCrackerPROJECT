@@ -7,6 +7,7 @@ import catalogApp.shared.model.SimpleUser;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import org.fusesource.restygwt.client.Method;
@@ -38,6 +39,8 @@ public class ProfilePresenter implements Presenter {
     private Display display;
     private UserWebService userWebService;
 
+    private boolean isLoaded;
+
     public ProfilePresenter(Display display, UserWebService userWebService) {
         this.display = display;
         this.userWebService = userWebService;
@@ -56,10 +59,14 @@ public class ProfilePresenter implements Presenter {
 
         initUploader();
 
+
         display.getSubmitButton().addClickHandler(event -> {
             boolean isChanged = false;
             SimpleUser updatedSimpleUser = new SimpleUser();
             updatedSimpleUser.setId(simpleUser.getId());
+
+            String imagePath = display.getFileUploader().getFileUpload().getFilename();
+            imagePath = imagePath.substring(imagePath.lastIndexOf("\\") + 1);
 
             String newDescription = display.getDescription().trim();
             if (!newDescription.equals(simpleUser.getDescription())) {
@@ -67,7 +74,12 @@ public class ProfilePresenter implements Presenter {
                 isChanged=true;
             }
 
-            if (updatedSimpleUser.getImagePath() != null || isChanged) {
+            if(!imagePath.isEmpty() && isLoaded){
+                updatedSimpleUser.setImagePath(imagePath);
+                isChanged=true;
+            }
+
+            if (isChanged) {
                 userWebService.updateUser(updatedSimpleUser, new MethodCallback<SimpleUser>() {
                     @Override
                     public void onFailure(Method method, Throwable exception) {
@@ -103,10 +115,15 @@ public class ProfilePresenter implements Presenter {
     }
 
     private void initUploader() {
-
         FileUploader fileUploader = display.getFileUploader();
         fileUploader.setAction(GWT.getModuleBaseURL() + AVATAR_SERVICE_PATH);
         fileUploader.setFileFieldName(IMAGE_FIELD);
+
+        fileUploader.addSubmitCompleteHandler(event -> {
+            Window.alert("Successfully loaded");
+            isLoaded=true;
+            event.getResults();
+        });
 
         display.getUploadButton().addClickHandler(event -> {
             String filename = fileUploader.getFileUpload().getFilename();

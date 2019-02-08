@@ -1,6 +1,7 @@
 package catalogApp.client.presenter;
 
 import catalogApp.shared.model.SimpleUser;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
@@ -28,7 +29,7 @@ public class ProfileBarPresenter implements Presenter {
         container.add(display.asWidget());
         display.getLogoutButton().addClickHandler(event -> {
             Cookies.removeCookie("JSESSIONID");
-            Window.Location.replace("/login");
+            Window.Location.replace(GWT.getHostPageBaseURL() + "login");
         });
     }
 

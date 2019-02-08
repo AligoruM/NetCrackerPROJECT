@@ -24,7 +24,7 @@ public class ImageService implements IImageService {
     }
 
     @Override
-    public void saveImage(InputStream stream, String filename) {
+    public boolean saveImage(InputStream stream, String filename) {
         try
         {
             int read;
@@ -36,9 +36,11 @@ public class ImageService implements IImageService {
             }
             out.flush();
             out.close();
+            return true;
         } catch (IOException e)
         {
             logger.error("IOException in imageService", e);
+            return false;
         }
     }
 }
