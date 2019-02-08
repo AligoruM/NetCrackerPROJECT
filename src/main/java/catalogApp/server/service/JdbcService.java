@@ -23,7 +23,6 @@ import static catalogApp.shared.constants.FileServiceConstants.IMAGE_SERVICE_DIR
 public class JdbcService implements IJdbcService {
 
 
-
     private IJdbcDAO jdbcDAO;
     private UserDAO userDAO;
 
@@ -35,7 +34,7 @@ public class JdbcService implements IJdbcService {
     @Override
     public List<Book> getAllBooks() {
         List<Book> books = jdbcDAO.getAllBooks();
-        if(!SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))){
+        if (!SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             books.removeIf(BaseObject::isArchived);
         }
         return books;
@@ -79,7 +78,7 @@ public class JdbcService implements IJdbcService {
     @Override
     public List<Song> getAllSong() {
         List<Song> songs = jdbcDAO.getAllSongs();
-        if(!SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))){
+        if (!SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             songs.removeIf(BaseObject::isArchived);
         }
         return songs;
@@ -118,9 +117,9 @@ public class JdbcService implements IJdbcService {
     public Song updateSong(Song newSong) {
         int id = newSong.getId();
         updateBaseObjectFields(newSong);
-        if (newSong.getDuration()<0) {
+        if (newSong.getDuration() < 0) {
             jdbcDAO.updateAttributeValue(id, Attribute.SONG_DURATION, "-1");
-        }else{
+        } else if (newSong.getDuration() > 0) {
             jdbcDAO.updateAttributeValue(id, Attribute.SONG_DURATION, String.valueOf(newSong.getDuration()));
         }
         return jdbcDAO.getSongById(id);
@@ -157,19 +156,19 @@ public class JdbcService implements IJdbcService {
         jdbcDAO.changeStateItems(ids, false);
     }
 
-    private int getUserId(){
+    private int getUserId() {
         return userDAO.getUserIdByName(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
-    private void updateBaseObjectFields(BaseObject object){
+    private void updateBaseObjectFields(BaseObject object) {
         int id = object.getId();
-        if (object.getName()!=null) {
+        if (object.getName() != null) {
             jdbcDAO.updateObjectName(id, object.getName());
         }
-        if(object.getComment()!=null){
+        if (object.getComment() != null) {
             jdbcDAO.updateObjectComment(id, object.getComment());
         }
-        if(object.getImagePath()!=null){
+        if (object.getImagePath() != null) {
             String filepath = IMAGE_SERVICE_DIR + "/" + object.getImagePath();
             jdbcDAO.updateObjectImage(id, filepath);
         }
