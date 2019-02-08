@@ -9,6 +9,7 @@ import com.google.gwt.uibinder.client.UiConstructor;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
+import com.google.gwt.user.cellview.client.FooterBuilder;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -41,8 +42,6 @@ public abstract class AbstractCatalogCellTable<T extends BaseObject> extends Cel
 
         setSelectionModel(selectionModel, DefaultSelectionEventManager.createCheckboxManager());
 
-        setPageSize(3);
-
         addColumn(baseCellTableColumns.getSelectionColumn(selectionModel));
 
         if (CatalogController.isAdmin()) {
@@ -55,8 +54,8 @@ public abstract class AbstractCatalogCellTable<T extends BaseObject> extends Cel
         if(popupEnabled) {
             ObjectPopup objectPopup = new ObjectPopup();
             nameColumn.setFieldUpdater((index, object, value) -> {
-                int left = getElement().getAbsoluteLeft();
-                int top = getElement().getAbsoluteTop();
+                int left = getRowElement(index).getAbsoluteLeft();
+                int top = getRowElement(index).getAbsoluteTop();
                 objectPopup.setData(object);
                 objectPopup.setPopupPositionAndShow(left, top);
             });

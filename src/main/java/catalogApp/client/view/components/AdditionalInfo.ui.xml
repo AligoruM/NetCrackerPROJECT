@@ -3,27 +3,30 @@
              xmlns:c="urn:import:catalogApp.client.view.components">
     <g:DisclosurePanel ui:field="disclosurePanel">
         <g:header>Additional info</g:header>
-        <g:HTMLPanel>
-            <table>
-                <tr>
-                    <td>
-                        <c:FileUploader ui:field="fileUploader" width="50px"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <g:Button ui:field="uploadButton" text="Upload"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <g:Label text="Comment:"/>
-                    </td>
-                    <td>
-                        <g:TextArea ui:field="commentArea"/>
-                    </td>
-                </tr>
-            </table>
-        </g:HTMLPanel>
+        <g:VerticalPanel>
+            <g:Image ui:field="image"/>
+            <g:HTMLPanel>
+                <table>
+                    <tr>
+                        <td>
+                            <c:FileUploader ui:field="fileUploader" width="50px"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <g:Button ui:field="uploadButton" text="Upload"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <g:Label text="Comment:"/>
+                        </td>
+                        <td>
+                            <g:TextArea ui:field="commentArea"/>
+                        </td>
+                    </tr>
+                </table>
+            </g:HTMLPanel>
+        </g:VerticalPanel>
     </g:DisclosurePanel>
 </ui:UiBinder>

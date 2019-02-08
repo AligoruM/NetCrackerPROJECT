@@ -108,12 +108,6 @@ public class JdbcService implements IJdbcService {
     }
 
     @Override
-    public void deleteSongsFromLibrary(List<Integer> ids) {
-        int userId = getUserId();
-        jdbcDAO.deleteObjectFromUserLibrary(userId, ids, Attribute.LIKED_SONG_ID);
-    }
-
-    @Override
     public Song updateSong(Song newSong) {
         int id = newSong.getId();
         updateBaseObjectFields(newSong);
@@ -139,6 +133,12 @@ public class JdbcService implements IJdbcService {
     @Override
     public List<SimpleUser> getAllUsers() {
         return userDAO.getAllUsers();
+    }
+
+    @Override
+    public void deleteObjectFromUserLib(List<Integer> ids, int type) {
+        int userId = getUserId();
+        jdbcDAO.deleteObjectFromUserLibrary(userId, ids, type);
     }
 
     @Override

@@ -116,13 +116,14 @@ public class ProfilePresenter implements Presenter {
 
     private void initUploader() {
         FileUploader fileUploader = display.getFileUploader();
-        fileUploader.setAction(GWT.getModuleBaseURL() + AVATAR_SERVICE_PATH);
+        fileUploader.setAction(GWT.getModuleName()+'/' + AVATAR_SERVICE_PATH);
         fileUploader.setFileFieldName(IMAGE_FIELD);
 
         fileUploader.addSubmitCompleteHandler(event -> {
             Window.alert("Successfully loaded");
             isLoaded=true;
-            event.getResults();
+            GWT.log(event.getResults());
+            GWT.log(fileUploader.getFileUpload().getFilename());
         });
 
         display.getUploadButton().addClickHandler(event -> {

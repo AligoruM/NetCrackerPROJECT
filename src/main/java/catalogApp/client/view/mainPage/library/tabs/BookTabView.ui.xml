@@ -1,11 +1,13 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-             xmlns:g='urn:import:com.google.gwt.user.client.ui'
-             xmlns:c='urn:import:com.google.gwt.user.cellview.client'>
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <g:HTMLPanel>
         <g:VerticalPanel>
-            <g:SimplePanel ui:field="simplePanel"/>
+            <g:ScrollPanel ui:field="simplePanel"/>
             <g:cell horizontalAlignment="ALIGN_CENTER">
-                <c:SimplePager ui:field='pager' location="CENTER"/>
+                <g:TextBox ui:field="searchField"/>
+            </g:cell>
+            <g:cell horizontalAlignment="ALIGN_CENTER">
+                <g:Button ui:field="searchButton" text="Search"/>
             </g:cell>
         </g:VerticalPanel>
     </g:HTMLPanel>

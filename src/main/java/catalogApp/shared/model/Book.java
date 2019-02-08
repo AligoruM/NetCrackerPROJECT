@@ -1,6 +1,7 @@
 package catalogApp.shared.model;
 
 import catalogApp.server.dao.constants.Types;
+import com.google.gwt.core.client.GWT;
 
 import java.util.Objects;
 

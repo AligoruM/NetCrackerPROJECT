@@ -36,8 +36,8 @@ public interface BookWebService extends RestService {
     void getUserBooks(MethodCallback<List<Book>> callback);
 
     @DELETE
-    @Path("rest/book")
-    void deleteBookFromLib(List<Integer> ids, MethodCallback<Void> callback);
+    @Path("rest/object/{type}")
+    void deleteBookFromLib(@PathParam("type")String type, List<Integer> ids, MethodCallback<Void> callback);
 
     @POST
     @Path("rest/book")
@@ -45,10 +45,10 @@ public interface BookWebService extends RestService {
     void updateBook(Book newBook, MethodCallback<Book> callback);
 
     @POST
-    @Path("rest/archiveBooks")
+    @Path("rest/archiveObjects")
     void archiveBooks(List<Integer> ids, MethodCallback<Void> callback);
 
     @POST
-    @Path("rest/restoreBooks")
+    @Path("rest/restoreObjects")
     void restoreBooks(List<Integer> ids, MethodCallback<Void> callback);
 }

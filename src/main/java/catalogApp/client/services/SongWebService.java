@@ -29,18 +29,18 @@ public interface SongWebService extends RestService {
     void getUserSongs(MethodCallback<List<Song>> callback);
 
     @DELETE
-    @Path("rest/song")
-    void deleteSongFromLib(List<Integer> ids, MethodCallback<Void> callback);
+    @Path("rest/object/{type}")
+    void deleteSongFromLib(@PathParam("type")String type, List<Integer> ids, MethodCallback<Void> callback);
 
     @POST
     @Path("rest/song")
     void updateSong(Song newSong, MethodCallback<Song> callback);
 
     @POST
-    @Path("rest/archiveSongs")
+    @Path("rest/archiveObjects")
     void archiveSongs(List<Integer> ids, MethodCallback<Void> callback);
 
     @POST
-    @Path("rest/restoreSongs")
+    @Path("rest/restoreObjects")
     void restoreSongs(List<Integer> ids, MethodCallback<Void> callback);
 }

@@ -21,4 +21,5 @@ public class LibraryConstants {
     public static final String GENRE_LABEL = "Genre:";
     public static final String SONG_LABEL = "Song:";
     public static final String DURATION_LABEL = "Duration:";
+    public static final String TABLE_HEIGHT = "500px";
 }

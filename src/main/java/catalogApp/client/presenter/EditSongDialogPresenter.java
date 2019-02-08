@@ -117,6 +117,7 @@ public class EditSongDialogPresenter implements Presenter {
                     @Override
                     public void onSuccess(Method method, Song response) {
                         song.setName(newName);
+                        song.setComment(newComment);
                         song.setDuration(newDuration);
                         dataProvider.refresh();
                         display.hideDialog();

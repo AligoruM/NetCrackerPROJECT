@@ -57,31 +57,11 @@ public class BookWebService {
     }
 
 
-    @DELETE
-    @Path("/book")
-    public void deleteBooksFromUserLibs(List<Integer> ids){
-        jdbcService.deleteBooksFromLibrary(ids);
-    }
-
     @POST
     @Path("/book")
     @Consumes(MediaType.APPLICATION_JSON)
     public Book updateBook(Book newBook){
         return jdbcService.updateBook(newBook);
-    }
-
-    @POST
-    @Path("/archiveBooks")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void archiveBooks(List<Integer> ids){
-        jdbcService.archiveItems(ids);
-    }
-
-    @POST
-    @Path("/restoreBooks")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void restoreBooks(List<Integer> ids){
-        jdbcService.restoreItems(ids);
     }
 
     public void setJdbcService(JdbcService service) {

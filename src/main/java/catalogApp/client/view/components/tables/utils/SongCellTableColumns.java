@@ -9,7 +9,7 @@ public class SongCellTableColumns {
         return new TextColumn<Song>() {
             @Override
             public String getValue(Song object) {
-                return object.getDuration() > 0 ? String.valueOf(object.getDuration()) : "???";
+                return DurationFormatter.formatDuration(object.getDuration());
             }
 
             @Override
@@ -31,7 +31,8 @@ public class SongCellTableColumns {
             public boolean isSortable() {
                 return sortable;
             }
-
         };
     }
+
+
 }

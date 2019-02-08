@@ -84,12 +84,7 @@ public class BaseObject {
             return false;
         }
         BaseObject that = (BaseObject) o;
-        return id == that.id &&
-                isArchived == that.isArchived &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(type, that.type) &&
-                Objects.equals(comment, that.comment) &&
-                Objects.equals(imagePath, that.imagePath);
+        return Objects.equals(name, that.name) && Objects.equals(type, that.type);
     }
 
     @Override

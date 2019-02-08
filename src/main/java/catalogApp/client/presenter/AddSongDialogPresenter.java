@@ -4,7 +4,6 @@ import catalogApp.client.services.SongWebService;
 import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.Panel;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
@@ -58,10 +57,11 @@ public class AddSongDialogPresenter implements Presenter {
 
         display.getSubmitButton().addClickHandler(event -> {
             List<String> tmp = display.getAddInfo();
-            if (tmp.size() >= 2 && tmp.size() <= 3) {
+            if (tmp.size() == 3) {
                 String name = tmp.get(0);
                 String genre = tmp.get(1);
-                if (name != null && !name.isEmpty() && genre != null && !genre.isEmpty()) {
+                String duration = tmp.get(2);
+                if (name != null && !name.isEmpty() && genre != null && !genre.isEmpty() && duration!=null && !duration.isEmpty()) {
                     songWebService.addSong(tmp, new MethodCallback<Song>() {
                         @Override
                         public void onFailure(Method method, Throwable throwable) {

@@ -23,7 +23,7 @@ public class AddSongDialogView extends Composite implements AddSongDialogPresent
     @UiField(provided = true)
     SuggestBox genreBox;
     @UiField
-    TextBox durationBox;
+    IntegerBox durationBox;
     @UiField
     DialogBox dialogPanel;
 
@@ -34,6 +34,11 @@ public class AddSongDialogView extends Composite implements AddSongDialogPresent
         genreBox = new SuggestBox(wordSuggest);
         initWidget(ourUiBinder.createAndBindUi(this));
         genreBox.setLimit(6);
+        durationBox.setMaxLength(4);
+        durationBox.addKeyPressHandler(event -> {
+            if(!Character.isDigit(event.getCharCode()))
+                ((IntegerBox)event.getSource()).cancelKey();
+        });
     }
 
     @Override

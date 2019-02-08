@@ -77,6 +77,7 @@ public class EditBookDialogView extends Composite implements EditBookDialogPrese
         nameBox.setText(object.getName());
         authorBox.setText(object.getAuthor().getName());
         additionalInfo.setComment(object.getComment());
+        additionalInfo.setImage(object.getImagePath());
     }
 
 

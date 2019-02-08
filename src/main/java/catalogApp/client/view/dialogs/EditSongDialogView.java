@@ -86,6 +86,7 @@ public class EditSongDialogView extends Composite implements EditSongDialogPrese
         genreBox.setText(object.getGenre().getName());
         durationBox.setText(String.valueOf(object.getDuration()));
         additionalInfo.setComment(object.getComment());
+        additionalInfo.setImage(object.getImagePath());
     }
 
     @Override

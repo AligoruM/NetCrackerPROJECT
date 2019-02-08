@@ -73,6 +73,7 @@ public class EditBookDialogPresenter implements Presenter {
 
         fileUploader.addSubmitCompleteHandler(event -> {
             isLoaded = true;
+            display.getAdditionalInfo().setImage(fileUploader.getFileUpload().getFilename());
             Window.alert("loaded");
         });
 

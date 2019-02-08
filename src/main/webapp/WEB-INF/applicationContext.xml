@@ -5,14 +5,18 @@
 						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
     <authentication-manager>
-        <authentication-provider ref="authenticationProvider"/>
+        <authentication-provider user-service-ref="userDetailsService">
+            <password-encoder ref="passwordEncoder"/>
+        </authentication-provider>
     </authentication-manager>
+
 
     <global-method-security secured-annotations="enabled" />
 
-    <b:bean name="authenticationProvider" class="catalogApp.server.security.CustomAuthenticationProvider" >
+    <!--<b:bean name="authenticationProvider" class="catalogApp.server.security.CustomAuthenticationProvider" >
         <b:property name="userDetailsService" ref="userDetailsService"/>
-    </b:bean>
+        <b:property name="passwordEncoder" ref="passwordEncoder"/>
+    </b:bean>-->
 
     <http auto-config='true' use-expressions="true">
         <csrf disabled="true"/>
@@ -38,6 +42,10 @@
     <b:bean id="userWebService" class="catalogApp.server.webServices.UserWebService">
         <b:property name="jdbcService" ref="jdbcServiceImpl"/>
         <b:property name="imageService" ref="imageServiceImpl"/>
+    </b:bean>
+
+    <b:bean id="generalWebService" class="catalogApp.server.webServices.GeneralWebService">
+        <b:property name="jdbcService" ref="jdbcServiceImpl"/>
     </b:bean>
 
     <b:bean id="bookWebService" class="catalogApp.server.webServices.BookWebService">
@@ -78,8 +86,11 @@
 
     <b:bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <b:property name="driverClassName" value="org.sqlite.JDBC" />
-        <b:property name="url" value="jdbc:sqlite:C:\\Users\\gento\\IntelliJ Proj\\NetCrackerPROJECT\\DataBase\\EAV_DB.db"/>
+        <b:property name="url" value="jdbc:sqlite:C:\Users\\Сергей\\IdeaProjects\\NetCrackerPROJECT\\DataBase\\EAV_DB.db"/>
     </b:bean>
 
+    <b:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+        <b:constructor-arg value="10"/>
+    </b:bean>
 
 </b:beans>

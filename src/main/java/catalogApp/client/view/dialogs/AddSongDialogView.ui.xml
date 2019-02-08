@@ -19,7 +19,7 @@
                     <tr>
                         <td>Duration:</td>
                         <td>
-                            <g:TextBox ui:field="durationBox"/>
+                            <g:IntegerBox ui:field="durationBox"/>
                         </td>
                     </tr>
                     <tr>

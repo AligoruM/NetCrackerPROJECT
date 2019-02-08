@@ -9,4 +9,7 @@ public class Attribute {
     public static final int LIKED_BOOK_ID = 10;
     public static final int LIKED_SONG_ID = 11;
     public static final int USER_DESCRIPTION=14;
+    public static final int OBJECT_MARK=16;
+    public static final int OBJECT_MARK_QUANTITY=17;
+    public static final int IS_USER_MARKED_IT=18;
 }

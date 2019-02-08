@@ -9,8 +9,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.HashSet;
+/*
 
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
@@ -18,6 +20,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
 
     private UserDetailsServiceImpl userDetailsService;
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -47,4 +50,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     public void setUserDetailsService(UserDetailsServiceImpl userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
+
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 }
+*/

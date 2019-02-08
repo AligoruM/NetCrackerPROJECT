@@ -1,6 +1,7 @@
 package catalogApp.client.view.mainPage.library.objectViews;
 
 import catalogApp.client.presenter.SongPresenter;
+import catalogApp.client.view.components.tables.utils.DurationFormatter;
 import catalogApp.shared.model.Song;
 import com.google.gwt.user.client.ui.Label;
 
@@ -29,7 +30,7 @@ public class SongView extends ObjectView implements SongPresenter.Display {
     public void setData(Song song) {
         super.setData(song);
         genreLabel.setText(song.getGenre().getName());
-        durationLabel.setText(String.valueOf(song.getDuration()));
+        durationLabel.setText(DurationFormatter.formatDuration(song.getDuration()));
     }
 
 }

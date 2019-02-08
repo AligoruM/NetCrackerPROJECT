@@ -7,12 +7,13 @@ import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
+
+import static catalogApp.client.view.constants.LibraryConstants.TABLE_HEIGHT;
 
 public class SongTabView extends Composite implements SongTabPresenter.Display {
 
@@ -23,8 +24,7 @@ public class SongTabView extends Composite implements SongTabPresenter.Display {
 
     @UiField
     SimplePanel simplePanel;
-    @UiField
-    SimplePager pager;
+
 
     private static SongTabViewUiBinder ourUiBinder = GWT.create(SongTabViewUiBinder.class);
 
@@ -34,8 +34,8 @@ public class SongTabView extends Composite implements SongTabPresenter.Display {
 
     private void initializeTable(ListDataProvider<Song> dataProvider, boolean popupEnabled) {
         table = new SongCellTable(dataProvider, popupEnabled);
-        pager.setDisplay(table);
         simplePanel.add(table);
+        simplePanel.setHeight(TABLE_HEIGHT);
     }
 
     @Override

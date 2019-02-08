@@ -8,7 +8,9 @@ import catalogApp.shared.model.Book;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
@@ -22,6 +24,10 @@ import java.util.Set;
 public class BookTabPresenter implements Presenter {
     public interface Display {
 
+        TextBox getSearchField();
+
+        Button getSearchButton();
+
         AbstractCatalogCellTable getTable();
 
         void setDataProviderAndInitialize(ListDataProvider<Book> dataProvider, boolean popupEnabled);
@@ -30,6 +36,7 @@ public class BookTabPresenter implements Presenter {
 
         Widget asWidget();
     }
+    ArrayList<Book> list;
 
     private final Display display;
     private final HandlerManager eventBus;
@@ -50,6 +57,24 @@ public class BookTabPresenter implements Presenter {
 
     private void bind() {
         display.setDataProviderAndInitialize(bookListDataProvider, true);
+        bookListDataProvider.getList();
+
+        display.getSearchField().addKeyUpHandler(event -> {
+            ArrayList<Book> foundedBooks = new ArrayList<>();
+            String str = display.getSearchField().getText();
+            if(!str.isEmpty()) {
+                list.forEach(item->{
+                    if(item.getName().contains(str) || item.getAuthor().getName().contains(str)){
+                        foundedBooks.add(item);
+                    }
+                });
+                bookListDataProvider.setList(foundedBooks);
+            }else {
+                bookListDataProvider.setList(list);
+            }
+            bookListDataProvider.refresh();
+        });
+
     }
 
     private List<Integer> getSelectedIDs() {
@@ -73,7 +98,7 @@ public class BookTabPresenter implements Presenter {
             @Override
             public void onSuccess(Method method, List<Book> songs) {
                 bookListDataProvider.getList().addAll(songs);
-
+                list = new ArrayList<>(songs);
             }
         });
     }

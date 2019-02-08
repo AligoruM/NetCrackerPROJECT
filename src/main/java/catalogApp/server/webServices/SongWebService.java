@@ -56,11 +56,6 @@ public class SongWebService {
         return jdbcService.getLibSongs();
     }
 
-    @DELETE
-    @Path("/song")
-    public void deleteBooksFromUserLibs(List<Integer> ids){
-        jdbcService.deleteSongsFromLibrary(ids);
-    }
 
     @POST
     @Path("/song")
@@ -69,19 +64,7 @@ public class SongWebService {
         return jdbcService.updateSong(newSong);
     }
 
-    @POST
-    @Path("/archiveSongs")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void archiveSongs(List<Integer> ids){
-        jdbcService.archiveItems(ids);
-    }
 
-    @POST
-    @Path("/restoreSongs")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void restoreSongs(List<Integer> ids){
-        jdbcService.restoreItems(ids);
-    }
 
     public void setJdbcService(JdbcService service) {
         jdbcService = service;

@@ -31,13 +31,13 @@ public interface IJdbcService {
 
     List<Song> addSongsToLibrary(List<Integer> idList);
 
-    void deleteSongsFromLibrary(List<Integer> ids);
-
     Song updateSong(Song newSong);
 
     SimpleUser getSimpleUser();
 
     List<SimpleUser> getAllUsers();
+
+    void deleteObjectFromUserLib(List<Integer> ids, int type);
 
     void updateUser(SimpleUser simpleUser);
 

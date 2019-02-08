@@ -8,11 +8,11 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
+
+import static catalogApp.client.view.constants.LibraryConstants.TABLE_HEIGHT;
 
 public class BookTabView extends Composite implements BookTabPresenter.Display {
 
@@ -24,7 +24,9 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
     @UiField
     SimplePanel simplePanel;
     @UiField
-    SimplePager pager;
+    Button searchButton;
+    @UiField
+    TextBox searchField;
 
     private static BookTabViewUiBinder ourUiBinder = GWT.create(BookTabViewUiBinder.class);
 
@@ -34,8 +36,8 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
 
     private void initializeTable(ListDataProvider<Book> dataProvider, boolean popupEnabled) {
         table = new BookCellTable(dataProvider, popupEnabled);
-        pager.setDisplay(table);
         simplePanel.add(table);
+        simplePanel.setHeight(TABLE_HEIGHT);
     }
 
     @Override
@@ -53,4 +55,11 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
         return ((MultiSelectionModel<Book>) table.getSelectionModel());
     }
 
+    public Button getSearchButton() {
+        return searchButton;
+    }
+
+    public TextBox getSearchField() {
+        return searchField;
+    }
 }

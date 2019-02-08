@@ -98,7 +98,7 @@ public class UserLibPanelPresenter implements Presenter {
             switch (event.getType()) {
                 case BOOK: {
                     for (Object x : event.getSelectedItems()) {
-                        if (!bookListDataProvider.getList().contains(x)) {
+                        if (!bookListDataProvider.getList().contains((Book)x)) {
                             bookListDataProvider.getList().add((Book) x);
                         }
                     }
@@ -119,7 +119,7 @@ public class UserLibPanelPresenter implements Presenter {
             List<Integer> listOfSelectedBooksIds = new ArrayList<>();
             display.getSelectionBooksModel().getSelectedSet().forEach(e -> listOfSelectedBooksIds.add(e.getId()));
             if (!listOfSelectedBooksIds.isEmpty()) {
-                bookWebService.deleteBookFromLib(listOfSelectedBooksIds, new MethodCallback<Void>() {
+                bookWebService.deleteBookFromLib("books", listOfSelectedBooksIds, new MethodCallback<Void>() {
                     @Override
                     public void onFailure(Method method, Throwable exception) {
                         GWT.log("delete book doesnt work", exception);
@@ -139,7 +139,7 @@ public class UserLibPanelPresenter implements Presenter {
             List<Integer> listOfSelectedSongsIds = new ArrayList<>();
             display.getSelectionSongsModel().getSelectedSet().forEach(e -> listOfSelectedSongsIds.add(e.getId()));
             if (!listOfSelectedSongsIds.isEmpty()) {
-                songWebService.deleteSongFromLib(listOfSelectedSongsIds, new MethodCallback<Void>() {
+                songWebService.deleteSongFromLib("songs", listOfSelectedSongsIds, new MethodCallback<Void>() {
                     @Override
                     public void onFailure(Method method, Throwable exception) {
                         GWT.log("delete song doesnt work", exception);
