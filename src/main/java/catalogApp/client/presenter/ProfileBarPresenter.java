@@ -17,11 +17,9 @@ public class ProfileBarPresenter implements Presenter {
     }
 
     private Display display;
-    private HandlerManager eventBus;
 
-    public ProfileBarPresenter(Display display, HandlerManager eventBus) {
+    public ProfileBarPresenter(Display display) {
         this.display = display;
-        this.eventBus = eventBus;
     }
 
     @Override

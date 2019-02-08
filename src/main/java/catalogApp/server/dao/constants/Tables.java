@@ -37,5 +37,5 @@ public class Tables {
     public static final String ROLE_ALIAS = "roles";
 
 
-
+    public static final String IDS_ALIAS = "ids";
 }

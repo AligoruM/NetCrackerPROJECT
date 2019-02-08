@@ -3,7 +3,7 @@ package catalogApp.client.event;
 import com.google.gwt.event.shared.GwtEvent;
 
 public class ShowProfileEvent extends GwtEvent<ShowProfileEventHandler> {
-    public static Type<ShowProfileEventHandler> TYPE = new Type<>();
+    public static final Type<ShowProfileEventHandler> TYPE = new Type<>();
 
 
     @Override

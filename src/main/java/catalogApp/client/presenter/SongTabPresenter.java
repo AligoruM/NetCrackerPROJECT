@@ -100,7 +100,9 @@ public class SongTabPresenter implements Presenter {
         if (selectedSongs.size() == 1) {
             new EditSongDialogPresenter(new EditSongDialogView(), songWebService,
                     songListDataProvider, (Song) selectedSongs.toArray()[0]).go(null);
-        } else Window.alert("Select only one item!");
+        } else {
+            Window.alert("Select only one item!");
+        }
     }
 
     void doArchiveSongs() {
@@ -115,8 +117,9 @@ public class SongTabPresenter implements Presenter {
                 @Override
                 public void onSuccess(Method method, Void response) {
                     songListDataProvider.getList().forEach(item -> {
-                        if (selectedIds.contains(item.getId()))
+                        if (selectedIds.contains(item.getId())) {
                             item.setArchived(true);
+                        }
                         display.getSelectionModel().clear();
                     });
                 }
@@ -136,8 +139,9 @@ public class SongTabPresenter implements Presenter {
                 @Override
                 public void onSuccess(Method method, Void response) {
                     songListDataProvider.getList().forEach(item -> {
-                        if (selectedIds.contains(item.getId()))
+                        if (selectedIds.contains(item.getId())) {
                             item.setArchived(false);
+                        }
                         display.getSelectionModel().clear();
                     });
                 }

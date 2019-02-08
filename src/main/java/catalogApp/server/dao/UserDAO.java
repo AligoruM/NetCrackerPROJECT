@@ -50,9 +50,13 @@ public class UserDAO {
                 if (simpleUser != null) {
                     simpleUser.setRoles(getUserRoles(id));
                     setAdditionDataInSimpleUser(simpleUser);
-                } else return null;
+                } else {
+                    return null;
+                }
                 return simpleUser;
-            }else throw new IncorrectResultSizeDataAccessException(1);
+            }else {
+                throw new IncorrectResultSizeDataAccessException(1);
+            }
         } catch (IncorrectResultSizeDataAccessException ex) {
             logger.error("Founded more, than one or not found user with name " + name);
             return null;

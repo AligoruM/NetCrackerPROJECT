@@ -32,7 +32,7 @@ public class MainPagePresenter implements Presenter {
 
         this.display = display;
 
-        profileBarPresenter = new ProfileBarPresenter(new ProfileBarView(), eventBus);
+        profileBarPresenter = new ProfileBarPresenter(new ProfileBarView());
 
         profileBarPresenter.setData(CatalogController.getUser());
         profileBarPresenter.go(display.getProfilePanel());

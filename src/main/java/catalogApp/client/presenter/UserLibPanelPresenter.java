@@ -98,15 +98,17 @@ public class UserLibPanelPresenter implements Presenter {
             switch (event.getType()) {
                 case BOOK: {
                     for (Object x : event.getSelectedItems()) {
-                        if (!bookListDataProvider.getList().contains(x))
+                        if (!bookListDataProvider.getList().contains(x)) {
                             bookListDataProvider.getList().add((Book) x);
+                        }
                     }
                     break;
                 }
                 case SONG: {
                     for (Object x : event.getSelectedItems()) {
-                        if (!songListDataProvider.getList().contains(x))
+                        if (!songListDataProvider.getList().contains(x)) {
                             songListDataProvider.getList().add((Song) x);
+                        }
                     }
                     break;
                 }
@@ -158,15 +160,17 @@ public class UserLibPanelPresenter implements Presenter {
 
         display.getBookTable().setNameColumnFieldUpdater((index, object, value) -> {
             bookPresenter.changeBook(object);
-            if(display.getObjectContainer().getWidget()==null || !(display.getObjectContainer().getWidget() instanceof BookView))
+            if(!(display.getObjectContainer().getWidget() instanceof BookView)) {
                 bookPresenter.go(display.getObjectContainer());
+            }
         });
     }
     private void setSongFieldHandler(){
         display.getSongTable().setNameColumnFieldUpdater((index, object, value) -> {
             songPresenter.changeSong(object);
-            if(display.getObjectContainer().getWidget()==null || !(display.getObjectContainer().getWidget() instanceof SongView))
+            if(!(display.getObjectContainer().getWidget() instanceof SongView)) {
                 songPresenter.go(display.getObjectContainer());
+            }
         });
     }
 }

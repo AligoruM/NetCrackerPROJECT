@@ -82,7 +82,7 @@ public class EditBookDialogPresenter implements Presenter {
             String newName = display.getNewName();
             String newComment = display.getAdditionalInfo().getComment();
             String imagePath = display.getAdditionalInfo().getFileUploader().getFileUpload().getFilename();
-            imagePath = imagePath.substring(imagePath.lastIndexOf("\\") + 1);
+            imagePath = imagePath.substring(imagePath.lastIndexOf('\\') + 1);
             Book newBook = new Book();
 
             newBook.setId(book.getId());

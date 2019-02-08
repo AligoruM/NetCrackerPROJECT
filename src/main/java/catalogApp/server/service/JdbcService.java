@@ -129,10 +129,11 @@ public class JdbcService implements IJdbcService {
     public SimpleUser getSimpleUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         SimpleUser user = userDAO.getSimpleUser(authentication.getName());
-        if (user != null)
+        if (user != null) {
             return user;
-        else
+        } else {
             throw new UsernameNotFoundException("User not found");
+        }
     }
 
     @Override

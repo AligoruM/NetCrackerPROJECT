@@ -19,11 +19,9 @@ public class UserPanelPresenter implements Presenter {
 
     private ListDataProvider<SimpleUser> dataProvider = new ListDataProvider<>();
 
-    private UserWebService userWebService;
     private Display display;
 
     public UserPanelPresenter(Display display, UserWebService userWebService) {
-        this.userWebService = userWebService;
         this.display = display;
         userWebService.getAllUsers(new MethodCallback<List<SimpleUser>>() {
             @Override

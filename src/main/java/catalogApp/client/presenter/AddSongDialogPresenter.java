@@ -27,13 +27,11 @@ public class AddSongDialogPresenter implements Presenter {
         void setSuggestions(List<String> suggestions);
     }
 
-    private final HandlerManager eventBus;
     private final Display display;
     private final SongWebService songWebService;
     private final SongTabPresenter songTabPresenter;
 
-    public AddSongDialogPresenter(Display display, SongWebService songWebService, SongTabPresenter songTabPresenter, HandlerManager eventBus) {
-        this.eventBus = eventBus;
+    public AddSongDialogPresenter(Display display, SongWebService songWebService, SongTabPresenter songTabPresenter) {
         this.display = display;
         this.songWebService = songWebService;
         this.songTabPresenter = songTabPresenter;
@@ -63,7 +61,7 @@ public class AddSongDialogPresenter implements Presenter {
             if (tmp.size() >= 2 && tmp.size() <= 3) {
                 String name = tmp.get(0);
                 String genre = tmp.get(1);
-                if (name != null && !name.isEmpty() && genre != null && !genre.isEmpty())
+                if (name != null && !name.isEmpty() && genre != null && !genre.isEmpty()) {
                     songWebService.addSong(tmp, new MethodCallback<Song>() {
                         @Override
                         public void onFailure(Method method, Throwable throwable) {
@@ -76,6 +74,7 @@ public class AddSongDialogPresenter implements Presenter {
                             display.hideDialog();
                         }
                     });
+                }
             }
         });
 

@@ -103,7 +103,9 @@ public class BookTabPresenter implements Presenter {
         if (selectedBooks.size() == 1) {
             new EditBookDialogPresenter(new EditBookDialogView(), bookWebService,
                     bookListDataProvider, (Book) selectedBooks.toArray()[0]).go(null);
-        } else Window.alert("Select only one item!");
+        } else {
+            Window.alert("Select only one item!");
+        }
     }
 
     void doArchiveBooks() {
@@ -118,8 +120,9 @@ public class BookTabPresenter implements Presenter {
                 @Override
                 public void onSuccess(Method method, Void response) {
                     bookListDataProvider.getList().forEach(item -> {
-                        if (selectedIds.contains(item.getId()))
+                        if (selectedIds.contains(item.getId())) {
                             item.setArchived(true);
+                        }
                         display.getSelectionModel().clear();
                     });
                 }
@@ -139,8 +142,9 @@ public class BookTabPresenter implements Presenter {
                 @Override
                 public void onSuccess(Method method, Void response) {
                     bookListDataProvider.getList().forEach(item -> {
-                        if (selectedIds.contains(item.getId()))
+                        if (selectedIds.contains(item.getId())) {
                             item.setArchived(false);
+                        }
                         display.getSelectionModel().clear();
                     });
                 }

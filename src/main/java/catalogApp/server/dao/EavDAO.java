@@ -76,15 +76,15 @@ public class EavDAO implements IJdbcDAO {
     public List<Book> getUsersBooks(int id) {
         List<Integer> ids = getObjectsIdsByUserIdAndAttribute(id, Attribute.LIKED_BOOK_ID);
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("ids", ids);
-        return namedParameterJdbcTemplate.query(SQLQuery.BOOKS_BY_IDS("ids"), params, new BookMapper());
+        params.addValue(IDS_ALIAS, ids);
+        return namedParameterJdbcTemplate.query(SQLQuery.BOOKS_BY_IDS(IDS_ALIAS), params, new BookMapper());
     }
 
     @Override
     public List<Book> getBooksByIds(List<Integer> ids) {
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("ids", ids);
-        return namedParameterJdbcTemplate.query(SQLQuery.BOOKS_BY_IDS("ids"), params, new BookMapper());
+        params.addValue(IDS_ALIAS, ids);
+        return namedParameterJdbcTemplate.query(SQLQuery.BOOKS_BY_IDS(IDS_ALIAS), params, new BookMapper());
     }
 
     @Override
@@ -123,8 +123,9 @@ public class EavDAO implements IJdbcDAO {
                 jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE("-1", songId, Attribute.SONG_DURATION));
                 logger.info("Incoming duration is empty or isn't positive.");
             }
-            else
+            else {
                 jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(duration, songId, Attribute.SONG_DURATION));
+            }
             return jdbcTemplate.queryForObject(SQLQuery.SONG_BY_ID(songId), new SongMapper());
         } catch (DataAccessException ex) {
             logger.error("Problem with access to DataBase", ex);
@@ -136,15 +137,15 @@ public class EavDAO implements IJdbcDAO {
     public List<Song> getUsersSongs(int id) {
         List<Integer> ids = getObjectsIdsByUserIdAndAttribute(id, Attribute.LIKED_SONG_ID);
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("ids", ids);
-        return namedParameterJdbcTemplate.query(SQLQuery.SONGS_BY_IDS("ids"), params, new SongMapper());
+        params.addValue(IDS_ALIAS, ids);
+        return namedParameterJdbcTemplate.query(SQLQuery.SONGS_BY_IDS(IDS_ALIAS), params, new SongMapper());
     }
 
     @Override
     public List<Song> getSongsByIds(List<Integer> ids) {
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("ids", ids);
-        return namedParameterJdbcTemplate.query(SQLQuery.SONGS_BY_IDS("ids"), params, new SongMapper());
+        params.addValue(IDS_ALIAS, ids);
+        return namedParameterJdbcTemplate.query(SQLQuery.SONGS_BY_IDS(IDS_ALIAS), params, new SongMapper());
     }
 
     @Override
@@ -208,9 +209,9 @@ public class EavDAO implements IJdbcDAO {
     @Override
     public void changeStateItems(List<Integer> ids, boolean state) {
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("ids", ids);
+        params.addValue(IDS_ALIAS, ids);
         int iState = state ? 1 : 0;
-        namedParameterJdbcTemplate.update(SQLQuery.UPDATE_OBJECTS_STATE(iState, "ids"), params);
+        namedParameterJdbcTemplate.update(SQLQuery.UPDATE_OBJECTS_STATE(iState, IDS_ALIAS), params);
     }
 }
 

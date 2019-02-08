@@ -48,10 +48,12 @@ public class ObjectView extends Composite {
 
 
     private void setImageSize(String height, String width) {
-        if (height != null)
+        if (height != null) {
             objectImage.setHeight(height);
-        if (width != null)
+        }
+        if (width != null) {
             objectImage.setWidth(width);
+        }
     }
 
     void setData(BaseObject object) {

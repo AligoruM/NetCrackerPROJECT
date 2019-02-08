@@ -6,7 +6,7 @@ import com.google.gwt.event.shared.GwtEvent;
 import java.util.List;
 
 public class UpdateUserLibraryEvent extends GwtEvent<UpdateUserLibraryEventHandler> {
-    public static Type<UpdateUserLibraryEventHandler> TYPE = new Type<>();
+    public static final Type<UpdateUserLibraryEventHandler> TYPE = new Type<>();
 
     private ITEM_TYPE type;
     private List selectedItems;

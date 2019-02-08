@@ -1,6 +1,8 @@
 package catalogApp.server.security;
 
 import catalogApp.server.dao.UserDAO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,6 +19,7 @@ import java.util.Set;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private static UserDAO userDAO;
+    private final Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 
     public UserDetailsServiceImpl() {
     }
@@ -36,6 +39,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             user.setRoles(authorities);
             return user;
         } catch (EmptyResultDataAccessException ex) {
+            logger.info("User not found: " + username, ex);
             throw new UsernameNotFoundException("User not found");
         }
     }

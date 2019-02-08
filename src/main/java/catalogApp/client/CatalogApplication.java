@@ -16,6 +16,6 @@ public class CatalogApplication implements EntryPoint {
         SongWebService songWebService = GWT.create(SongWebService.class);
         BookWebService bookWebService = GWT.create(BookWebService.class);
         UserWebService userWebService = GWT.create(UserWebService.class);
-        CatalogController contr = new CatalogController(eventBus, bookWebService, songWebService, userWebService);
+        new CatalogController(eventBus, bookWebService, songWebService, userWebService);
     }
 }

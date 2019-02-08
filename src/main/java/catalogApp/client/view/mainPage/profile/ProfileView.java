@@ -93,24 +93,27 @@ public class ProfileView extends Composite implements ProfilePresenter.Display {
     }
 
     private void setDescription(String text) {
-        if(text!=null)
+        if(text!=null) {
             describeBox.setText(text);
-        else
+        } else {
             describeBox.setText("");
+        }
     }
 
     private void setUsername(String username) {
-        if(username!=null &&!username.isEmpty())
+        if(username!=null &&!username.isEmpty()) {
             usernameBox.setText(username);
-        else
+        } else {
             usernameBox.setText(NA);
+        }
     }
 
     private void setRole(String role) {
-        if(role!=null &&!role.isEmpty())
+        if(role!=null &&!role.isEmpty()) {
             roleBox.setText(role);
-        else
+        } else {
             roleBox.setText(NA);
+        }
     }
 
     private void setAvatarUrl(String url) {

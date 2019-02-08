@@ -53,9 +53,11 @@ public class UserWebService {
     @Consumes({MediaType.MULTIPART_FORM_DATA})
     public Integer uploadAvatar(@FormDataParam(IMAGE_FIELD) InputStream fileInputStream,
                                 @FormDataParam(IMAGE_FIELD) FormDataContentDisposition fileMetaData) {
-        if(imageService.saveImage(fileInputStream, fileMetaData.getFileName()))
+        if(imageService.saveImage(fileInputStream, fileMetaData.getFileName())) {
             return 200;
-        else return 500;
+        } else {
+            return 500;
+        }
     }
 
     @POST
@@ -63,9 +65,11 @@ public class UserWebService {
     @Consumes({MediaType.MULTIPART_FORM_DATA})
     public Integer uploadImage(@FormDataParam(IMAGE_FIELD) InputStream fileInputStream,
                                @FormDataParam(IMAGE_FIELD) FormDataContentDisposition fileMetaData) {
-        if (imageService.saveImage(fileInputStream, fileMetaData.getFileName()))
+        if (imageService.saveImage(fileInputStream, fileMetaData.getFileName())) {
             return 200;
-        else return 500;
+        } else {
+            return 500;
+        }
     }
 
 

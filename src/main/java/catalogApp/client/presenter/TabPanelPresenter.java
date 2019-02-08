@@ -43,13 +43,11 @@ public class TabPanelPresenter implements Presenter {
     private BookTabPresenter bookTabPresenter;
     private SongTabPresenter songTabPresenter;
 
-    private HandlerManager eventBus;
     private BookWebService bookWebService;
     private SongWebService songWebService;
 
     public TabPanelPresenter(Display view, HandlerManager eventBus, BookWebService bookWebService, SongWebService songWebService) {
         this.display = view;
-        this.eventBus = eventBus;
         this.bookWebService = bookWebService;
         this.songWebService = songWebService;
 
@@ -94,10 +92,10 @@ public class TabPanelPresenter implements Presenter {
             int x = display.getTabPanel().getTabBar().getSelectedTab();
             switch (x) {
                 case 0:
-                    new AddBookDialogPresenter(new AddBookDialogView(), bookWebService, bookTabPresenter, eventBus).go(null);
+                    new AddBookDialogPresenter(new AddBookDialogView(), bookWebService, bookTabPresenter).go(null);
                     break;
                 case 1:
-                    new AddSongDialogPresenter(new AddSongDialogView(), songWebService, songTabPresenter, eventBus).go(null);
+                    new AddSongDialogPresenter(new AddSongDialogView(), songWebService, songTabPresenter).go(null);
                     break;
                 default:
                     break;

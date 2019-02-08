@@ -32,8 +32,9 @@ public class MainPageView extends Composite implements MainPagePresenter.Display
 
     public MainPageView() {
         initWidget(ourUiBinder.createAndBindUi(this));
-        if(!CatalogController.isAdmin())
+        if(!CatalogController.isAdmin()) {
             userButton.getElement().getStyle().setVisibility(Style.Visibility.HIDDEN);
+        }
     }
 
     @Override

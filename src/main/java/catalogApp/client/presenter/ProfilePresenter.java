@@ -66,7 +66,7 @@ public class ProfilePresenter implements Presenter {
             updatedSimpleUser.setId(simpleUser.getId());
 
             String imagePath = display.getFileUploader().getFileUpload().getFilename();
-            imagePath = imagePath.substring(imagePath.lastIndexOf("\\") + 1);
+            imagePath = imagePath.substring(imagePath.lastIndexOf('\\') + 1);
 
             String newDescription = display.getDescription().trim();
             if (!newDescription.equals(simpleUser.getDescription())) {

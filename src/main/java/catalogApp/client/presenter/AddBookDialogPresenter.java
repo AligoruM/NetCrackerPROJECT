@@ -28,14 +28,12 @@ public class AddBookDialogPresenter implements Presenter {
         void setSuggestions(List<String> suggestions);
     }
 
-    private final HandlerManager eventBus;
     private final Display display;
     private final BookWebService bookService;
     private final BookTabPresenter bookTabPresenter;
 
-    public AddBookDialogPresenter(Display view, BookWebService bookService, BookTabPresenter bookTabPresenter, HandlerManager eventBus) {
+    public AddBookDialogPresenter(Display view, BookWebService bookService, BookTabPresenter bookTabPresenter) {
         this.bookService = bookService;
-        this.eventBus = eventBus;
         this.display = view;
         this.bookTabPresenter = bookTabPresenter;
     }
@@ -64,7 +62,7 @@ public class AddBookDialogPresenter implements Presenter {
             if (tmp.size() == 2) {
                 String name = tmp.get(0);
                 String author = tmp.get(1);
-                if (name != null && !name.isEmpty() && author != null && !author.isEmpty())
+                if (name != null && !name.isEmpty() && author != null && !author.isEmpty()) {
                     bookService.addBook(tmp, new MethodCallback<Book>() {
                         @Override
                         public void onFailure(Method method, Throwable throwable) {
@@ -77,7 +75,9 @@ public class AddBookDialogPresenter implements Presenter {
                             display.hideDialog();
                         }
                     });
-                else Window.alert("Fields cannot be empty!");
+                } else {
+                    Window.alert("Fields cannot be empty!");
+                }
             }
         });
 

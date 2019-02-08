@@ -77,8 +77,12 @@ public class BaseObject {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         BaseObject that = (BaseObject) o;
         return id == that.id &&
                 isArchived == that.isArchived &&

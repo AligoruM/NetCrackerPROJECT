@@ -18,8 +18,6 @@ public class UserPanelView extends Composite implements UserPanelPresenter.Displ
     @UiField
     SimplePanel simplePanel;
 
-    private UserCellTable userTable;
-
     private static UserPanelViewUiBinder ourUiBinder = GWT.create(UserPanelViewUiBinder.class);
 
     public UserPanelView() {
@@ -28,7 +26,7 @@ public class UserPanelView extends Composite implements UserPanelPresenter.Displ
 
     @Override
     public void setDataProvider(ListDataProvider<SimpleUser> dataProvider) {
-        userTable=new UserCellTable(dataProvider);
+        UserCellTable userTable = new UserCellTable(dataProvider);
         simplePanel.add(userTable);
     }
 }

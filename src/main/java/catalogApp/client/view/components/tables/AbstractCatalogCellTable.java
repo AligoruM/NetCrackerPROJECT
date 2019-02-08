@@ -66,7 +66,8 @@ public abstract class AbstractCatalogCellTable<T extends BaseObject> extends Cel
         addSorter(nameColumn, Comparator.comparing(BaseObject::getName));
     }
 
-    void addSorter(Column<T, String> column, Comparator<T> comparator){
+
+    final void addSorter(Column<T, String> column, Comparator<T> comparator){
         ColumnSortEvent.ListHandler<T> sorter = new ColumnSortEvent.ListHandler<>(dataProvider.getList());
         sorter.setComparator(column, comparator);
         addColumnSortHandler(sorter);

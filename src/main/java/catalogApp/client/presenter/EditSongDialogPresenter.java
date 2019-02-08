@@ -84,7 +84,7 @@ public class EditSongDialogPresenter implements Presenter {
             String newComment = display.getAdditionalInfo().getComment();
             String newName = display.getNewName();
             String imagePath = display.getAdditionalInfo().getFileUploader().getFileUpload().getFilename();
-            imagePath = imagePath.substring(imagePath.lastIndexOf("\\") + 1);
+            imagePath = imagePath.substring(imagePath.lastIndexOf('\\') + 1);
             int newDuration = display.getNewDuration();
 
             Song newSong = new Song();

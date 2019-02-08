@@ -28,8 +28,9 @@ public class AdditionalInfo extends Composite {
     }
 
     public void setComment(String comment){
-        if(comment!=null)
+        if(comment!=null) {
             commentArea.setText(comment);
+        }
     }
 
     public Button getUploadButton(){
