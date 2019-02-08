@@ -6,6 +6,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -36,9 +37,6 @@ public class CustomAuthenticationProviderTest {
         when(userDetails.isEnabled()).thenReturn(true);
 
         when(userDetailsService.loadUserByUsername("admin")).thenReturn(userDetails);
-        //authenticationProvider.authenticate(authentication);
-
-        //verify(authenticationProvider).authenticate(authentication);
 
         assertTrue(authenticationProvider.authenticate(authentication).isAuthenticated());
 
@@ -74,6 +72,24 @@ public class CustomAuthenticationProviderTest {
         when(userDetails.isEnabled()).thenReturn(true);
 
         when(userDetailsService.loadUserByUsername("dfgdfgdf")).thenThrow(new UsernameNotFoundException("User not found"));
+
+        authenticationProvider.authenticate(authentication);
+
+    }
+
+    @Test(expected = DisabledException.class)
+    public void testNegativeUserBanned(){
+        CustomAuthenticationProvider authenticationProvider = new CustomAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(userDetailsService);
+
+        when(authentication.getName()).thenReturn("admin");
+        when(authentication.getCredentials()).thenReturn("admin");
+
+        when(userDetails.getUsername()).thenReturn("admin");
+        when(userDetails.getPassword()).thenReturn("admin");
+        when(userDetails.isEnabled()).thenReturn(false);
+
+        when(userDetailsService.loadUserByUsername("admin")).thenReturn(userDetails);
 
         authenticationProvider.authenticate(authentication);
 
