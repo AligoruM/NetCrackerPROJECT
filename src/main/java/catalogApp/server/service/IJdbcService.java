@@ -1,5 +1,6 @@
 package catalogApp.server.service;
 
+import catalogApp.shared.exception.ItemAlreadyExistException;
 import catalogApp.shared.model.Book;
 import catalogApp.shared.model.SimpleUser;
 import catalogApp.shared.model.Song;
@@ -11,7 +12,7 @@ public interface IJdbcService {
 
     List<String> getAllAuthorsNames();
 
-    Book addBook(String name, String authorName);
+    Book addBook(String name, String authorName) throws ItemAlreadyExistException;
 
     List<Book> getLibBooks();
 
@@ -25,7 +26,7 @@ public interface IJdbcService {
 
     List<String> getAllGenresNames();
 
-    Song addSong(String name, String genreName, String duration);
+    Song addSong(String name, String genreName, String duration) throws ItemAlreadyExistException;
 
     List<Song> getLibSongs();
 
@@ -44,4 +45,6 @@ public interface IJdbcService {
     void archiveItems(List<Integer> ids);
 
     void restoreItems(List<Integer> ids);
+
+    boolean changePassword(String password);
 }

@@ -5,11 +5,9 @@ import catalogApp.client.services.UserWebService;
 import catalogApp.client.view.components.FileUploader;
 import catalogApp.shared.model.SimpleUser;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.FormPanel;
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 
@@ -30,6 +28,10 @@ public class ProfilePresenter implements Presenter {
         Widget asWidget();
 
         String getDescription();
+
+        PasswordTextBox getPasswordBox();
+
+        Button getChangePassButton();
 
         void updateData(SimpleUser simpleUser);
     }
@@ -58,6 +60,26 @@ public class ProfilePresenter implements Presenter {
         display.updateData(simpleUser);
 
         initUploader();
+
+        display.getChangePassButton().addClickHandler(event -> {
+            String str = display.getPasswordBox().getText();
+            userWebService.changePassword(str, new MethodCallback<Boolean>() {
+                @Override
+                public void onFailure(Method method, Throwable exception) {
+
+                }
+
+                @Override
+                public void onSuccess(Method method, Boolean response) {
+                    if(response){
+                        Window.alert("changed");
+                        Cookies.removeCookie("JSESSIONID");
+                        Window.Location.replace(GWT.getHostPageBaseURL() + "login");
+                    }else
+                        Window.alert("Something went wrong");
+                }
+            });
+        });
 
 
         display.getSubmitButton().addClickHandler(event -> {
@@ -122,8 +144,6 @@ public class ProfilePresenter implements Presenter {
         fileUploader.addSubmitCompleteHandler(event -> {
             Window.alert("Successfully loaded");
             isLoaded=true;
-            GWT.log(event.getResults());
-            GWT.log(fileUploader.getFileUpload().getFilename());
         });
 
         display.getUploadButton().addClickHandler(event -> {

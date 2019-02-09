@@ -2,6 +2,7 @@ package catalogApp.client.view.dialogs;
 
 import catalogApp.client.presenter.EditSongDialogPresenter;
 import catalogApp.client.view.components.AdditionalInfo;
+import catalogApp.client.view.components.tables.utils.DurationFormatter;
 import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -30,7 +31,7 @@ public class EditSongDialogView extends Composite implements EditSongDialogPrese
 
     private TextBox genreBox = new TextBox();
 
-    private TextBox durationBox = new TextBox();
+    private IntegerBox durationBox = new IntegerBox();
 
     private TextBox idBox = new TextBox();
 
@@ -47,7 +48,6 @@ public class EditSongDialogView extends Composite implements EditSongDialogPrese
         flexTable.setWidget(1, 0, new Label(NAME_COL_LABEL));
         flexTable.setWidget(1, 1, nameBox);
 
-        genreBox.setEnabled(false);
         flexTable.setWidget(2, 0, new Label(GENRE_COL_LABEL));
         flexTable.setWidget(2, 1, genreBox);
         flexTable.setWidget(3, 0, new Label(DURATION_COL_LABEL));
@@ -87,11 +87,18 @@ public class EditSongDialogView extends Composite implements EditSongDialogPrese
         durationBox.setText(String.valueOf(object.getDuration()));
         additionalInfo.setComment(object.getComment());
         additionalInfo.setImage(object.getImagePath());
+        durationBox.setMaxLength(4);
+        durationBox.addKeyPressHandler(DurationFormatter.durationBoxKeyPressHandler());
     }
 
     @Override
     public String getNewName() {
         return nameBox.getText().trim();
+    }
+
+    @Override
+    public String getNewGenre() {
+        return genreBox.getText().trim();
     }
 
     @Override

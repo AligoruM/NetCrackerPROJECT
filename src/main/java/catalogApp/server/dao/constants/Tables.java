@@ -38,4 +38,5 @@ public class Tables {
 
 
     public static final String IDS_ALIAS = "ids";
+    public static final String COUNT_ALIAS = "count";
 }

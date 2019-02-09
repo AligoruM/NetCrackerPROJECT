@@ -1,6 +1,5 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-             xmlns:g='urn:import:com.google.gwt.user.client.ui'
-             xmlns:library="urn:import:catalogApp.client.view.mainPage.library">
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <g:HTMLPanel ui:field="mainPanel">
         <g:HorizontalPanel>
             <g:HTMLPanel>
@@ -9,13 +8,13 @@
                     <g:HorizontalPanel>
                         <g:DecoratorPanel>
                             <g:VerticalPanel>
-                                <library:tabs.BookTabView ui:field="bookView"/>
+                                <g:SimplePanel ui:field="bookPanel"/>
                                 <g:Button ui:field="deleteBooksButton" text="Delete books from lib"/>
                             </g:VerticalPanel>
                         </g:DecoratorPanel>
                         <g:DecoratorPanel>
-                            <g:VerticalPanel>
-                                <library:tabs.SongTabView ui:field="songView"/>
+                            <g:VerticalPanel >
+                                <g:SimplePanel ui:field="songPanel"/>
                                 <g:Button ui:field="deleteSongsButton" text="Delete songs from lib"/>
                             </g:VerticalPanel>
                         </g:DecoratorPanel>

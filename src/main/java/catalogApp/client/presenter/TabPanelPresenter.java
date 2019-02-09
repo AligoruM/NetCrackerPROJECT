@@ -60,13 +60,13 @@ public class TabPanelPresenter implements Presenter {
             switch (event.getSelectedItem()) {
                 case 0:
                     if (!booksIsLoaded) {
-                        bookTabPresenter.loadData();
+                        bookTabPresenter.loadData(true);
                         booksIsLoaded = true;
                     }
                     break;
                 case 1:
                     if (!songsIsLoaded) {
-                        songTabPresenter.loadData();
+                        songTabPresenter.loadData(true);
                         songsIsLoaded = true;
                     }
                     break;

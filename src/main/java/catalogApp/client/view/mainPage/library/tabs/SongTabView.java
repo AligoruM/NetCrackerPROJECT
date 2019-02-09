@@ -10,8 +10,11 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
+
+import java.util.List;
 
 import static catalogApp.client.view.constants.LibraryConstants.TABLE_HEIGHT;
 
@@ -24,6 +27,8 @@ public class SongTabView extends Composite implements SongTabPresenter.Display {
 
     @UiField
     SimplePanel simplePanel;
+    @UiField
+    TextBox searchField;
 
 
     private static SongTabViewUiBinder ourUiBinder = GWT.create(SongTabViewUiBinder.class);
@@ -32,8 +37,8 @@ public class SongTabView extends Composite implements SongTabPresenter.Display {
         initWidget(ourUiBinder.createAndBindUi(this));
     }
 
-    private void initializeTable(ListDataProvider<Song> dataProvider, boolean popupEnabled) {
-        table = new SongCellTable(dataProvider, popupEnabled);
+    private void initializeTable(List<Song> list) {
+        table = new SongCellTable(list);
         simplePanel.add(table);
         simplePanel.setHeight(TABLE_HEIGHT);
     }
@@ -43,11 +48,14 @@ public class SongTabView extends Composite implements SongTabPresenter.Display {
         return table;
     }
 
-
-
     @Override
-    public void setDataProviderAndInitialize(ListDataProvider<Song> dataProvider, boolean popupEnabled) {
-        initializeTable(dataProvider, popupEnabled);
+    public TextBox getSearchField() {
+        return searchField;
+    }
+
+
+    public void setListAndInitialize(List<Song> list) {
+        initializeTable(list);
     }
 
     public MultiSelectionModel<Song> getSelectionModel(){

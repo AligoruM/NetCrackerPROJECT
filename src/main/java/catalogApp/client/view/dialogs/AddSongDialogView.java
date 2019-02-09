@@ -1,6 +1,7 @@
 package catalogApp.client.view.dialogs;
 
 import catalogApp.client.presenter.AddSongDialogPresenter;
+import catalogApp.client.view.components.tables.utils.DurationFormatter;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -35,10 +36,7 @@ public class AddSongDialogView extends Composite implements AddSongDialogPresent
         initWidget(ourUiBinder.createAndBindUi(this));
         genreBox.setLimit(6);
         durationBox.setMaxLength(4);
-        durationBox.addKeyPressHandler(event -> {
-            if(!Character.isDigit(event.getCharCode()))
-                ((IntegerBox)event.getSource()).cancelKey();
-        });
+        durationBox.addKeyPressHandler(DurationFormatter.durationBoxKeyPressHandler());
     }
 
     @Override

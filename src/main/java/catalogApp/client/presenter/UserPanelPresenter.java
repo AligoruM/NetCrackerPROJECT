@@ -1,6 +1,7 @@
 package catalogApp.client.presenter;
 
 import catalogApp.client.services.UserWebService;
+import catalogApp.client.view.components.tables.AbstractCatalogCellTable;
 import catalogApp.shared.model.SimpleUser;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Panel;
@@ -13,7 +14,8 @@ import java.util.List;
 
 public class UserPanelPresenter implements Presenter {
     public interface Display{
-        void setDataProvider(ListDataProvider<SimpleUser> dataProvider);
+        AbstractCatalogCellTable<SimpleUser> getTable();
+        void setList(List<SimpleUser> dataProvider);
         Widget asWidget();
     }
 
@@ -23,6 +25,8 @@ public class UserPanelPresenter implements Presenter {
 
     public UserPanelPresenter(Display display, UserWebService userWebService) {
         this.display = display;
+        display.setList(dataProvider.getList());
+        dataProvider.addDataDisplay(display.getTable());
         userWebService.getAllUsers(new MethodCallback<List<SimpleUser>>() {
             @Override
             public void onFailure(Method method, Throwable exception) {
@@ -32,7 +36,6 @@ public class UserPanelPresenter implements Presenter {
             @Override
             public void onSuccess(Method method, List<SimpleUser> response) {
                 dataProvider.getList().addAll(response);
-                display.setDataProvider(dataProvider);
             }
         });
     }

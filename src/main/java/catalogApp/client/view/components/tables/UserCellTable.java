@@ -6,13 +6,14 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.view.client.ListDataProvider;
 
 import java.util.Comparator;
+import java.util.List;
 
 import static catalogApp.client.view.constants.UserConstants.AVATAR_LABEL;
 import static catalogApp.client.view.constants.UserConstants.ROLES_LABEL;
 
 public class UserCellTable extends AbstractCatalogCellTable <SimpleUser>{
-    public UserCellTable(ListDataProvider<SimpleUser> dataProvider) {
-        super(dataProvider, true);
+    public UserCellTable(List<SimpleUser> list) {
+        super(list);
 
         Column<SimpleUser, String> roleColumn = UserCellTableColumns.getUserRoleColumn(true);
         Column<SimpleUser, String> avatarUrlColumn = UserCellTableColumns.getUserAvatarUrlColumn(false);

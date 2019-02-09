@@ -47,20 +47,6 @@ public class UserWebService {
         return jdbcService.getAllUsers();
     }
 
-
-    @POST
-    @Path("/avatar")
-    @Consumes({MediaType.MULTIPART_FORM_DATA})
-    @Produces(MediaType.TEXT_HTML)
-    public String uploadAvatar(@FormDataParam(IMAGE_FIELD) InputStream fileInputStream,
-                                @FormDataParam(IMAGE_FIELD) FormDataContentDisposition fileMetaData) {
-        if(imageService.saveImage(fileInputStream, fileMetaData.getFileName())) {
-            return "200";
-        } else {
-            return "500";
-        }
-    }
-
     @POST
     @Path("/image")
     @Consumes({MediaType.MULTIPART_FORM_DATA})
@@ -72,6 +58,12 @@ public class UserWebService {
         } else {
             return "500";
         }
+    }
+
+    @POST
+    @Path("/updPass")
+    public Boolean changePassword(String password){
+        return jdbcService.changePassword(password);
     }
 
 

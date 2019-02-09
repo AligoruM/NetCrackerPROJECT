@@ -6,14 +6,15 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.view.client.ListDataProvider;
 
 import java.util.Comparator;
+import java.util.List;
 
 import static catalogApp.client.view.constants.LibraryConstants.DURATION_COL_LABEL;
 import static catalogApp.client.view.constants.LibraryConstants.GENRE_COL_LABEL;
 
 public class SongCellTable extends AbstractCatalogCellTable<Song>{
 
-    public SongCellTable(ListDataProvider<Song> dataProvider, boolean popupEnabled) {
-        super(dataProvider, popupEnabled);
+    public SongCellTable(List<Song> list) {
+        super(list);
 
         Column<Song, String> genreColumn = SongCellTableColumns.getSongGenreColumn(true);
         Column<Song, String> durationColumn = SongCellTableColumns.getSongDurationColumn(true);

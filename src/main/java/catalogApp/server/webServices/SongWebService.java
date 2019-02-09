@@ -2,6 +2,7 @@ package catalogApp.server.webServices;
 
 import catalogApp.server.service.IJdbcService;
 import catalogApp.server.service.JdbcService;
+import catalogApp.shared.exception.ItemAlreadyExistException;
 import catalogApp.shared.model.Song;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,13 @@ public class SongWebService {
         String name = (String) params.get(0);
         String genre = (String) params.get(1);
         String duration = (String) params.get(2);
-        return jdbcService.addSong(name, genre, duration);
+        Song song;
+        try {
+            song = jdbcService.addSong(name, genre, duration);
+        } catch (ItemAlreadyExistException e) {
+            return null;
+        }
+        return song;
     }
 
     @GET

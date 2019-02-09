@@ -1,6 +1,7 @@
 package catalogApp.client.presenter;
 
 import catalogApp.client.services.BookWebService;
+import catalogApp.shared.exception.ItemAlreadyExistException;
 import catalogApp.shared.model.Book;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -71,8 +72,13 @@ public class AddBookDialogPresenter implements Presenter {
 
                         @Override
                         public void onSuccess(Method method, Book book) {
-                            bookTabPresenter.getBookListDataProvider().getList().add(book);
-                            display.hideDialog();
+                            GWT.log(method.getResponse().getText());
+                            if(book!=null) {
+                                bookTabPresenter.getBookListDataProvider().getList().add(book);
+                                display.hideDialog();
+                            }else {
+                                Window.alert("Book is null. Item already exist or problem with access to database");
+                            }
                         }
                     });
                 } else {

@@ -1,6 +1,7 @@
 package catalogApp.client.presenter;
 
 import catalogApp.client.event.UpdateUserLibraryEvent;
+import catalogApp.client.presenter.helper.FieldUpdaters;
 import catalogApp.client.services.BookWebService;
 import catalogApp.client.view.components.tables.AbstractCatalogCellTable;
 import catalogApp.client.view.dialogs.EditBookDialogView;
@@ -8,7 +9,6 @@ import catalogApp.shared.model.Book;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -26,81 +26,117 @@ public class BookTabPresenter implements Presenter {
 
         TextBox getSearchField();
 
-        Button getSearchButton();
+        AbstractCatalogCellTable<Book> getTable();
 
-        AbstractCatalogCellTable getTable();
-
-        void setDataProviderAndInitialize(ListDataProvider<Book> dataProvider, boolean popupEnabled);
+        void setListAndInitialize(List<Book> list);
 
         MultiSelectionModel<Book> getSelectionModel();
 
         Widget asWidget();
     }
-    ArrayList<Book> list;
+
+    private ArrayList<Book> list;
 
     private final Display display;
     private final HandlerManager eventBus;
     private final BookWebService bookWebService;
-    private final static ListDataProvider<Book> bookListDataProvider = new ListDataProvider<>();
+    private final ListDataProvider<Book> bookListDataProvider = new ListDataProvider<>();
+
+    private boolean isGlobalPanel;
 
     BookTabPresenter(Display display, HandlerManager eventBus, BookWebService bookWebService) {
         this.display = display;
         this.eventBus = eventBus;
         this.bookWebService = bookWebService;
-        bind();
+        display.setListAndInitialize(bookListDataProvider.getList());
+        bookListDataProvider.addDataDisplay(display.getTable());
     }
 
     @Override
     public void go(Panel container) {
-
+        container.add(display.asWidget());
     }
 
     private void bind() {
-        display.setDataProviderAndInitialize(bookListDataProvider, true);
-        bookListDataProvider.getList();
+        if (!isGlobalPanel) {
+            eventBus.addHandler(UpdateUserLibraryEvent.TYPE, event -> {
 
+                if (event.getType() == UpdateUserLibraryEvent.ITEM_TYPE.BOOK) {
+                    for (Object x : event.getSelectedItems()) {
+                        if (!bookListDataProvider.getList().contains(x)) {
+                            bookListDataProvider.getList().add((Book) x);
+                        }
+                    }
+                }
+            });
+        } else {
+            display.getTable().enablePopup();
+        }
         display.getSearchField().addKeyUpHandler(event -> {
             ArrayList<Book> foundedBooks = new ArrayList<>();
-            String str = display.getSearchField().getText();
-            if(!str.isEmpty()) {
-                list.forEach(item->{
-                    if(item.getName().contains(str) || item.getAuthor().getName().contains(str)){
+            String str = display.getSearchField().getText().toLowerCase();
+            if (!str.isEmpty()) {
+                list.forEach(item -> {
+                    if (item.getName().toLowerCase().contains(str) || item.getAuthor().getName().toLowerCase().contains(str)) {
                         foundedBooks.add(item);
+                    }else{
+                        if(getSelectionModel().isSelected(item)){
+                            getSelectionModel().setSelected(item, false);
+                        }
                     }
                 });
-                bookListDataProvider.setList(foundedBooks);
-            }else {
-                bookListDataProvider.setList(list);
+                bookListDataProvider.getList().clear();
+                bookListDataProvider.getList().addAll(foundedBooks);
+            } else {
+                bookListDataProvider.getList().clear();
+                bookListDataProvider.getList().addAll(list);
             }
             bookListDataProvider.refresh();
         });
 
     }
 
-    private List<Integer> getSelectedIDs() {
+    List<Integer> getSelectedIDs() {
         List<Integer> tmp = new ArrayList<>();
         display.getSelectionModel().getSelectedSet().forEach(e -> tmp.add(e.getId()));
         return tmp;
     }
 
-    private Set<Book> getSelectedSet() {
+    Set<Book> getSelectedSet() {
         return display.getSelectionModel().getSelectedSet();
     }
 
-    void loadData() {
+    void loadData(boolean isGlobal) {
+        isGlobalPanel = isGlobal;
+        if (isGlobal) {
+            bookWebService.getAllBooks(new MethodCallback<List<Book>>() {
+                @Override
+                public void onFailure(Method method, Throwable throwable) {
+                    GWT.log("getAllBooks doesnt work", throwable);
+                }
 
-        bookWebService.getAllBooks(new MethodCallback<List<Book>>() {
-            @Override
-            public void onFailure(Method method, Throwable throwable) {
-                GWT.log("getAllBooks doesnt work", throwable);
-            }
+                @Override
+                public void onSuccess(Method method, List<Book> books) {
+                    bookListDataProvider.getList().addAll(books);
+                    list = new ArrayList<>(books);
+                    bind();
+                }
+            });
+        } else {
+            bookWebService.getUserBooks(new MethodCallback<List<Book>>() {
+                @Override
+                public void onFailure(Method method, Throwable exception) {
+                    GWT.log("getUserBooks doesnt work", exception);
+                }
 
-            @Override
-            public void onSuccess(Method method, List<Book> songs) {
-                bookListDataProvider.getList().addAll(songs);
-                list = new ArrayList<>(songs);
-            }
-        });
+                @Override
+                public void onSuccess(Method method, List<Book> books) {
+                    bookListDataProvider.getList().addAll(books);
+                    list = new ArrayList<>(books);
+                    bind();
+                }
+            });
+        }
     }
 
     void doAddBooksToLib() {
@@ -155,7 +191,7 @@ public class BookTabPresenter implements Presenter {
         }
     }
 
-    void doRestoreBooks(){
+    void doRestoreBooks() {
         List<Integer> selectedIds = getSelectedIDs();
         if (selectedIds.size() > 0) {
             bookWebService.restoreBooks(selectedIds, new MethodCallback<Void>() {
@@ -179,5 +215,12 @@ public class BookTabPresenter implements Presenter {
 
     ListDataProvider<Book> getBookListDataProvider() {
         return bookListDataProvider;
+    }
+    MultiSelectionModel<Book> getSelectionModel(){
+        return display.getSelectionModel();
+    }
+
+    public Display getDisplay() {
+        return display;
     }
 }

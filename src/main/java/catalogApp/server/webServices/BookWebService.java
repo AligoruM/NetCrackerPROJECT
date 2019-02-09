@@ -3,12 +3,14 @@ package catalogApp.server.webServices;
 
 import catalogApp.server.service.IJdbcService;
 import catalogApp.server.service.JdbcService;
+import catalogApp.shared.exception.ItemAlreadyExistException;
 import catalogApp.shared.model.Book;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -32,7 +34,13 @@ public class BookWebService {
     public Book addBook(List params) {
         String name = (String) params.get(0);
         String author = (String) params.get(1);
-        return jdbcService.addBook(name, author);
+        Book book;
+        try {
+            book = jdbcService.addBook(name, author);
+        } catch (ItemAlreadyExistException e) {
+            return null;
+        }
+        return book;
     }
 
     @GET

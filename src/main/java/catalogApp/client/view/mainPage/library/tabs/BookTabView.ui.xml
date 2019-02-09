@@ -6,9 +6,6 @@
             <g:cell horizontalAlignment="ALIGN_CENTER">
                 <g:TextBox ui:field="searchField"/>
             </g:cell>
-            <g:cell horizontalAlignment="ALIGN_CENTER">
-                <g:Button ui:field="searchButton" text="Search"/>
-            </g:cell>
         </g:VerticalPanel>
     </g:HTMLPanel>
 </ui:UiBinder>

@@ -65,6 +65,10 @@ public class SQLQuery {
         return "update  " + OBJECT_TABLE + " set " + NAME_OBJ + "=\"" + name + "\" where " + ID_OBJ + "=" + id;
     }
 
+    public static String CHECK_FOR_EXIST_BY_NAME_AND_TYPE(String name, int type){
+        return "select COUNT(1) as " + COUNT_ALIAS + " from "+ OBJECT_TABLE + " where " + NAME_OBJ + "=\"" + name + "\" and " + ID_TYPE_OBJ + "=" + type;
+    }
+
     public static String UPDATE_OBJECTS_STATE(int state, String paramName) {
         return "update " + OBJECT_TABLE + " set " + ARCHIVED_OBJ + "=\"" + state + "\" where " + ID_OBJ + " in (:" + paramName + ")";
     }

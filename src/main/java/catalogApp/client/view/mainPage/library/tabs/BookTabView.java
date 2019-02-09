@@ -12,6 +12,8 @@ import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 
+import java.util.List;
+
 import static catalogApp.client.view.constants.LibraryConstants.TABLE_HEIGHT;
 
 public class BookTabView extends Composite implements BookTabPresenter.Display {
@@ -24,8 +26,6 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
     @UiField
     SimplePanel simplePanel;
     @UiField
-    Button searchButton;
-    @UiField
     TextBox searchField;
 
     private static BookTabViewUiBinder ourUiBinder = GWT.create(BookTabViewUiBinder.class);
@@ -34,10 +34,11 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
         initWidget(ourUiBinder.createAndBindUi(this));
     }
 
-    private void initializeTable(ListDataProvider<Book> dataProvider, boolean popupEnabled) {
-        table = new BookCellTable(dataProvider, popupEnabled);
+    private void initializeTable(List<Book> list) {
+        table = new BookCellTable(list);
         simplePanel.add(table);
         simplePanel.setHeight(TABLE_HEIGHT);
+        
     }
 
     @Override
@@ -46,17 +47,13 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
     }
 
     @Override
-    public void setDataProviderAndInitialize(ListDataProvider<Book> dataProvider, boolean popupEnabled) {
-        initializeTable(dataProvider, popupEnabled);
+    public void setListAndInitialize(List<Book> list) {
+        initializeTable(list);
     }
 
     @Override
     public MultiSelectionModel<Book> getSelectionModel() {
         return ((MultiSelectionModel<Book>) table.getSelectionModel());
-    }
-
-    public Button getSearchButton() {
-        return searchButton;
     }
 
     public TextBox getSearchField() {

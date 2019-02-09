@@ -27,6 +27,9 @@
                         </g:cell>
                     </g:HorizontalPanel>
                 </g:cell>
+                <g:cell horizontalAlignment="ALIGN_CENTER">
+                    <g:FlexTable ui:field="passwordTable"/>
+                </g:cell>
             </g:VerticalPanel>
         </g:DecoratorPanel>
     </g:HTMLPanel>

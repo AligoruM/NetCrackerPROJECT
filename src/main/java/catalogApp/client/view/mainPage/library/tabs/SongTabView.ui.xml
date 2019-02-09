@@ -3,6 +3,9 @@
     <g:HTMLPanel>
         <g:VerticalPanel>
             <g:SimplePanel ui:field="simplePanel"/>
+            <g:cell horizontalAlignment="ALIGN_CENTER">
+                <g:TextBox ui:field="searchField"/>
+            </g:cell>
         </g:VerticalPanel>
     </g:HTMLPanel>
 </ui:UiBinder>

@@ -5,6 +5,7 @@ import catalogApp.server.dao.constants.SQLQuery;
 import catalogApp.server.dao.constants.Types;
 import catalogApp.server.dao.mapper.BookMapper;
 import catalogApp.server.dao.mapper.SongMapper;
+import catalogApp.shared.exception.ItemAlreadyExistException;
 import catalogApp.shared.model.Book;
 import catalogApp.shared.model.Song;
 import org.slf4j.Logger;
@@ -28,7 +29,6 @@ public class EavDAO implements IJdbcDAO {
 
     private final Logger logger = LoggerFactory.getLogger(EavDAO.class);
 
-
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -49,19 +49,23 @@ public class EavDAO implements IJdbcDAO {
     }
 
     @Override
-    public Book addBook(String name, String authorName) {
+    public Book addBook(String name, String authorName) throws ItemAlreadyExistException {
         if (name.trim().isEmpty() || authorName.trim().isEmpty()) {
             logger.info("Incoming params is empty. Book cannot be created.");
             return null;
         }
-        Integer authorId;
-        int bookId;
-        try {
-            authorId = jdbcTemplate.queryForObject(SQLQuery.AUTHOR_ID_BY_NAME(authorName), (rs, rowNum) -> rs.getInt(ID_OBJ));
-        } catch (IncorrectResultSizeDataAccessException exception) {
-            authorId = createObjectAndReturnNewId(authorName, Types.AUTHOR);
-            logger.info("Author(" + authorName +") not found. Created.");
+        for (Book item : getAllBooks()) {
+            if(item.getAuthor().getName().equalsIgnoreCase(authorName) && item.getName().equalsIgnoreCase(name)){
+                String msg = "Book with name = " + name + " and author = " + authorName + " already exist";
+                logger.info(msg);
+                System.out.println(msg);
+                throw new ItemAlreadyExistException(msg);
+            }
         }
+
+        Integer authorId = createOrGetAuthor(authorName);
+        int bookId;
+
         bookId = createObjectAndReturnNewId(name, Types.BOOK);
         try {
             jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(String.valueOf(authorId), bookId, Attribute.BOOK_AUTHOR_ID));
@@ -93,6 +97,12 @@ public class EavDAO implements IJdbcDAO {
     }
 
     @Override
+    public void updateAuthor(int bookId, String authorName) {
+        int authorId = createOrGetAuthor(authorName);
+        jdbcTemplate.execute(SQLQuery.UPDATE_ATTRIBUTE_VALUE(String.valueOf(authorId), bookId, Attribute.BOOK_AUTHOR_ID));
+    }
+
+    @Override
     public List<Song> getAllSongs() {
         return jdbcTemplate.query(SQLQuery.ALL_SONGS(), new SongMapper());
     }
@@ -103,19 +113,22 @@ public class EavDAO implements IJdbcDAO {
     }
 
     @Override
-    public Song addSong(String name, String genreName, String duration) {
+    public Song addSong(String name, String genreName, String duration) throws ItemAlreadyExistException {
         if (name.trim().isEmpty() || genreName.trim().isEmpty()) {
             logger.info("Incoming params is empty. Song cannot be created.");
             return null;
         }
-        Integer genreId;
-        int songId;
-        try {
-            genreId = jdbcTemplate.queryForObject(SQLQuery.GENRE_ID_BY_NAME(genreName), (rs, rowNum) -> rs.getInt(ID_OBJ));
-        } catch (IncorrectResultSizeDataAccessException ex) {
-            genreId = createObjectAndReturnNewId(genreName, Types.SONG_GENRE);
-            logger.info("Genre(" + genreName +") not found. Created.");
+        for (Song item : getAllSongs()) {
+            if(item.getGenre().getName().equalsIgnoreCase(name) && item.getName().equalsIgnoreCase(genreName)){
+                String msg = "Song with name = " + name + " and genre = " + genreName + " already exist";
+                logger.info(msg);
+                throw new ItemAlreadyExistException(msg);
+            }
         }
+
+        Integer genreId = createOrGetGenre(genreName);
+        int songId;
+
         songId = createObjectAndReturnNewId(name, Types.SONG);
         try {
             jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(String.valueOf(genreId), songId, Attribute.SONG_GENRE_ID));
@@ -154,6 +167,12 @@ public class EavDAO implements IJdbcDAO {
     }
 
     @Override
+    public void updateGenre(int songId, String genreName) {
+        int genreId = createOrGetGenre(genreName);
+        jdbcTemplate.execute(SQLQuery.UPDATE_ATTRIBUTE_VALUE(String.valueOf(genreId), songId, Attribute.SONG_GENRE_ID));
+    }
+
+    @Override
     public void updateObjectName(int id, String name) {
         jdbcTemplate.execute(SQLQuery.UPDATE_OBJECT_NAME(id, name));
     }
@@ -187,6 +206,28 @@ public class EavDAO implements IJdbcDAO {
                     put(ARCHIVED_OBJ, "0");
                 }})
                 .intValue();
+    }
+
+    private Integer createOrGetAuthor(String authorName){
+        Integer authorId;
+        try {
+            authorId = jdbcTemplate.queryForObject(SQLQuery.AUTHOR_ID_BY_NAME(authorName), (rs, rowNum) -> rs.getInt(ID_OBJ));
+        } catch (IncorrectResultSizeDataAccessException exception) {
+            authorId = createObjectAndReturnNewId(authorName, Types.AUTHOR);
+            logger.info("Author(" + authorName +") not found. Created.");
+        }
+        return authorId;
+    }
+
+    private Integer createOrGetGenre(String genreName){
+        Integer genreId;
+        try {
+            genreId = jdbcTemplate.queryForObject(SQLQuery.GENRE_ID_BY_NAME(genreName), (rs, rowNum) -> rs.getInt(ID_OBJ));
+        } catch (IncorrectResultSizeDataAccessException exception) {
+            genreId = createObjectAndReturnNewId(genreName, Types.SONG_GENRE);
+            logger.info("Author(" + genreName +") not found. Created.");
+        }
+        return genreId;
     }
 
     @Override

@@ -12,10 +12,13 @@ import catalogApp.client.view.mainPage.profile.ProfileView;
 import catalogApp.client.view.mainPage.users.UserPanelView;
 import catalogApp.shared.model.SimpleUser;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -49,6 +52,8 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
             @Override
             public void onFailure(Method method, Throwable exception) {
                 GWT.log("simpleUser doesnt work", exception);
+                Cookies.removeCookie("JSESSIONID");
+                Window.Location.replace(GWT.getHostPageBaseURL() + "login");
             }
 
             @Override
@@ -69,6 +74,7 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
         mainContainer = mainPagePresenter.getPanel();
 
         container.add(mainPageView);
+        History.fireCurrentHistoryState();
     }
 
     private void bind() {
@@ -77,6 +83,7 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
         eventBus.addHandler(ShowLibraryEvent.TYPE, event -> doShowLibrary());
         eventBus.addHandler(ShowUsersEvent.TYPE, event -> doShowUsers());
     }
+
 
     private void doShowProfile() {
         History.newItem("profile");
@@ -127,7 +134,7 @@ public class CatalogController implements Presenter, ValueChangeHandler<String> 
     }
 
     public static boolean isAdmin() {
-        if (user!=null) {
+        if (user != null) {
             return user.getRoles().contains("ADMIN");
         }
         return false;

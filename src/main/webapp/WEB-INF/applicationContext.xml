@@ -65,6 +65,7 @@
     <b:bean id="jdbcServiceImpl" class="catalogApp.server.service.JdbcService">
         <b:constructor-arg ref="jdbcEavDAO"/>
         <b:constructor-arg ref="userDAO"/>
+        <b:constructor-arg ref="passwordEncoder"/>
     </b:bean>
 
     <b:bean id="userDAO" class="catalogApp.server.dao.UserDAO">

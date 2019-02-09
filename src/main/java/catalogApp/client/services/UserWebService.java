@@ -27,8 +27,7 @@ public interface UserWebService extends RestService {
     @Path("rest/avatar/{id}")
     void getAvatarUrl(@PathParam("id") int id, MethodCallback<String> callback);
 
-    /*@POST
-    @Path("rest/avatar/{id}")
-    void uploadAvatar(@FormParam("image")OutputStream stream, MethodCallback<String> callback);*/
-
+    @POST
+    @Path("rest/updPass/")
+    void changePassword(String password, MethodCallback<Boolean> callback);
 }

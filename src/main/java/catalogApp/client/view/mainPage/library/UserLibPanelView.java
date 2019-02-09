@@ -10,10 +10,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 
@@ -22,10 +19,6 @@ public class UserLibPanelView extends Composite implements UserLibPanelPresenter
 
     }
     @UiField
-    BookTabView bookView;
-    @UiField
-    SongTabView songView;
-    @UiField
     Button deleteBooksButton;
     @UiField
     Button deleteSongsButton;
@@ -33,6 +26,11 @@ public class UserLibPanelView extends Composite implements UserLibPanelPresenter
     HTMLPanel mainPanel;
     @UiField
     SimplePanel objectContainer;
+    @UiField
+    SimplePanel bookPanel;
+    @UiField
+    SimplePanel songPanel;
+
 
     private static UserLibPanelViewUiBinder ourUiBinder = GWT.create(UserLibPanelViewUiBinder.class);
 
@@ -43,33 +41,13 @@ public class UserLibPanelView extends Composite implements UserLibPanelPresenter
     }
 
     @Override
-    public void setBookDataProvider(ListDataProvider<Book> dataProvider, boolean popupEnabled) {
-        bookView.setDataProviderAndInitialize(dataProvider, popupEnabled);
+    public SimplePanel getBookContainer() {
+        return bookPanel;
     }
 
     @Override
-    public void setSongDataProvider(ListDataProvider<Song> dataProvider, boolean popupEnabled) {
-        songView.setDataProviderAndInitialize(dataProvider, popupEnabled);
-    }
-
-    @Override
-    public AbstractCatalogCellTable<Book> getBookTable() {
-        return bookView.getTable();
-    }
-
-    @Override
-    public AbstractCatalogCellTable<Song> getSongTable() {
-        return songView.getTable();
-    }
-
-    @Override
-    public MultiSelectionModel<Book> getSelectionBooksModel() {
-        return bookView.getSelectionModel();
-    }
-
-    @Override
-    public MultiSelectionModel<Song> getSelectionSongsModel() {
-        return songView.getSelectionModel();
+    public SimplePanel getSongContainer() {
+        return songPanel;
     }
 
     @Override

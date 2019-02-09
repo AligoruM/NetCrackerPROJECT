@@ -3,15 +3,25 @@ package catalogApp.server.service;
 import catalogApp.server.dao.IJdbcDAO;
 import catalogApp.server.dao.UserDAO;
 import catalogApp.server.dao.constants.Attribute;
+import catalogApp.shared.exception.ItemAlreadyExistException;
 import catalogApp.shared.model.BaseObject;
 import catalogApp.shared.model.Book;
 import catalogApp.shared.model.SimpleUser;
 import catalogApp.shared.model.Song;
+import org.apache.commons.codec.digest.Md5Crypt;
+import org.eclipse.jetty.util.security.Credential;
+import org.springframework.security.config.authentication.PasswordEncoderParser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import sun.security.provider.MD5;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,9 +36,12 @@ public class JdbcService implements IJdbcService {
     private IJdbcDAO jdbcDAO;
     private UserDAO userDAO;
 
-    public JdbcService(IJdbcDAO jdbcDAO, UserDAO userDAO) {
+    private BCryptPasswordEncoder bCrypt;
+
+    public JdbcService(IJdbcDAO jdbcDAO, UserDAO userDAO, BCryptPasswordEncoder encoder) {
         this.jdbcDAO = jdbcDAO;
         this.userDAO = userDAO;
+        this.bCrypt = encoder;
     }
 
     @Override
@@ -46,7 +59,7 @@ public class JdbcService implements IJdbcService {
     }
 
     @Override
-    public Book addBook(String name, String authorName) {
+    public Book addBook(String name, String authorName) throws ItemAlreadyExistException {
         return jdbcDAO.addBook(name, authorName);
     }
 
@@ -71,7 +84,18 @@ public class JdbcService implements IJdbcService {
 
     @Override
     public Book updateBook(Book newBook) {
+        for (Book item : jdbcDAO.getAllBooks()) {
+            String newAuthor = newBook.getAuthor() == null ? null : newBook.getAuthor().getName();
+            String newName = newBook.getName();
+            if (newName != null && newAuthor != null) {
+                if (item.getAuthor().getName().equalsIgnoreCase(newAuthor) && item.getName().equalsIgnoreCase(newName))
+                    return null;
+            }
+        }
         updateBaseObjectFields(newBook);
+        if (newBook.getAuthor() != null) {
+            jdbcDAO.updateAuthor(newBook.getId(), newBook.getAuthor().getName());
+        }
         return jdbcDAO.getBookById(newBook.getId());
     }
 
@@ -90,7 +114,7 @@ public class JdbcService implements IJdbcService {
     }
 
     @Override
-    public Song addSong(String name, String genreName, String duration) {
+    public Song addSong(String name, String genreName, String duration) throws ItemAlreadyExistException {
         return jdbcDAO.addSong(name, genreName, duration);
     }
 
@@ -110,7 +134,20 @@ public class JdbcService implements IJdbcService {
     @Override
     public Song updateSong(Song newSong) {
         int id = newSong.getId();
+        for (Song item : jdbcDAO.getAllSongs()) {
+            String newGenre = newSong.getGenre()==null ? null : newSong.getGenre().getName();
+            String newName = newSong.getName();
+            if (newName != null && newGenre != null) {
+                if (item.getGenre().getName().equalsIgnoreCase(newGenre) && item.getName().equalsIgnoreCase(newName))
+                    return null;
+            }
+        }
         updateBaseObjectFields(newSong);
+
+        if (newSong.getGenre() != null) {
+            jdbcDAO.updateGenre(newSong.getId(), newSong.getGenre().getName());
+        }
+
         if (newSong.getDuration() < 0) {
             jdbcDAO.updateAttributeValue(id, Attribute.SONG_DURATION, "-1");
         } else if (newSong.getDuration() > 0) {
@@ -159,6 +196,14 @@ public class JdbcService implements IJdbcService {
 
     private int getUserId() {
         return userDAO.getUserIdByName(SecurityContextHolder.getContext().getAuthentication().getName());
+    }
+
+    @Override
+    public boolean changePassword(String password) {
+        String bCryptPass = bCrypt.encode(password);
+        boolean success = userDAO.updateUserPassword(getUserId(), bCryptPass);
+        SecurityContextHolder.getContext().getAuthentication().setAuthenticated(!success);
+        return success;
     }
 
     private void updateBaseObjectFields(BaseObject object) {

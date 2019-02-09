@@ -4,6 +4,7 @@ import catalogApp.client.presenter.helper.EditorInitializeHelper;
 import catalogApp.client.services.BookWebService;
 import catalogApp.client.view.components.AdditionalInfo;
 import catalogApp.client.view.components.FileUploader;
+import catalogApp.shared.model.Author;
 import catalogApp.shared.model.Book;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
@@ -33,6 +34,8 @@ public class EditBookDialogPresenter implements Presenter {
 
         String getNewName();
 
+        String getNewAuthor();
+
     }
 
     private ListDataProvider<Book> dataProvider;
@@ -47,6 +50,8 @@ public class EditBookDialogPresenter implements Presenter {
 
     private String oldComment;
 
+    private String oldAuthor;
+
     private boolean isLoaded;
 
 
@@ -56,7 +61,8 @@ public class EditBookDialogPresenter implements Presenter {
         this.display = display;
         this.bookWebService = bookWebService;
         oldName = book.getName();
-        oldComment = book.getComment()!=null ? book.getComment() : "";
+        oldAuthor = book.getAuthor().getName();
+        oldComment = book.getComment() != null ? book.getComment() : "";
         bind();
     }
 
@@ -65,6 +71,7 @@ public class EditBookDialogPresenter implements Presenter {
         display.showData(book);
         display.showDialog();
     }
+
     private void bind() {
 
         FileUploader fileUploader = display.getAdditionalInfo().getFileUploader();
@@ -73,14 +80,15 @@ public class EditBookDialogPresenter implements Presenter {
 
         fileUploader.addSubmitCompleteHandler(event -> {
             isLoaded = true;
-            display.getAdditionalInfo().setImage(fileUploader.getFileUpload().getFilename());
             Window.alert("loaded");
         });
 
 
         display.getSubmitButton().addClickHandler(event -> {
-            boolean isChanged=false;
+            boolean isChanged = false;
+            boolean mainFieldsIsChanged = false;
             String newName = display.getNewName();
+            String newAuthorName = display.getNewAuthor();
             String newComment = display.getAdditionalInfo().getComment();
             String imagePath = display.getAdditionalInfo().getFileUploader().getFileUpload().getFilename();
             imagePath = imagePath.substring(imagePath.lastIndexOf('\\') + 1);
@@ -88,22 +96,38 @@ public class EditBookDialogPresenter implements Presenter {
 
             newBook.setId(book.getId());
 
-            if(!oldName.equals(newName) && !newName.isEmpty()) {
+            if (!oldName.equalsIgnoreCase(newName) && !newName.isEmpty()) {
                 newBook.setName(newName);
-                isChanged=true;
+                mainFieldsIsChanged = true;
+            } else {
+                newBook.setName(book.getName());
             }
-            if(!oldComment.equals(newComment)){
+
+            if (!oldAuthor.equalsIgnoreCase(newAuthorName) && !newAuthorName.isEmpty()) {
+                Author newAuthor = new Author();
+                newAuthor.setName(newAuthorName);
+                newBook.setAuthor(newAuthor);
+                mainFieldsIsChanged = true;
+            } else {
+                newBook.setAuthor(book.getAuthor());
+            }
+
+            if (!oldComment.equals(newComment)) {
                 newBook.setComment(newComment);
                 isChanged = true;
             }
 
-            if(!imagePath.isEmpty() && isLoaded){
+            if (!imagePath.isEmpty() && isLoaded) {
                 newBook.setImagePath(imagePath);
-                isChanged=true;
+                isChanged = true;
             }
 
 
-            if(isChanged || isLoaded){
+            if (isChanged || mainFieldsIsChanged) {
+                if(!mainFieldsIsChanged){
+                    newBook.setAuthor(null);
+                    newBook.setName(null);
+                }
                 bookWebService.updateBook(newBook, new MethodCallback<Book>() {
                     @Override
                     public void onFailure(Method method, Throwable exception) {
@@ -112,11 +136,20 @@ public class EditBookDialogPresenter implements Presenter {
 
                     @Override
                     public void onSuccess(Method method, Book response) {
-                        book.setName(newName);
-                        book.setComment(newComment);
-                        book.setImagePath(response.getImagePath());
-                        dataProvider.refresh();
-                        display.hideDialog();
+                        if (response != null) {
+                            book.setName(response.getName());
+                            book.setComment(response.getComment());
+                            if (response.getImagePath() != null) {
+                                book.setImagePath(response.getImagePath());
+                            }
+                            if (response.getAuthor() != null) {
+                                book.setAuthor(response.getAuthor());
+                            }
+                            dataProvider.refresh();
+                            display.hideDialog();
+                        } else {
+                            Window.alert("Book like that already exists");
+                        }
                     }
                 });
             }

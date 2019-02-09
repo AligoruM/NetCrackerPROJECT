@@ -30,10 +30,14 @@ public class ProfileView extends Composite implements ProfilePresenter.Display {
     Button upload;
     @UiField
     Button refresh;
+    @UiField
+    FlexTable passwordTable;
 
     private TextBox usernameBox = new TextBox();
     private TextBox roleBox = new TextBox();
     private TextArea describeBox = new TextArea();
+    private PasswordTextBox passwordBox = new PasswordTextBox();
+    private Button changePassButton = new Button("Change pass");
 
     private static ProfileViewUiBinder ourUiBinder = GWT.create(ProfileViewUiBinder.class);
 
@@ -56,6 +60,13 @@ public class ProfileView extends Composite implements ProfilePresenter.Display {
         table.setWidget(2, 1, describeBox);
         avatarImg.setWidth(PROFILE_AVATAR_SIZE);
         table.getElement().getStyle().setPaddingLeft(20, Style.Unit.PX);
+
+        passwordTable.setCellSpacing(6);
+        passwordTable.setWidget(0,0, new HTML("Password"));
+        passwordTable.setWidget(0,1, passwordBox);
+        passwordTable.setWidget(1,0, changePassButton);
+        passwordTable.getFlexCellFormatter().setColSpan(1,0, 2);
+        passwordTable.getFlexCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_CENTER);
     }
 
 
@@ -122,5 +133,13 @@ public class ProfileView extends Composite implements ProfilePresenter.Display {
         } else {
             avatarImg.setUrl(DEFAULT_AVATAR_URL);
         }
+    }
+
+    public PasswordTextBox getPasswordBox() {
+        return passwordBox;
+    }
+
+    public Button getChangePassButton() {
+        return changePassButton;
     }
 }

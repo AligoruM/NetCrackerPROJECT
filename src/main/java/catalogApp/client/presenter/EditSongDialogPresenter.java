@@ -5,6 +5,7 @@ import catalogApp.client.services.SongWebService;
 import catalogApp.client.view.components.AdditionalInfo;
 import catalogApp.client.view.components.FileUploader;
 import catalogApp.shared.model.Song;
+import catalogApp.shared.model.SongGenre;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
@@ -33,6 +34,8 @@ public class EditSongDialogPresenter implements Presenter {
 
         String getNewName();
 
+        String getNewGenre();
+
         int getNewDuration();
     }
 
@@ -41,6 +44,8 @@ public class EditSongDialogPresenter implements Presenter {
     private String oldName;
 
     private String oldComment;
+
+    private String oldGenreName;
 
     private ListDataProvider<Song> dataProvider;
 
@@ -59,6 +64,7 @@ public class EditSongDialogPresenter implements Presenter {
         this.songWebService = songWebService;
         oldName = song.getName();
         oldComment = song.getComment()!=null ? song.getComment() : "";
+        oldGenreName = song.getGenre().getName();
         bind();
     }
 
@@ -83,6 +89,7 @@ public class EditSongDialogPresenter implements Presenter {
             boolean isChanged = false;
             String newComment = display.getAdditionalInfo().getComment();
             String newName = display.getNewName();
+            String newGenreName = display.getNewGenre();
             String imagePath = display.getAdditionalInfo().getFileUploader().getFileUpload().getFilename();
             imagePath = imagePath.substring(imagePath.lastIndexOf('\\') + 1);
             int newDuration = display.getNewDuration();
@@ -98,6 +105,12 @@ public class EditSongDialogPresenter implements Presenter {
                 newSong.setDuration(newDuration);
                 isChanged = true;
             }
+            if(!oldGenreName.equalsIgnoreCase(newGenreName) && !newGenreName.isEmpty()) {
+                SongGenre newGenre = new SongGenre();
+                newGenre.setName(newGenreName);
+                newSong.setGenre(newGenre);
+                isChanged=true;
+            }
             if (!oldName.equals(newName)) {
                 newSong.setName(newName);
                 isChanged = true;
@@ -107,7 +120,7 @@ public class EditSongDialogPresenter implements Presenter {
                 isChanged=true;
             }
 
-            if (isChanged || isLoaded) {
+            if (isChanged) {
                 songWebService.updateSong(newSong, new MethodCallback<Song>() {
                     @Override
                     public void onFailure(Method method, Throwable exception) {
@@ -116,9 +129,19 @@ public class EditSongDialogPresenter implements Presenter {
 
                     @Override
                     public void onSuccess(Method method, Song response) {
-                        song.setName(newName);
-                        song.setComment(newComment);
-                        song.setDuration(newDuration);
+                        if(response!=null) {
+                            song.setName(response.getName());
+                            song.setComment(response.getComment());
+                            if(response.getImagePath()!=null){
+                                song.setImagePath(response.getImagePath());
+                            }
+                            if(response.getGenre()!=null){
+                                song.setGenre(response.getGenre());
+                            }
+
+                            song.setDuration(response.getDuration());
+
+                        }
                         dataProvider.refresh();
                         display.hideDialog();
                     }

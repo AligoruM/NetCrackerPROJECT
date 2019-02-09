@@ -95,18 +95,26 @@ public class UserDAO {
         jdbcTemplate.execute(SQLQuery.UPDATE_OBJECT_IMAGE(filepath, id));
     }
 
-    private void updateUserAttr(String value, int userId, int attributeId) {
+    private int updateUserAttr(String value, int userId, int attributeId) {
         if (value.isEmpty()) {
             jdbcTemplate.execute(SQLQuery.DELETE_ATTRIBUTE_VALUE_BY_KEYS(userId, attributeId));
             logger.info("Deleted attribute " + attributeId + ", value = " + value + ", object id = " + userId);
+            return 0;
         } else {
-            if (jdbcTemplate.update(SQLQuery.UPDATE_ATTRIBUTE_VALUE(value, userId, attributeId)) == 0) {
+            int count = jdbcTemplate.update(SQLQuery.UPDATE_ATTRIBUTE_VALUE(value, userId, attributeId));
+            if (count == 0) {
                 jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(value, userId, attributeId));
                 logger.info("Created attribute " + attributeId + ", value = " + value + ", object id = " + userId);
+                return 0;
             } else {
                 logger.info("Updated attribute " + attributeId + ", value = " + value + ", object id = " + userId);
+                return count;
             }
         }
+    }
+
+    public boolean updateUserPassword(int id, String password){
+        return updateUserAttr(password, id, Attribute.USER_PASSWORD) == 1;
     }
 
     private void setAdditionDataInSimpleUser(SimpleUser simpleUser) {

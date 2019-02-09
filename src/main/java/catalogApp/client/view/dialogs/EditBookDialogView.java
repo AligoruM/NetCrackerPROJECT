@@ -46,7 +46,6 @@ public class EditBookDialogView extends Composite implements EditBookDialogPrese
         flexTable.setWidget(1, 0, new Label(NAME_COL_LABEL));
         flexTable.setWidget(1, 1, nameBox);
 
-        authorBox.setEnabled(false);
         flexTable.setWidget(2, 0, new Label(AUTHOR_COL_LABEL));
         flexTable.setWidget(2, 1, authorBox);
     }
@@ -80,6 +79,11 @@ public class EditBookDialogView extends Composite implements EditBookDialogPrese
         additionalInfo.setImage(object.getImagePath());
     }
 
+
+    @Override
+    public String getNewAuthor() {
+        return authorBox.getText().trim();
+    }
 
     @Override
     public String getNewName() {

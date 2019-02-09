@@ -1,5 +1,6 @@
 package catalogApp.server.dao;
 
+import catalogApp.shared.exception.ItemAlreadyExistException;
 import catalogApp.shared.model.Book;
 import catalogApp.shared.model.Song;
 
@@ -12,7 +13,7 @@ public interface IJdbcDAO {
 
     List<String> getAllAuthorNames();
 
-    Book addBook(String name, String authorName);
+    Book addBook(String name, String authorName) throws ItemAlreadyExistException;
 
     List<Book> getUsersBooks(int id);
 
@@ -20,18 +21,22 @@ public interface IJdbcDAO {
 
     Book getBookById(int id);
 
+    void updateAuthor(int bookId, String authorName);
+
     //Songs
     List<Song> getAllSongs();
 
     List<String> getAllGenreNames();
 
-    Song addSong(String name, String genreName, String duration);
+    Song addSong(String name, String genreName, String duration) throws ItemAlreadyExistException;
 
     List<Song> getUsersSongs(int id);
 
     List<Song> getSongsByIds(List<Integer> ids);
 
     Song getSongById(int id);
+
+    void updateGenre(int songId, String genreName);
 
     //General
     void updateObjectName(int id, String name);

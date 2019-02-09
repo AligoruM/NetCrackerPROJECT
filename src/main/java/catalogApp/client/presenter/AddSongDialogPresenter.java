@@ -4,6 +4,7 @@ import catalogApp.client.services.SongWebService;
 import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
@@ -74,6 +75,8 @@ public class AddSongDialogPresenter implements Presenter {
                             display.hideDialog();
                         }
                     });
+                }else {
+                    Window.alert("Fields cannot be empty!");
                 }
             }
         });

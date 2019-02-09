@@ -1,11 +1,14 @@
 package catalogApp.client.presenter;
 
 import catalogApp.client.event.UpdateUserLibraryEvent;
+import catalogApp.client.presenter.helper.FieldUpdaters;
 import catalogApp.client.services.BookWebService;
 import catalogApp.client.services.SongWebService;
 import catalogApp.client.view.components.tables.AbstractCatalogCellTable;
 import catalogApp.client.view.mainPage.library.objectViews.BookView;
 import catalogApp.client.view.mainPage.library.objectViews.SongView;
+import catalogApp.client.view.mainPage.library.tabs.BookTabView;
+import catalogApp.client.view.mainPage.library.tabs.SongTabView;
 import catalogApp.shared.model.Book;
 import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
@@ -14,7 +17,6 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
@@ -24,14 +26,8 @@ import java.util.List;
 
 public class UserLibPanelPresenter implements Presenter {
     public interface Display{
-        void setBookDataProvider(ListDataProvider<Book> dataProvider, boolean popupEnabled);
-        void setSongDataProvider(ListDataProvider<Song> dataProvider, boolean popupEnabled);
-
-        AbstractCatalogCellTable<Book> getBookTable();
-        AbstractCatalogCellTable<Song> getSongTable();
-
-        MultiSelectionModel<Book> getSelectionBooksModel();
-        MultiSelectionModel<Song> getSelectionSongsModel();
+        SimplePanel getBookContainer();
+        SimplePanel getSongContainer();
 
         Button getDeleteBooksButton();
         Button getDeleteSongsButton();
@@ -46,8 +42,8 @@ public class UserLibPanelPresenter implements Presenter {
     private BookWebService bookWebService;
     private HandlerManager eventBus;
 
-    private ListDataProvider<Book> bookListDataProvider = new ListDataProvider<>();
-    private ListDataProvider<Song> songListDataProvider = new ListDataProvider<>();
+    private BookTabPresenter bookTabPresenter;
+    private SongTabPresenter songTabPresenter;
 
     private BookPresenter bookPresenter = new BookPresenter(new BookView());
     private SongPresenter songPresenter = new SongPresenter(new SongView());
@@ -58,33 +54,14 @@ public class UserLibPanelPresenter implements Presenter {
         this.bookWebService = bookWebService;
         this.eventBus = eventBus;
 
-        this.bookWebService.getUserBooks(new MethodCallback<List<Book>>() {
-            @Override
-            public void onFailure(Method method, Throwable exception) {
-                GWT.log("getUserBooks doesnt work", exception);
-            }
+        bookTabPresenter = new BookTabPresenter(new BookTabView(), eventBus, bookWebService);
+        songTabPresenter = new SongTabPresenter(new SongTabView(), eventBus, songWebService);
 
-            @Override
-            public void onSuccess(Method method, List<Book> response) {
-                bookListDataProvider.getList().addAll(response);
-                display.setBookDataProvider(bookListDataProvider,false);
-                setBookFiledHandler();
-            }
-        });
+        bookTabPresenter.loadData(false);
+        bookTabPresenter.go(display.getBookContainer());
 
-        this.songWebService.getUserSongs(new MethodCallback<List<Song>>() {
-            @Override
-            public void onFailure(Method method, Throwable exception) {
-                GWT.log("getUserSongs doesnt work", exception);
-            }
-
-            @Override
-            public void onSuccess(Method method, List<Song> response) {
-                songListDataProvider.getList().addAll(response);
-                display.setSongDataProvider(songListDataProvider, false);
-                setSongFieldHandler();
-            }
-        });
+        songTabPresenter.loadData(false);
+        songTabPresenter.go(display.getSongContainer());
         bind();
     }
 
@@ -94,30 +71,12 @@ public class UserLibPanelPresenter implements Presenter {
     }
 
     private void bind() {
-        eventBus.addHandler(UpdateUserLibraryEvent.TYPE, event -> {
-            switch (event.getType()) {
-                case BOOK: {
-                    for (Object x : event.getSelectedItems()) {
-                        if (!bookListDataProvider.getList().contains((Book)x)) {
-                            bookListDataProvider.getList().add((Book) x);
-                        }
-                    }
-                    break;
-                }
-                case SONG: {
-                    for (Object x : event.getSelectedItems()) {
-                        if (!songListDataProvider.getList().contains(x)) {
-                            songListDataProvider.getList().add((Song) x);
-                        }
-                    }
-                    break;
-                }
-            }
-        });
+        songTabPresenter.getDisplay().getTable().setNameColumnFieldUpdater(FieldUpdaters.songFieldUpdater(songPresenter, display));
+        bookTabPresenter.getDisplay().getTable().setNameColumnFieldUpdater(FieldUpdaters.bookFieldUpdater(bookPresenter, display));
 
         display.getDeleteBooksButton().addClickHandler(event -> {
             List<Integer> listOfSelectedBooksIds = new ArrayList<>();
-            display.getSelectionBooksModel().getSelectedSet().forEach(e -> listOfSelectedBooksIds.add(e.getId()));
+            bookTabPresenter.getSelectedSet().forEach(e -> listOfSelectedBooksIds.add(e.getId()));
             if (!listOfSelectedBooksIds.isEmpty()) {
                 bookWebService.deleteBookFromLib("books", listOfSelectedBooksIds, new MethodCallback<Void>() {
                     @Override
@@ -127,8 +86,8 @@ public class UserLibPanelPresenter implements Presenter {
 
                     @Override
                     public void onSuccess(Method method, Void response) {
-                        display.getSelectionBooksModel().clear();
-                        bookListDataProvider.getList().removeIf(book -> listOfSelectedBooksIds.contains(book.getId()));
+                        bookTabPresenter.getSelectionModel().clear();
+                        bookTabPresenter.getBookListDataProvider().getList().removeIf(book -> listOfSelectedBooksIds.contains(book.getId()));
                         GWT.log("deleted book ids " + listOfSelectedBooksIds.toString());
                     }
                 });
@@ -137,7 +96,7 @@ public class UserLibPanelPresenter implements Presenter {
 
         display.getDeleteSongsButton().addClickHandler(event -> {
             List<Integer> listOfSelectedSongsIds = new ArrayList<>();
-            display.getSelectionSongsModel().getSelectedSet().forEach(e -> listOfSelectedSongsIds.add(e.getId()));
+            songTabPresenter.getSelectedSet().forEach(e -> listOfSelectedSongsIds.add(e.getId()));
             if (!listOfSelectedSongsIds.isEmpty()) {
                 songWebService.deleteSongFromLib("songs", listOfSelectedSongsIds, new MethodCallback<Void>() {
                     @Override
@@ -147,29 +106,11 @@ public class UserLibPanelPresenter implements Presenter {
 
                     @Override
                     public void onSuccess(Method method, Void response) {
-                        display.getSelectionSongsModel().clear();
-                        songListDataProvider.getList().removeIf(song -> listOfSelectedSongsIds.contains(song.getId()));
+                        songTabPresenter.getSelectionModel().clear();
+                        songTabPresenter.getSongListDataProvider().getList().removeIf(song -> listOfSelectedSongsIds.contains(song.getId()));
                         GWT.log("deleted song ids " + listOfSelectedSongsIds.toString());
                     }
                 });
-            }
-        });
-    }
-
-    private void setBookFiledHandler(){
-
-        display.getBookTable().setNameColumnFieldUpdater((index, object, value) -> {
-            bookPresenter.changeBook(object);
-            if(!(display.getObjectContainer().getWidget() instanceof BookView)) {
-                bookPresenter.go(display.getObjectContainer());
-            }
-        });
-    }
-    private void setSongFieldHandler(){
-        display.getSongTable().setNameColumnFieldUpdater((index, object, value) -> {
-            songPresenter.changeSong(object);
-            if(!(display.getObjectContainer().getWidget() instanceof SongView)) {
-                songPresenter.go(display.getObjectContainer());
             }
         });
     }
