@@ -13,10 +13,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
-
+/*
 @RunWith(MockitoJUnitRunner.class)
 public class CustomAuthenticationProviderTest {
-/*    UserDetailsServiceImpl userDetailsService = Mockito.mock(UserDetailsServiceImpl.class);
+    UserDetailsServiceImpl userDetailsService = Mockito.mock(UserDetailsServiceImpl.class);
 
     @Mock
     Authentication authentication;
@@ -93,5 +93,6 @@ public class CustomAuthenticationProviderTest {
 
         authenticationProvider.authenticate(authentication);
 
-    }*/
+    }
 }
+*/
