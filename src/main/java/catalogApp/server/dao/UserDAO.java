@@ -124,7 +124,7 @@ public class UserDAO {
                     , (rs, rowNum) -> rs.getString("value"));
             simpleUser.setDescription(result);
         } catch (IncorrectResultSizeDataAccessException ex) {
-            logger.warn("Founded more, than one instance of " + Attribute.USER_DESCRIPTION + "th attribute");
+            logger.warn("Founded " + ex.getActualSize() + " instance/s of " + Attribute.USER_DESCRIPTION + "th attribute");
         }
     }
 }

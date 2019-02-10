@@ -51,4 +51,8 @@ public interface BookWebService extends RestService {
     @POST
     @Path("rest/restoreObjects")
     void restoreBooks(List<Integer> ids, MethodCallback<Void> callback);
+
+    @POST
+    @Path("rest/mark/{id}")
+    void markBook(@PathParam("id")Integer bookId,  Integer mark, MethodCallback<Double> callback);
 }

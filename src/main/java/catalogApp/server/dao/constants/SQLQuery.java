@@ -8,16 +8,20 @@ public class SQLQuery {
         return "select O." + ID_OBJ + " as " + ID_OBJ_ALIAS + ", O." + NAME_OBJ + " " + NAME_OBJ_ALIAS + ", " +
                 " O." + ARCHIVED_OBJ + " as " + ARCHIVED_OBJ_ALIAS + ", O." + IMG_OBJ + " as " + IMG_OBJ_ALIAS + ", " +
                 " O." + COMMENT_OBJ + " as " + COMMENT_OBJ_ALIAS + ", AV2." + ID_OBJ + " as " + ID_AUTHOR_ALIAS + ", " +
-                " AV2." + NAME_OBJ + " as " + NAME_AUTHOR_ALIAS +
+                " AV2." + NAME_OBJ + " as " + NAME_AUTHOR_ALIAS + ", AV3." + VALUE_AV + " as " + MARK_ALIAS +
                 " from " + OBJECT_TABLE + " O " +
                 " join " + ATTR_VAL_TABLE + " AV on (O." + ID_OBJ + " = AV." + ID_OBJ_AV +
-                " and " + ID_ATTR_AV + "=" + Attribute.BOOK_AUTHOR_ID + ")" +
+                " and AV." + ID_ATTR_AV + "=" + Attribute.BOOK_AUTHOR_ID + ")" +
                 " join (select " + ID_OBJ + ", " + NAME_OBJ + " from " + OBJECT_TABLE + " where " + ID_TYPE_OBJ + "=" + Types.AUTHOR + ")" +
-                " AV2 on AV." + VALUE_AV + "=AV2." + ID_OBJ;
+                " AV2 on AV." + VALUE_AV + "=AV2." + ID_OBJ +
+                " left join " + ATTR_VAL_TABLE + " AV3 on (O." + ID_OBJ + "=AV3." + ID_OBJ_AV + " and AV3." + ID_ATTR_AV + "=" + Attribute.OBJECT_MARK + ")"
+                ;
     }
 
     public static String BOOK_BY_ID(int id) {
-        return ALL_BOOKS() + " where O." + ID_OBJ + "=" + id;
+        return ALL_BOOKS() +
+                " left join " + ATTR_VAL_TABLE + " AV4 on (O." + ID_OBJ + "=AV4." + ID_OBJ_AV + " and AV4." + ID_ATTR_AV + "=" + Attribute.IS_USER_MARKED_IT + ")" +
+                " where O." + ID_OBJ + "=" + id;
     }
 
     public static String ALL_AUTHORS_NAMES() {
@@ -37,11 +41,14 @@ public class SQLQuery {
         return "select O." + ID_OBJ + " as " + ID_OBJ_ALIAS + ", O." + NAME_OBJ + " " + NAME_OBJ_ALIAS + ", " +
                 " O." + ARCHIVED_OBJ + " as " + ARCHIVED_OBJ_ALIAS + ", O." + IMG_OBJ + " as " + IMG_OBJ_ALIAS + ", " +
                 " O." + COMMENT_OBJ + " as " + COMMENT_OBJ_ALIAS + ", AV." + VALUE_AV + " as " + DURATION_ALIAS + ", " +
-                " AV3." + ID_OBJ + " as " + ID_GENRE_ALIAS + ", AV3." + NAME_OBJ + " as " + NAME_GENRE_ALIAS + " " +
+                " AV3." + ID_OBJ + " as " + ID_GENRE_ALIAS + ", AV3." + NAME_OBJ + " as " + NAME_GENRE_ALIAS +  ", " +
+                " AV4." + VALUE_AV + " as " + MARK_ALIAS +
                 " from " + OBJECT_TABLE + " O" +
                 " join " + ATTR_VAL_TABLE + " AV on (O." + ID_OBJ + " = AV." + ID_OBJ_AV + " and AV." + ID_ATTR_AV + "=" + Attribute.SONG_DURATION + ")" +
                 " join " + ATTR_VAL_TABLE + " AV2 on (O." + ID_OBJ + "= AV2." + ID_OBJ_AV + " and AV2." + ID_ATTR_AV + "=" + Attribute.SONG_GENRE_ID + ")" +
-                " join (select " + ID_OBJ + ", " + NAME_OBJ + " from " + OBJECT_TABLE + " where " + ID_TYPE_OBJ + "=" + Types.SONG_GENRE + ") AV3 on AV2." + VALUE_AV + "=AV3." + ID_OBJ;
+                " join (select " + ID_OBJ + ", " + NAME_OBJ + " from " + OBJECT_TABLE + " where " + ID_TYPE_OBJ + "=" + Types.SONG_GENRE + ") AV3 on (AV2." + VALUE_AV + "=AV3." + ID_OBJ + ")" +
+                " left join " + ATTR_VAL_TABLE + " AV4 on (O." + ID_OBJ + "=AV4." + ID_OBJ_AV + " and AV4." + ID_ATTR_AV + "=" + Attribute.OBJECT_MARK + ")"
+                ;
     }
 
     public static String SONG_BY_ID(int id) {

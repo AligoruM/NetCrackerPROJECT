@@ -43,4 +43,8 @@ public interface SongWebService extends RestService {
     @POST
     @Path("rest/restoreObjects")
     void restoreSongs(List<Integer> ids, MethodCallback<Void> callback);
+
+    @POST
+    @Path("rest/mark/{id}")
+    void markSong(@PathParam("id")Integer songId,  Integer mark, MethodCallback<Double> callback);
 }

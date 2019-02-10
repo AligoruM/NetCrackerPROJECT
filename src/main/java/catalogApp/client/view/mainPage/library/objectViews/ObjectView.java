@@ -1,5 +1,6 @@
 package catalogApp.client.view.mainPage.library.objectViews;
 
+import catalogApp.client.view.components.RatingPanel;
 import catalogApp.shared.model.BaseObject;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -20,6 +21,8 @@ public class ObjectView extends Composite {
     FlexTable table;
     @UiField
     Image objectImage;
+    @UiField
+    RatingPanel ratingPanel;
 
     private Label name = new Label();
     private DecoratorPanel comment = new DecoratorPanel();

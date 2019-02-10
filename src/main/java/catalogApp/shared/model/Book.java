@@ -5,10 +5,13 @@ import com.google.gwt.core.client.GWT;
 
 import java.util.Objects;
 
-public class Book extends BaseObject {
+public class Book extends BaseObject implements Ratable {
 
 
     private Author author;
+    private double rating;
+    private boolean isMarked;
+
 
     public Book() {
     }
@@ -26,11 +29,23 @@ public class Book extends BaseObject {
     }
 
     @Override
-    public String toString() {
-        return "Book{" + "id=" + getId() +
-                ", name='" + getName() + '\'' +
-                ", author=" + author +
-                '}';
+    public double getRating() {
+        return rating;
+    }
+
+    @Override
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    @Override
+    public boolean isMarked() {
+        return isMarked;
+    }
+
+    @Override
+    public void setMarked(boolean marked) {
+        isMarked = marked;
     }
 
     @Override
@@ -51,5 +66,17 @@ public class Book extends BaseObject {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), author);
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "author=" + author +
+                ", rating=" + rating +
+                ", isMarked=" + isMarked +
+                ", id=" + getId() +
+                ", name='" + getName() + '\'' +
+                ", type=" + getType() +
+                '}';
     }
 }

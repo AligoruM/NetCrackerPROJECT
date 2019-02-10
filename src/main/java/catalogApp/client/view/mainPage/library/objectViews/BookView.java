@@ -1,6 +1,7 @@
 package catalogApp.client.view.mainPage.library.objectViews;
 
 import catalogApp.client.presenter.BookPresenter;
+import catalogApp.client.view.components.RatingPanel;
 import catalogApp.shared.model.Book;
 import com.google.gwt.user.client.ui.Label;
 
@@ -28,5 +29,11 @@ public class BookView extends ObjectView implements BookPresenter.Display {
     public void setData(Book book){
         super.setData(book);
         authorLabel.setText(book.getAuthor().getName());
+        ratingPanel.setRating(book.getRating());
+        ratingPanel.setActive(!book.isMarked());
+    }
+
+    public RatingPanel getRatingPanel(){
+        return ratingPanel;
     }
 }

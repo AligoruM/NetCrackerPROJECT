@@ -17,7 +17,7 @@ public interface IJdbcDAO {
 
     List<Book> getUsersBooks(int id);
 
-    List<Book> getBooksByIds(List<Integer> ids);
+    List<Book> getBooksByIds(List<Integer> ids, int userId);
 
     Book getBookById(int id);
 
@@ -52,4 +52,8 @@ public interface IJdbcDAO {
     void deleteObjectFromUserLibrary(int id, List<Integer> ids, int attributeId);
 
     void changeStateItems(List<Integer> ids, boolean state);
+
+    double markItem(int userId, int objectId, double newMark);
+
+    List<Integer> getUsersMarks(int userId);
 }

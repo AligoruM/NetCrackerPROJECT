@@ -1,0 +1,29 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <g:HTMLPanel>
+        <g:VerticalPanel>
+            <g:cell horizontalAlignment="ALIGN_CENTER">
+                <g:Label ui:field="ratingLabel"/>
+            </g:cell>
+            <g:cell horizontalAlignment="ALIGN_CENTER">
+                <g:HorizontalPanel ui:field="mainPanel" spacing="5">
+                    <g:cell>
+                        <g:Button ui:field="oneButton" text="1"/>
+                    </g:cell>
+                    <g:cell>
+                        <g:Button ui:field="twoButton" text="2"/>
+                    </g:cell>
+                    <g:cell>
+                        <g:Button ui:field="threeButton" text="3"/>
+                    </g:cell>
+                    <g:cell>
+                        <g:Button ui:field="fourButton" text="4"/>
+                    </g:cell>
+                    <g:cell>
+                        <g:Button ui:field="fiveButton" text="5"/>
+                    </g:cell>
+                </g:HorizontalPanel>
+            </g:cell>
+        </g:VerticalPanel>
+    </g:HTMLPanel>
+</ui:UiBinder>

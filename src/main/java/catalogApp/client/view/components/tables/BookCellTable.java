@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static catalogApp.client.view.constants.LibraryConstants.AUTHOR_COL_LABEL;
+import static catalogApp.client.view.constants.LibraryConstants.RATING_COL_LABEL;
 
 public class BookCellTable extends AbstractCatalogCellTable<Book> {
 
@@ -17,9 +18,12 @@ public class BookCellTable extends AbstractCatalogCellTable<Book> {
         super(dataProvider);
 
         Column<Book, String> authorColumn = BookCellTableColumns.getBookAuthorNameColumn(true);
-        setColumnWidth(authorColumn, 140, com.google.gwt.dom.client.Style.Unit.PX);
+        setColumnWidth(authorColumn, 100, com.google.gwt.dom.client.Style.Unit.PX);
         addColumn(authorColumn, AUTHOR_COL_LABEL);
         addSorter(authorColumn, Comparator.comparing(e-> e.getAuthor().getName()));
+        Column<Book, String> ratingColumn = BookCellTableColumns.getBookRatingColumn(true);
+        addColumn(ratingColumn, RATING_COL_LABEL);
+        addSorter(ratingColumn, Comparator.comparing(Book::getRating));
     }
 
 }

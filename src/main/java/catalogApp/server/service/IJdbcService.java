@@ -46,5 +46,7 @@ public interface IJdbcService {
 
     void restoreItems(List<Integer> ids);
 
+    double markItem(int objectId, int newMark);
+
     boolean changePassword(String password);
 }

@@ -4,6 +4,7 @@ public class LibraryConstants {
     public static final String BOOKS_LABEL = "Books";
     public static final String SONGS_LABEL = "Songs";
     public static final String AUTHOR_COL_LABEL = "Author";
+    public static final String RATING_COL_LABEL = "Rating";
     public static final String GENRE_COL_LABEL = "Genre";
     public static final String DURATION_COL_LABEL = "Duration";
     public static final String NAME_COL_LABEL = "Name";

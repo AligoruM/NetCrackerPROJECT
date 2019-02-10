@@ -1,6 +1,7 @@
 package catalogApp.client.view.mainPage.library.objectViews;
 
 import catalogApp.client.presenter.SongPresenter;
+import catalogApp.client.view.components.RatingPanel;
 import catalogApp.client.view.components.tables.utils.DurationFormatter;
 import catalogApp.shared.model.Song;
 import com.google.gwt.user.client.ui.Label;
@@ -31,6 +32,13 @@ public class SongView extends ObjectView implements SongPresenter.Display {
         super.setData(song);
         genreLabel.setText(song.getGenre().getName());
         durationLabel.setText(DurationFormatter.formatDuration(song.getDuration()));
+        ratingPanel.setRating(song.getRating());
+        ratingPanel.setActive(!song.isMarked());
+    }
+
+
+    public RatingPanel getRatingPanel(){
+        return ratingPanel;
     }
 
 }

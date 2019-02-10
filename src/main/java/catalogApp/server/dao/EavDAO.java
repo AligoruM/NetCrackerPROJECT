@@ -14,11 +14,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.Attr;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -55,7 +59,7 @@ public class EavDAO implements IJdbcDAO {
             return null;
         }
         for (Book item : getAllBooks()) {
-            if(item.getAuthor().getName().equalsIgnoreCase(authorName) && item.getName().equalsIgnoreCase(name)){
+            if (item.getAuthor().getName().equalsIgnoreCase(authorName) && item.getName().equalsIgnoreCase(name)) {
                 String msg = "Book with name = " + name + " and author = " + authorName + " already exist";
                 logger.info(msg);
                 System.out.println(msg);
@@ -85,7 +89,7 @@ public class EavDAO implements IJdbcDAO {
     }
 
     @Override
-    public List<Book> getBooksByIds(List<Integer> ids) {
+    public List<Book> getBooksByIds(List<Integer> ids, int userId) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue(IDS_ALIAS, ids);
         return namedParameterJdbcTemplate.query(SQLQuery.BOOKS_BY_IDS(IDS_ALIAS), params, new BookMapper());
@@ -119,7 +123,7 @@ public class EavDAO implements IJdbcDAO {
             return null;
         }
         for (Song item : getAllSongs()) {
-            if(item.getGenre().getName().equalsIgnoreCase(name) && item.getName().equalsIgnoreCase(genreName)){
+            if (item.getGenre().getName().equalsIgnoreCase(name) && item.getName().equalsIgnoreCase(genreName)) {
                 String msg = "Song with name = " + name + " and genre = " + genreName + " already exist";
                 logger.info(msg);
                 throw new ItemAlreadyExistException(msg);
@@ -135,8 +139,7 @@ public class EavDAO implements IJdbcDAO {
             if (duration.isEmpty() || Integer.valueOf(duration) <= 0) {
                 jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE("-1", songId, Attribute.SONG_DURATION));
                 logger.info("Incoming duration is empty or isn't positive.");
-            }
-            else {
+            } else {
                 jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(duration, songId, Attribute.SONG_DURATION));
             }
             return jdbcTemplate.queryForObject(SQLQuery.SONG_BY_ID(songId), new SongMapper());
@@ -192,44 +195,6 @@ public class EavDAO implements IJdbcDAO {
         jdbcTemplate.execute(SQLQuery.UPDATE_ATTRIBUTE_VALUE(value, id, attributeId));
     }
 
-    private List<Integer> getObjectsIdsByUserIdAndAttribute(int id, int idAttribute) {
-        return jdbcTemplate.query(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(id, idAttribute), (rs, rowNum) -> rs.getInt(VALUE_AV));
-    }
-
-    private int createObjectAndReturnNewId(String name, int type) {
-        SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
-        return jdbcInsert.withTableName(OBJECT_TABLE)
-                .usingGeneratedKeyColumns(ID_OBJ)
-                .executeAndReturnKey(new HashMap<String, String>() {{
-                    put(NAME_OBJ, name);
-                    put(ID_TYPE_OBJ, String.valueOf(type));
-                    put(ARCHIVED_OBJ, "0");
-                }})
-                .intValue();
-    }
-
-    private Integer createOrGetAuthor(String authorName){
-        Integer authorId;
-        try {
-            authorId = jdbcTemplate.queryForObject(SQLQuery.AUTHOR_ID_BY_NAME(authorName), (rs, rowNum) -> rs.getInt(ID_OBJ));
-        } catch (IncorrectResultSizeDataAccessException exception) {
-            authorId = createObjectAndReturnNewId(authorName, Types.AUTHOR);
-            logger.info("Author(" + authorName +") not found. Created.");
-        }
-        return authorId;
-    }
-
-    private Integer createOrGetGenre(String genreName){
-        Integer genreId;
-        try {
-            genreId = jdbcTemplate.queryForObject(SQLQuery.GENRE_ID_BY_NAME(genreName), (rs, rowNum) -> rs.getInt(ID_OBJ));
-        } catch (IncorrectResultSizeDataAccessException exception) {
-            genreId = createObjectAndReturnNewId(genreName, Types.SONG_GENRE);
-            logger.info("Author(" + genreName +") not found. Created.");
-        }
-        return genreId;
-    }
-
     @Override
     public void addObjectsToUserLibrary(int userId, List<Integer> objectIds, int attributeId) {
         List<Integer> ids = getObjectsIdsByUserIdAndAttribute(userId, attributeId);
@@ -253,6 +218,95 @@ public class EavDAO implements IJdbcDAO {
         params.addValue(IDS_ALIAS, ids);
         int iState = state ? 1 : 0;
         namedParameterJdbcTemplate.update(SQLQuery.UPDATE_OBJECTS_STATE(iState, IDS_ALIAS), params);
+    }
+
+    @Override
+    public double markItem(int userId, int objectId, double newMark) {
+        Double currentMark;
+        Integer currentQuantity = 0;
+
+        List<Integer> marks = jdbcTemplate.query(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(userId, Attribute.IS_USER_MARKED_IT), (rs, i) -> rs.getInt(VALUE_AV_ALIAS));
+
+        if (!marks.contains(objectId)) {
+            jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(String.valueOf(objectId), userId, Attribute.IS_USER_MARKED_IT));
+            try {
+                currentMark = jdbcTemplate.queryForObject(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(objectId, Attribute.OBJECT_MARK),
+                        (rs, rowNum) -> rs.getDouble(VALUE_AV_ALIAS));
+            } catch (IncorrectResultSizeDataAccessException ex) {
+                currentMark = 0.0;
+                if (ex.getActualSize() == 0) {
+                    jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(currentMark.toString(), objectId, Attribute.OBJECT_MARK));
+                }
+            }
+            try {
+                currentQuantity = jdbcTemplate.queryForObject(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(objectId, Attribute.OBJECT_MARK_QUANTITY),
+                        (rs, rowNum) -> rs.getInt("value"));
+            } catch (IncorrectResultSizeDataAccessException ex) {
+                jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(currentQuantity.toString(), objectId, Attribute.OBJECT_MARK_QUANTITY));
+            }
+            if (currentMark != null && currentQuantity != null) {
+                double updatedMark = (currentMark * currentQuantity + newMark) / (currentQuantity + 1);
+                jdbcTemplate.update(SQLQuery.UPDATE_ATTRIBUTE_VALUE(Double.toString(updatedMark), objectId, Attribute.OBJECT_MARK));
+                jdbcTemplate.update(SQLQuery.UPDATE_ATTRIBUTE_VALUE(Integer.toString(currentQuantity + 1), objectId, Attribute.OBJECT_MARK_QUANTITY));
+                return updatedMark;
+            }
+        }else {
+            try {
+                currentMark = jdbcTemplate.queryForObject(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(objectId, Attribute.OBJECT_MARK),
+                        (rs, rowNum) -> rs.getDouble(VALUE_AV_ALIAS));
+            }catch (IncorrectResultSizeDataAccessException ex){
+                return 0.0;
+            }
+        }
+
+        if(currentMark!=null) {
+            return currentMark;
+        }else {
+            return 0.0;
+        }
+    }
+
+    @Override
+    public List<Integer> getUsersMarks(int userId) {
+        return jdbcTemplate.query(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(userId, Attribute.IS_USER_MARKED_IT), (rs, rowNum) -> rs.getInt(VALUE_AV_ALIAS));
+    }
+
+    private List<Integer> getObjectsIdsByUserIdAndAttribute(int id, int idAttribute) {
+        return jdbcTemplate.query(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(id, idAttribute), (rs, rowNum) -> rs.getInt(VALUE_AV));
+    }
+
+    private int createObjectAndReturnNewId(String name, int type) {
+        SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
+        return jdbcInsert.withTableName(OBJECT_TABLE)
+                .usingGeneratedKeyColumns(ID_OBJ)
+                .executeAndReturnKey(new HashMap<String, String>() {{
+                    put(NAME_OBJ, name);
+                    put(ID_TYPE_OBJ, String.valueOf(type));
+                    put(ARCHIVED_OBJ, "0");
+                }})
+                .intValue();
+    }
+
+    private Integer createOrGetAuthor(String authorName) {
+        Integer authorId;
+        try {
+            authorId = jdbcTemplate.queryForObject(SQLQuery.AUTHOR_ID_BY_NAME(authorName), (rs, rowNum) -> rs.getInt(ID_OBJ));
+        } catch (IncorrectResultSizeDataAccessException exception) {
+            authorId = createObjectAndReturnNewId(authorName, Types.AUTHOR);
+            logger.info("Author(" + authorName + ") not found. Created.");
+        }
+        return authorId;
+    }
+
+    private Integer createOrGetGenre(String genreName) {
+        Integer genreId;
+        try {
+            genreId = jdbcTemplate.queryForObject(SQLQuery.GENRE_ID_BY_NAME(genreName), (rs, rowNum) -> rs.getInt(ID_OBJ));
+        } catch (IncorrectResultSizeDataAccessException exception) {
+            genreId = createObjectAndReturnNewId(genreName, Types.SONG_GENRE);
+            logger.info("Author(" + genreName + ") not found. Created.");
+        }
+        return genreId;
     }
 }
 

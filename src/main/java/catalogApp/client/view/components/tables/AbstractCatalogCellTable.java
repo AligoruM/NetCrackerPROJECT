@@ -52,7 +52,7 @@ public abstract class AbstractCatalogCellTable<T extends BaseObject> extends Cel
 
 
 
-        setColumnWidth(nameColumn, 180, com.google.gwt.dom.client.Style.Unit.PX);
+        setColumnWidth(nameColumn, 140, com.google.gwt.dom.client.Style.Unit.PX);
         addColumn(nameColumn, NAME_COL_LABEL);
         addSorter(nameColumn, Comparator.comparing(BaseObject::getName));
 

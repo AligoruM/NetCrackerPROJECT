@@ -4,10 +4,12 @@ import catalogApp.server.dao.constants.Types;
 
 import java.util.Objects;
 
-public class Song extends BaseObject {
+public class Song extends BaseObject implements Ratable {
 
     private int duration;
     private SongGenre genre;
+    private double rating;
+    private boolean isMarked;
 
     public Song() {
     }
@@ -33,16 +35,6 @@ public class Song extends BaseObject {
     }
 
     @Override
-    public String toString() {
-        return "Song{" + "duration=" + duration +
-                ", genre=" + genre +
-                ", id=" + getId() +
-                ", name='" + getName() + '\'' +
-                ", type=" + getType() +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -59,7 +51,40 @@ public class Song extends BaseObject {
     }
 
     @Override
+    public double getRating() {
+        return rating;
+    }
+
+    @Override
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    @Override
+    public boolean isMarked() {
+        return isMarked;
+    }
+
+    @Override
+    public void setMarked(boolean marked) {
+        isMarked = marked;
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), duration, genre);
+    }
+
+    @Override
+    public String toString() {
+        return "Song{" +
+                "duration=" + duration +
+                ", genre=" + genre +
+                ", rating=" + rating +
+                ", isMarked=" + isMarked +
+                ", id=" + getId() +
+                ", name='" + getName() + '\'' +
+                ", type=" + getType() +
+                '}';
     }
 }

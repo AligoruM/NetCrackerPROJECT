@@ -4,26 +4,14 @@ import catalogApp.server.dao.IJdbcDAO;
 import catalogApp.server.dao.UserDAO;
 import catalogApp.server.dao.constants.Attribute;
 import catalogApp.shared.exception.ItemAlreadyExistException;
-import catalogApp.shared.model.BaseObject;
-import catalogApp.shared.model.Book;
-import catalogApp.shared.model.SimpleUser;
-import catalogApp.shared.model.Song;
-import org.apache.commons.codec.digest.Md5Crypt;
-import org.eclipse.jetty.util.security.Credential;
-import org.springframework.security.config.authentication.PasswordEncoderParser;
+import catalogApp.shared.model.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import sun.security.provider.MD5;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static catalogApp.shared.constants.FileServiceConstants.IMAGE_SERVICE_DIR;
@@ -66,14 +54,19 @@ public class JdbcService implements IJdbcService {
     @Override
     public List<Book> getLibBooks() {
         int userId = getUserId();
-        return jdbcDAO.getUsersBooks(userId);
+        List<Book> list = jdbcDAO.getUsersBooks(userId);
+        setIsMarked(userId, list);
+        return list;
     }
 
     @Override
     public List<Book> addBooksToLibrary(List<Integer> idList) {
         int userId = getUserId();
         jdbcDAO.addObjectsToUserLibrary(userId, idList, Attribute.LIKED_BOOK_ID);
-        return jdbcDAO.getBooksByIds(idList);
+
+        List<Book> list = jdbcDAO.getBooksByIds(idList, userId);
+        setIsMarked(userId, list);
+        return list;
     }
 
     @Override
@@ -121,14 +114,18 @@ public class JdbcService implements IJdbcService {
     @Override
     public List<Song> getLibSongs() {
         int userId = getUserId();
-        return jdbcDAO.getUsersSongs(userId);
+        List<Song> list = jdbcDAO.getUsersSongs(userId);
+        setIsMarked(userId, list);
+        return list;
     }
 
     @Override
     public List<Song> addSongsToLibrary(List<Integer> idList) {
         int userId = getUserId();
         jdbcDAO.addObjectsToUserLibrary(userId, idList, Attribute.LIKED_SONG_ID);
-        return jdbcDAO.getSongsByIds(idList);
+        List<Song> list = jdbcDAO.getSongsByIds(idList);
+        setIsMarked(userId, list);
+        return list;
     }
 
     @Override
@@ -194,6 +191,11 @@ public class JdbcService implements IJdbcService {
         jdbcDAO.changeStateItems(ids, false);
     }
 
+    @Override
+    public double markItem(int objectId, int newMark) {
+        return jdbcDAO.markItem(getUserId(), objectId, newMark);
+    }
+
     private int getUserId() {
         return userDAO.getUserIdByName(SecurityContextHolder.getContext().getAuthentication().getName());
     }
@@ -217,6 +219,15 @@ public class JdbcService implements IJdbcService {
         if (object.getImagePath() != null) {
             String filepath = IMAGE_SERVICE_DIR + "/" + object.getImagePath();
             jdbcDAO.updateObjectImage(id, filepath);
+        }
+    }
+
+    private void setIsMarked(int userId, List<? extends Ratable> list){
+        List<Integer> markedIds = jdbcDAO.getUsersMarks(userId);
+        for (Ratable item : list) {
+            if(markedIds.contains(item.getId())){
+                item.setMarked(true);
+            }
         }
     }
 

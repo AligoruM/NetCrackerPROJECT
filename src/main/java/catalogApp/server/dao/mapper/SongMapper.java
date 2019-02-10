@@ -32,6 +32,7 @@ public class SongMapper implements RowMapper<Song> {
         song.setDuration(rs.getInt(DURATION_ALIAS));
         song.setComment(rs.getString(COMMENT_OBJ_ALIAS));
         song.setImagePath(rs.getString(IMG_OBJ_ALIAS));
+        song.setRating(rs.getDouble(MARK_ALIAS));
         song.setGenre(genre);
         song.setType(songType);
 

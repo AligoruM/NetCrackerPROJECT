@@ -32,6 +32,14 @@ public class GeneralWebService {
     }
 
     @POST
+    @Path("/mark/{id}")
+    public Double markItem(@PathParam("id")int objectId, Integer newMark){
+        System.out.println("id = " + objectId);
+        System.out.println("mark = " + newMark);
+        return jdbcService.markItem(objectId, newMark);
+    }
+
+    @POST
     @Path("/archiveObjects")
     @Consumes(MediaType.APPLICATION_JSON)
     public void archiveSongs(List<Integer> ids) {

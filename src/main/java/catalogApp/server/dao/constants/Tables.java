@@ -39,4 +39,6 @@ public class Tables {
 
     public static final String IDS_ALIAS = "ids";
     public static final String COUNT_ALIAS = "count";
+    public static final String MARK_ALIAS = "mark";
+    public static final String IS_MARKED_ALIAS = "marked";
 }
