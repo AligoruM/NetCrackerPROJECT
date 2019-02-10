@@ -1,11 +1,15 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-             xmlns:g='urn:import:com.google.gwt.user.client.ui'
->
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <g:HTMLPanel>
-        <g:VerticalPanel>
-            <g:DecoratorPanel>
+        <g:DecoratorPanel>
+            <g:VerticalPanel horizontalAlignment="ALIGN_RIGHT">
                 <g:SimplePanel ui:field="simplePanel"/>
-            </g:DecoratorPanel>
-        </g:VerticalPanel>
+                <g:HorizontalPanel ui:field="hPanel">
+                    <g:Button ui:field="addButton" text="Add user"/>
+                    <g:Button ui:field="enableButton" text="Enable user"/>
+                    <g:Button ui:field="banButton" text="Ban user"/>
+                </g:HorizontalPanel>
+            </g:VerticalPanel>
+        </g:DecoratorPanel>
     </g:HTMLPanel>
 </ui:UiBinder>

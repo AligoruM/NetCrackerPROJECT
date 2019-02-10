@@ -12,9 +12,13 @@ import org.springframework.stereotype.Service;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static catalogApp.shared.constants.FileServiceConstants.IMAGE_FIELD;
+import static catalogApp.shared.constants.UserConstants.*;
 
 @Service
 @Controller
@@ -22,7 +26,6 @@ import static catalogApp.shared.constants.FileServiceConstants.IMAGE_FIELD;
 public class UserWebService {
 
     private static IJdbcService jdbcService;
-    private static IImageService imageService;
 
     @POST
     @Path("/UserProfile")
@@ -47,18 +50,6 @@ public class UserWebService {
         return jdbcService.getAllUsers();
     }
 
-    @POST
-    @Path("/image")
-    @Consumes({MediaType.MULTIPART_FORM_DATA})
-    @Produces(MediaType.TEXT_HTML)
-    public String uploadImage(@FormDataParam(IMAGE_FIELD) InputStream fileInputStream,
-                               @FormDataParam(IMAGE_FIELD) FormDataContentDisposition fileMetaData) {
-        if (imageService.saveImage(fileInputStream, fileMetaData.getFileName())) {
-            return "200";
-        } else {
-            return "500";
-        }
-    }
 
     @POST
     @Path("/updPass")
@@ -66,12 +57,26 @@ public class UserWebService {
         return jdbcService.changePassword(password);
     }
 
+    @POST
+    @Path("/user")
+    public SimpleUser createUser(Map<String, String> map){
+        if(map==null || !map.containsKey(USERNAME_FIELD) || !map.containsKey(PASSWORD_FIELD) || !map.containsKey(ROLE_FIELD)){
+            return null;
+        }else {
+            return jdbcService.addUser(map.get(USERNAME_FIELD), map.get(PASSWORD_FIELD), map.get(ROLE_FIELD));
+        }
+    }
 
-    public static void setJdbcService(IJdbcService service) {
+    @GET
+    @Path("/roles")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<String> getRoles(){
+        return Arrays.asList("ADMIN", "USER");
+    }
+
+
+    public void setJdbcService(IJdbcService service) {
         jdbcService = service;
     }
 
-    public static void setImageService(IImageService service) {
-        imageService = service;
-    }
 }

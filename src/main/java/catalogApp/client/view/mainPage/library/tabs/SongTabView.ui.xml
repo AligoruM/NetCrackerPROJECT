@@ -1,11 +1,12 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <g:HTMLPanel>
-        <g:VerticalPanel>
-            <g:SimplePanel ui:field="simplePanel"/>
-            <g:cell horizontalAlignment="ALIGN_CENTER">
+        <g:VerticalPanel horizontalAlignment="ALIGN_CENTER">
+            <g:ScrollPanel ui:field="simplePanel"/>
+            <g:HorizontalPanel horizontalAlignment="ALIGN_CENTER" verticalAlignment="ALIGN_MIDDLE" spacing="5">
+                <g:Label ui:field="searchLabel"/>
                 <g:TextBox ui:field="searchField"/>
-            </g:cell>
+            </g:HorizontalPanel>
         </g:VerticalPanel>
     </g:HTMLPanel>
 </ui:UiBinder>

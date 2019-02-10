@@ -1,16 +1,18 @@
 package catalogApp.client.presenter;
 
 import catalogApp.client.services.BookWebService;
-import catalogApp.shared.exception.ItemAlreadyExistException;
+import catalogApp.client.view.dialogs.AddAuthorDialogView;
 import catalogApp.shared.model.Book;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.RootPanel;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AddBookDialogPresenter implements Presenter {
@@ -20,14 +22,22 @@ public class AddBookDialogPresenter implements Presenter {
 
         HasClickHandlers getCancelButton();
 
+        HasClickHandlers getPlusButton();
+
         void showDialog();
 
         void hideDialog();
 
         List<String> getAddInfo();
 
-        void setSuggestions(List<String> suggestions);
+        ListBox getListBox();
+
+        void setListBoxData(List<String> suggestions);
     }
+
+    private AddAuthorDialogPresenter addAuthorDialogPresenter;
+
+    private List<String> authorList = new ArrayList<>();
 
     private final Display display;
     private final BookWebService bookService;
@@ -37,6 +47,7 @@ public class AddBookDialogPresenter implements Presenter {
         this.bookService = bookService;
         this.display = view;
         this.bookTabPresenter = bookTabPresenter;
+        addAuthorDialogPresenter = new AddAuthorDialogPresenter(new AddAuthorDialogView(), bookService);
     }
 
     @Override
@@ -46,6 +57,8 @@ public class AddBookDialogPresenter implements Presenter {
     }
 
     private void bind() {
+        display.getListBox().addFocusHandler(event -> display.setListBoxData(authorList));
+
         bookService.getAllAuthor(new MethodCallback<List<String>>() {
             @Override
             public void onFailure(Method method, Throwable throwable) {
@@ -54,8 +67,14 @@ public class AddBookDialogPresenter implements Presenter {
 
             @Override
             public void onSuccess(Method method, List<String> strings) {
-                display.setSuggestions(strings);
+                authorList=strings;
+                display.setListBoxData(authorList);
             }
+        });
+
+        display.getPlusButton().addClickHandler(event -> {
+            addAuthorDialogPresenter.setAuthors(authorList);
+            addAuthorDialogPresenter.go(RootPanel.get());
         });
 
         display.getSubmitButton().addClickHandler(event -> {

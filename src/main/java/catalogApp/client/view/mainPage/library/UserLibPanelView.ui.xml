@@ -1,19 +1,19 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <g:HTMLPanel ui:field="mainPanel">
-        <g:HorizontalPanel>
+        <g:HorizontalPanel horizontalAlignment="ALIGN_CENTER">
             <g:HTMLPanel>
                 <h3 align="center" style="margin: 13px;">My library</h3>
                 <g:DecoratorPanel>
-                    <g:HorizontalPanel>
+                    <g:HorizontalPanel horizontalAlignment="ALIGN_CENTER">
                         <g:DecoratorPanel>
-                            <g:VerticalPanel>
+                            <g:VerticalPanel horizontalAlignment="ALIGN_CENTER">
                                 <g:SimplePanel ui:field="bookPanel"/>
                                 <g:Button ui:field="deleteBooksButton" text="Delete books from lib"/>
                             </g:VerticalPanel>
                         </g:DecoratorPanel>
                         <g:DecoratorPanel>
-                            <g:VerticalPanel >
+                            <g:VerticalPanel horizontalAlignment="ALIGN_CENTER">
                                 <g:SimplePanel ui:field="songPanel"/>
                                 <g:Button ui:field="deleteSongsButton" text="Delete songs from lib"/>
                             </g:VerticalPanel>

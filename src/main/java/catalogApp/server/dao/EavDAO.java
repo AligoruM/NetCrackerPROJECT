@@ -25,6 +25,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import static catalogApp.server.dao.constants.Tables.*;
 
@@ -78,6 +79,11 @@ public class EavDAO implements IJdbcDAO {
             logger.error("Problem with access to DataBase", ex);
             return null;
         }
+    }
+
+    @Override
+    public int addAuthor(String name) {
+        return createObjectAndReturnNewId(name, Types.AUTHOR);
     }
 
     @Override
@@ -225,9 +231,9 @@ public class EavDAO implements IJdbcDAO {
         Double currentMark;
         Integer currentQuantity = 0;
 
-        List<Integer> marks = jdbcTemplate.query(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(userId, Attribute.IS_USER_MARKED_IT), (rs, i) -> rs.getInt(VALUE_AV_ALIAS));
+        List<Integer> userMarks = jdbcTemplate.query(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(userId, Attribute.IS_USER_MARKED_IT), (rs, i) -> rs.getInt(VALUE_AV_ALIAS));
 
-        if (!marks.contains(objectId)) {
+        if (!userMarks.contains(objectId)) {
             jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(String.valueOf(objectId), userId, Attribute.IS_USER_MARKED_IT));
             try {
                 currentMark = jdbcTemplate.queryForObject(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(objectId, Attribute.OBJECT_MARK),
@@ -264,6 +270,14 @@ public class EavDAO implements IJdbcDAO {
         }else {
             return 0.0;
         }
+    }
+
+    @Override
+    public Integer createUser(String name, String password, Set<String> roles) {
+        int id = createObjectAndReturnNewId(name, Types.USER);
+        jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(password, id, Attribute.USER_PASSWORD));
+        roles.forEach(e->jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(e, id, Attribute.USER_ROLE)));
+        return id;
     }
 
     @Override

@@ -7,15 +7,13 @@ import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 
 import java.util.List;
 
+import static catalogApp.client.view.constants.LibraryConstants.SEARCH_LABEL;
 import static catalogApp.client.view.constants.LibraryConstants.TABLE_HEIGHT;
 
 public class SongTabView extends Composite implements SongTabPresenter.Display {
@@ -29,6 +27,8 @@ public class SongTabView extends Composite implements SongTabPresenter.Display {
     SimplePanel simplePanel;
     @UiField
     TextBox searchField;
+    @UiField
+    Label searchLabel;
 
 
     private static SongTabViewUiBinder ourUiBinder = GWT.create(SongTabViewUiBinder.class);
@@ -41,6 +41,7 @@ public class SongTabView extends Composite implements SongTabPresenter.Display {
         table = new SongCellTable(list);
         simplePanel.add(table);
         simplePanel.setHeight(TABLE_HEIGHT);
+        searchLabel.setText(SEARCH_LABEL);
     }
 
     @Override

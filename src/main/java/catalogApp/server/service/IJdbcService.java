@@ -6,6 +6,7 @@ import catalogApp.shared.model.SimpleUser;
 import catalogApp.shared.model.Song;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IJdbcService {
     List<Book> getAllBooks();
@@ -18,7 +19,7 @@ public interface IJdbcService {
 
     List<Book> addBooksToLibrary(List<Integer> idList);
 
-    void deleteBooksFromLibrary(List<Integer> ids);
+    Boolean addAuthor(String authorName);
 
     Book updateBook(Book newBook);
 
@@ -37,6 +38,8 @@ public interface IJdbcService {
     SimpleUser getSimpleUser();
 
     List<SimpleUser> getAllUsers();
+
+    SimpleUser addUser(String name, String pass, String role);
 
     void deleteObjectFromUserLib(List<Integer> ids, int type);
 

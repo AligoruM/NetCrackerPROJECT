@@ -21,20 +21,17 @@ public class AddSongDialogView extends Composite implements AddSongDialogPresent
     Button cancelButton;
     @UiField
     TextBox nameBox;
-    @UiField(provided = true)
-    SuggestBox genreBox;
+    @UiField
+    ListBox genreBox;
     @UiField
     IntegerBox durationBox;
     @UiField
     DialogBox dialogPanel;
 
     private static AddSongDialogViewUiBinder ourUiBinder = GWT.create(AddSongDialogViewUiBinder.class);
-    private MultiWordSuggestOracle wordSuggest = new MultiWordSuggestOracle();
 
     public AddSongDialogView() {
-        genreBox = new SuggestBox(wordSuggest);
         initWidget(ourUiBinder.createAndBindUi(this));
-        genreBox.setLimit(6);
         durationBox.setMaxLength(4);
         durationBox.addKeyPressHandler(DurationFormatter.durationBoxKeyPressHandler());
     }
@@ -61,12 +58,12 @@ public class AddSongDialogView extends Composite implements AddSongDialogPresent
 
     @Override
     public List<String> getAddInfo() {
-        return Arrays.asList(nameBox.getText(), genreBox.getText(), durationBox.getText());
+        return Arrays.asList(nameBox.getText(), genreBox.getSelectedValue(), durationBox.getText());
     }
 
     @Override
     public void setSuggestions(List<String> suggestions) {
-        wordSuggest.addAll(suggestions);
-        genreBox.refreshSuggestionList();
+        suggestions.forEach(x-> genreBox.addItem(x));
     }
+
 }

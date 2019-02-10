@@ -5,6 +5,7 @@ import catalogApp.shared.model.Book;
 import catalogApp.shared.model.Song;
 
 import java.util.List;
+import java.util.Set;
 
 public interface IJdbcDAO {
 
@@ -14,6 +15,8 @@ public interface IJdbcDAO {
     List<String> getAllAuthorNames();
 
     Book addBook(String name, String authorName) throws ItemAlreadyExistException;
+
+    int addAuthor(String name);
 
     List<Book> getUsersBooks(int id);
 
@@ -54,6 +57,8 @@ public interface IJdbcDAO {
     void changeStateItems(List<Integer> ids, boolean state);
 
     double markItem(int userId, int objectId, double newMark);
+
+    Integer createUser(String name, String password, Set<String> roles);
 
     List<Integer> getUsersMarks(int userId);
 }

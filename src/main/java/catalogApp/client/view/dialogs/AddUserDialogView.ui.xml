@@ -1,25 +1,25 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <g:HTMLPanel>
-        <g:DialogBox ui:field="dialogPanel" text="Adding song">
+        <g:DialogBox ui:field="dialogPanel">
             <g:HTMLPanel>
                 <table>
                     <tr>
-                        <td>Name:</td>
+                        <td>Username:</td>
                         <td>
                             <g:TextBox ui:field="nameBox"/>
                         </td>
                     </tr>
                     <tr>
-                        <td>Genre:</td>
+                        <td>Password:</td>
                         <td>
-                            <g:ListBox ui:field="genreBox"/>
+                            <g:TextBox ui:field="passBox"/>
                         </td>
                     </tr>
                     <tr>
-                        <td>Duration:</td>
+                        <td>Role:</td>
                         <td>
-                            <g:IntegerBox ui:field="durationBox"/>
+                            <g:ListBox ui:field="roleBox"/>
                         </td>
                     </tr>
                     <tr>

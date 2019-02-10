@@ -14,6 +14,7 @@ import com.google.gwt.view.client.MultiSelectionModel;
 
 import java.util.List;
 
+import static catalogApp.client.view.constants.LibraryConstants.SEARCH_LABEL;
 import static catalogApp.client.view.constants.LibraryConstants.TABLE_HEIGHT;
 
 public class BookTabView extends Composite implements BookTabPresenter.Display {
@@ -27,6 +28,9 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
     SimplePanel simplePanel;
     @UiField
     TextBox searchField;
+    @UiField
+    Label searchLabel;
+
 
     private static BookTabViewUiBinder ourUiBinder = GWT.create(BookTabViewUiBinder.class);
 
@@ -38,7 +42,7 @@ public class BookTabView extends Composite implements BookTabPresenter.Display {
         table = new BookCellTable(list);
         simplePanel.add(table);
         simplePanel.setHeight(TABLE_HEIGHT);
-        
+        searchLabel.setText(SEARCH_LABEL);
     }
 
     @Override

@@ -21,25 +21,25 @@ public class AddBookDialogView extends Composite implements AddBookDialogPresent
     Button cancelButton;
     @UiField
     TextBox nameBox;
-    @UiField(provided = true)
-    SuggestBox authorBox;
+    @UiField
+    ListBox authorBox;
     @UiField
     DialogBox dialogPanel;
+    @UiField
+    Button plusButton;
 
     private static AddDialogViewUiBinder ourUiBinder = GWT.create(AddDialogViewUiBinder.class);
-    private MultiWordSuggestOracle wordSuggest = new MultiWordSuggestOracle();
 
     public AddBookDialogView() {
-        authorBox = new SuggestBox(wordSuggest);
         initWidget(ourUiBinder.createAndBindUi(this));
-        authorBox.setLimit(6);
     }
 
 
     @Override
-    public void setSuggestions(List<String> suggestions) {
-        wordSuggest.addAll(suggestions);
-        authorBox.refreshSuggestionList();
+    public void setListBoxData(List<String> suggestions) {
+        if(suggestions!=null) {
+            suggestions.forEach(x -> authorBox.addItem(x));
+        }
     }
 
     @Override
@@ -50,6 +50,10 @@ public class AddBookDialogView extends Composite implements AddBookDialogPresent
     @Override
     public HasClickHandlers getCancelButton() {
         return cancelButton;
+    }
+
+    public HasClickHandlers getPlusButton() {
+        return plusButton;
     }
 
     @Override
@@ -64,6 +68,11 @@ public class AddBookDialogView extends Composite implements AddBookDialogPresent
 
     @Override
     public List<String> getAddInfo() {
-        return Arrays.asList(nameBox.getText(), authorBox.getText());
+        return Arrays.asList(nameBox.getText(), authorBox.getSelectedValue());
+    }
+
+    @Override
+    public ListBox getListBox() {
+        return authorBox;
     }
 }

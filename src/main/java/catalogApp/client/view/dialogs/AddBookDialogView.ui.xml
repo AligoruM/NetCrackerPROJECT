@@ -13,7 +13,8 @@
                     <tr>
                         <td>Author:</td>
                         <td>
-                            <g:SuggestBox ui:field="authorBox"/>
+                            <g:ListBox ui:field="authorBox"/>
+                            <g:Button ui:field="plusButton" text="+"/>
                         </td>
                     </tr>
                     <tr>

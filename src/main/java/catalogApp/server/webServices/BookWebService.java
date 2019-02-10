@@ -49,6 +49,11 @@ public class BookWebService {
     public List<String> getAuthorsNames() {
         return jdbcService.getAllAuthorsNames();
     }
+    @POST
+    @Path("/author/{name}")
+    public Boolean addAuthor(@PathParam("name") String name){
+        return jdbcService.addAuthor(name);
+    }
 
     @POST
     @Path("/addBooksToUserLib")

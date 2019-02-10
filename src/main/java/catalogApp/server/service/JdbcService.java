@@ -5,6 +5,7 @@ import catalogApp.server.dao.UserDAO;
 import catalogApp.server.dao.constants.Attribute;
 import catalogApp.shared.exception.ItemAlreadyExistException;
 import catalogApp.shared.model.*;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,7 +13,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static catalogApp.shared.constants.FileServiceConstants.IMAGE_SERVICE_DIR;
 
@@ -70,10 +74,15 @@ public class JdbcService implements IJdbcService {
     }
 
     @Override
-    public void deleteBooksFromLibrary(List<Integer> ids) {
-        int userId = getUserId();
-        jdbcDAO.deleteObjectFromUserLibrary(userId, ids, Attribute.LIKED_BOOK_ID);
+    public Boolean addAuthor(String authorName) {
+        for (String author : jdbcDAO.getAllAuthorNames()) {
+            if (authorName.equalsIgnoreCase(author)) {
+                return false;
+            }
+        }
+        return jdbcDAO.addAuthor(authorName) > 0;
     }
+
 
     @Override
     public Book updateBook(Book newBook) {
@@ -132,7 +141,7 @@ public class JdbcService implements IJdbcService {
     public Song updateSong(Song newSong) {
         int id = newSong.getId();
         for (Song item : jdbcDAO.getAllSongs()) {
-            String newGenre = newSong.getGenre()==null ? null : newSong.getGenre().getName();
+            String newGenre = newSong.getGenre() == null ? null : newSong.getGenre().getName();
             String newName = newSong.getName();
             if (newName != null && newGenre != null) {
                 if (item.getGenre().getName().equalsIgnoreCase(newGenre) && item.getName().equalsIgnoreCase(newName))
@@ -168,6 +177,36 @@ public class JdbcService implements IJdbcService {
     public List<SimpleUser> getAllUsers() {
         return userDAO.getAllUsers();
     }
+
+    @Override
+    public SimpleUser addUser(String name, String pass, String role) {
+        try {
+            userDAO.getUserIdByName(name);
+        } catch (IncorrectResultSizeDataAccessException ex) {
+            if (ex.getActualSize() == 0) {
+                Set<String> roles = new HashSet<>();
+                switch (role) {
+                    case "ADMIN": {
+                        roles.add("USER");
+                        roles.add("ADMIN");
+                        break;
+                    }
+                    case "USER": {
+                        roles.add("USER");
+                        break;
+                    }
+                    default:
+                        return null;
+                }
+                int userId = jdbcDAO.createUser(name, bCrypt.encode(pass), roles);
+                if (userId > 0) {
+                    return userDAO.getSimpleUser(name);
+                }
+            }
+        }
+        return null;
+    }
+
 
     @Override
     public void deleteObjectFromUserLib(List<Integer> ids, int type) {
@@ -222,10 +261,10 @@ public class JdbcService implements IJdbcService {
         }
     }
 
-    private void setIsMarked(int userId, List<? extends Ratable> list){
+    private void setIsMarked(int userId, List<? extends Ratable> list) {
         List<Integer> markedIds = jdbcDAO.getUsersMarks(userId);
         for (Ratable item : list) {
-            if(markedIds.contains(item.getId())){
+            if (markedIds.contains(item.getId())) {
                 item.setMarked(true);
             }
         }

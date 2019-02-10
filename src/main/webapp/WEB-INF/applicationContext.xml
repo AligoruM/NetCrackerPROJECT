@@ -41,11 +41,11 @@
 
     <b:bean id="userWebService" class="catalogApp.server.webServices.UserWebService">
         <b:property name="jdbcService" ref="jdbcServiceImpl"/>
-        <b:property name="imageService" ref="imageServiceImpl"/>
     </b:bean>
 
     <b:bean id="generalWebService" class="catalogApp.server.webServices.GeneralWebService">
         <b:property name="jdbcService" ref="jdbcServiceImpl"/>
+        <b:property name="imageService" ref="imageServiceImpl"/>
     </b:bean>
 
     <b:bean id="bookWebService" class="catalogApp.server.webServices.BookWebService">
