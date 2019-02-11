@@ -15,6 +15,9 @@ import com.google.gwt.view.client.ListDataProvider;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EditBookDialogPresenter implements Presenter {
 
     public interface Display {
@@ -30,7 +33,7 @@ public class EditBookDialogPresenter implements Presenter {
 
         Widget asWidget();
 
-        void showData(Book object);
+        void showData(Book object, List<String> authors);
 
         String getNewName();
 
@@ -54,6 +57,8 @@ public class EditBookDialogPresenter implements Presenter {
 
     private boolean isLoaded;
 
+    private List<String> authorsList = new ArrayList<>();
+
 
     public EditBookDialogPresenter(Display display, BookWebService bookWebService, ListDataProvider<Book> dataProvider, Book book) {
         this.book = book;
@@ -63,12 +68,23 @@ public class EditBookDialogPresenter implements Presenter {
         oldName = book.getName();
         oldAuthor = book.getAuthor().getName();
         oldComment = book.getComment() != null ? book.getComment() : "";
+        bookWebService.getAllAuthor(new MethodCallback<List<String>>() {
+            @Override
+            public void onFailure(Method method, Throwable exception) {
+
+            }
+
+            @Override
+            public void onSuccess(Method method, List<String> response) {
+                authorsList.addAll(response);
+                display.showData(book, authorsList);
+            }
+        });
         bind();
     }
 
     @Override
     public void go(Panel container) {
-        display.showData(book);
         display.showDialog();
     }
 

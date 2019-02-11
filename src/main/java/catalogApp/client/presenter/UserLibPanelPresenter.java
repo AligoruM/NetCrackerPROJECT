@@ -1,23 +1,18 @@
 package catalogApp.client.presenter;
 
-import catalogApp.client.event.UpdateUserLibraryEvent;
 import catalogApp.client.presenter.helper.FieldUpdaters;
 import catalogApp.client.services.BookWebService;
 import catalogApp.client.services.SongWebService;
-import catalogApp.client.view.components.tables.AbstractCatalogCellTable;
 import catalogApp.client.view.mainPage.library.objectViews.BookView;
 import catalogApp.client.view.mainPage.library.objectViews.SongView;
 import catalogApp.client.view.mainPage.library.tabs.BookTabView;
 import catalogApp.client.view.mainPage.library.tabs.SongTabView;
-import catalogApp.shared.model.Book;
-import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.MultiSelectionModel;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 

@@ -23,7 +23,7 @@ public class MainPagePresenter implements Presenter {
     }
 
     private HandlerManager eventBus;
-    Display display;
+    private Display display;
 
     private ProfileBarPresenter profileBarPresenter;
 

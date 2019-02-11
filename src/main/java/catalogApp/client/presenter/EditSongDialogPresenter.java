@@ -15,6 +15,9 @@ import com.google.gwt.view.client.ListDataProvider;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EditSongDialogPresenter implements Presenter {
 
     public interface Display {
@@ -30,7 +33,7 @@ public class EditSongDialogPresenter implements Presenter {
 
         Widget asWidget();
 
-        void showData(Song object);
+        void showData(Song object, List<String> genres);
 
         String getNewName();
 
@@ -55,6 +58,8 @@ public class EditSongDialogPresenter implements Presenter {
 
     private SongWebService songWebService;
 
+    private List<String> genres = new ArrayList<>();
+
 
     public EditSongDialogPresenter(Display display, SongWebService songWebService,
                                    ListDataProvider<Song> dataProvider, Song song) {
@@ -65,6 +70,19 @@ public class EditSongDialogPresenter implements Presenter {
         oldName = song.getName();
         oldComment = song.getComment()!=null ? song.getComment() : "";
         oldGenreName = song.getGenre().getName();
+        songWebService.getGenreNames(new MethodCallback<List<String>>() {
+            @Override
+            public void onFailure(Method method, Throwable exception) {
+                GWT.log("getGenres doesnt work");
+            }
+
+            @Override
+            public void onSuccess(Method method, List<String> response) {
+                genres.addAll(response);
+                display.showData(song, genres);
+
+            }
+        });
         bind();
     }
 
@@ -74,7 +92,6 @@ public class EditSongDialogPresenter implements Presenter {
     }
 
     private void bind() {
-        display.showData(song);
 
         FileUploader fileUploader = display.getAdditionalInfo().getFileUploader();
 

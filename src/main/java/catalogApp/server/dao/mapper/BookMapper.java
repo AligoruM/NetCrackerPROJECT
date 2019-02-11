@@ -1,6 +1,5 @@
 package catalogApp.server.dao.mapper;
 
-import catalogApp.server.dao.constants.Tables;
 import catalogApp.server.dao.constants.Types;
 import catalogApp.shared.model.Author;
 import catalogApp.shared.model.Book;

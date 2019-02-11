@@ -71,8 +71,12 @@ public class AddSongDialogPresenter implements Presenter {
 
                         @Override
                         public void onSuccess(Method method, Song song) {
-                            songTabPresenter.getSongListDataProvider().getList().add(song);
-                            display.hideDialog();
+                            if(song!=null) {
+                                songTabPresenter.getSongListDataProvider().getList().add(song);
+                                display.hideDialog();
+                            }else{
+                                GWT.log("Song already exists");
+                            }
                         }
                     });
                 }else {

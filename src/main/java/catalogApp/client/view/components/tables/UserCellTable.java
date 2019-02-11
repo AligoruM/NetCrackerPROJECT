@@ -3,7 +3,6 @@ package catalogApp.client.view.components.tables;
 import catalogApp.client.view.components.tables.utils.UserCellTableColumns;
 import catalogApp.shared.model.SimpleUser;
 import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.view.client.ListDataProvider;
 
 import java.util.Comparator;
 import java.util.List;

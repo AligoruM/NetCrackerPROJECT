@@ -12,12 +12,10 @@ import org.springframework.stereotype.Service;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static catalogApp.shared.constants.FileServiceConstants.IMAGE_FIELD;
 import static catalogApp.shared.constants.UserConstants.*;
 
 @Service

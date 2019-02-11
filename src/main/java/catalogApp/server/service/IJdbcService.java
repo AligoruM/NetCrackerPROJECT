@@ -6,7 +6,6 @@ import catalogApp.shared.model.SimpleUser;
 import catalogApp.shared.model.Song;
 
 import java.util.List;
-import java.util.Map;
 
 public interface IJdbcService {
     List<Book> getAllBooks();

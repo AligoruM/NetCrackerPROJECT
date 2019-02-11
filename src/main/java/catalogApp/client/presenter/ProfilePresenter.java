@@ -7,13 +7,16 @@ import catalogApp.shared.model.SimpleUser;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.PasswordTextBox;
+import com.google.gwt.user.client.ui.Widget;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 import org.fusesource.restygwt.client.TextCallback;
 
-import static catalogApp.shared.constants.FileServiceConstants.IMAGE_FIELD;
 import static catalogApp.shared.constants.FileServiceConstants.AVATAR_SERVICE_PATH;
+import static catalogApp.shared.constants.FileServiceConstants.IMAGE_FIELD;
 
 
 public class ProfilePresenter implements Presenter {
@@ -62,6 +65,7 @@ public class ProfilePresenter implements Presenter {
 
         display.getChangePassButton().addClickHandler(event -> {
             String str = display.getPasswordBox().getText();
+            if(str.length()>=4)
             userWebService.changePassword(str, new MethodCallback<Boolean>() {
                 @Override
                 public void onFailure(Method method, Throwable exception) {
@@ -78,6 +82,8 @@ public class ProfilePresenter implements Presenter {
                         Window.alert("Something went wrong");
                 }
             });
+            else
+                GWT.log("In password should be at least 4 symbols");
         });
 
 
@@ -111,20 +117,18 @@ public class ProfilePresenter implements Presenter {
 
         });
 
-        display.getRefreshButton().addClickHandler(event -> {
-            userWebService.getSimpleUser(new MethodCallback<SimpleUser>() {
-                @Override
-                public void onFailure(Method method, Throwable exception) {
-                    GWT.log("something goes wrong", exception);
-                }
+        display.getRefreshButton().addClickHandler(event -> userWebService.getSimpleUser(new MethodCallback<SimpleUser>() {
+            @Override
+            public void onFailure(Method method, Throwable exception) {
+                GWT.log("something goes wrong", exception);
+            }
 
-                @Override
-                public void onSuccess(Method method, SimpleUser response) {
-                    simpleUser.updateFields(response);
-                    display.updateData(simpleUser);
-                }
-            });
-        });
+            @Override
+            public void onSuccess(Method method, SimpleUser response) {
+                simpleUser.updateFields(response);
+                display.updateData(simpleUser);
+            }
+        }));
     }
 
     private void initUploader() {
@@ -132,22 +136,20 @@ public class ProfilePresenter implements Presenter {
         fileUploader.setAction(GWT.getModuleName() + '/' + AVATAR_SERVICE_PATH);
         fileUploader.setFileFieldName(IMAGE_FIELD);
 
-        fileUploader.addSubmitCompleteHandler(event -> {
-            userWebService.getAvatarUrl(simpleUser.getId(), new TextCallback() {
-                @Override
-                public void onFailure(Method method, Throwable exception) {
-                    GWT.log("get avatar doesnt work", exception);
-                }
+        fileUploader.addSubmitCompleteHandler(event -> userWebService.getAvatarUrl(simpleUser.getId(), new TextCallback() {
+            @Override
+            public void onFailure(Method method, Throwable exception) {
+                GWT.log("get avatar doesnt work", exception);
+            }
 
-                @Override
-                public void onSuccess(Method method, String response) {
-                    if (response != null) {
-                        simpleUser.setImagePath(response);
-                        display.updateData(simpleUser);
-                    }
+            @Override
+            public void onSuccess(Method method, String response) {
+                if (response != null) {
+                    simpleUser.setImagePath(response);
+                    display.updateData(simpleUser);
                 }
-            });
-        });
+            }
+        }));
 
         display.getUploadButton().addClickHandler(event -> {
             String filename = fileUploader.getFileUpload().getFilename();

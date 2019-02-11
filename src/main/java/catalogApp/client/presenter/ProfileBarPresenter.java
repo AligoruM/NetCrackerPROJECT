@@ -2,7 +2,6 @@ package catalogApp.client.presenter;
 
 import catalogApp.shared.model.SimpleUser;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;

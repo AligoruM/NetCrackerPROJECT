@@ -6,16 +6,16 @@ import catalogApp.client.view.components.tables.utils.BaseCellTableColumns;
 import catalogApp.shared.model.BaseObject;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.uibinder.client.UiConstructor;
-import com.google.gwt.user.cellview.client.*;
+import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
-import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -28,7 +28,7 @@ public abstract class AbstractCatalogCellTable<T extends BaseObject> extends Cel
 
     private Column<T, String> nameColumn = baseCellTableColumns.getNameColumn();
 
-    ObjectPopup objectPopup = new ObjectPopup();
+    private ObjectPopup objectPopup = new ObjectPopup();
 
     private List<T> list;
 

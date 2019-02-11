@@ -10,6 +10,8 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.*;
 
+import java.util.List;
+
 import static catalogApp.client.view.constants.LibraryConstants.*;
 
 public class EditSongDialogView extends Composite implements EditSongDialogPresenter.Display {
@@ -29,7 +31,7 @@ public class EditSongDialogView extends Composite implements EditSongDialogPrese
     @UiField
     AdditionalInfo additionalInfo;
 
-    private TextBox genreBox = new TextBox();
+    private ListBox genreBox = new ListBox();
 
     private IntegerBox durationBox = new IntegerBox();
 
@@ -80,10 +82,10 @@ public class EditSongDialogView extends Composite implements EditSongDialogPrese
     }
 
     @Override
-    public void showData(Song object) {
+    public void showData(Song object, List<String> genres) {
         idBox.setText(String.valueOf(object.getId()));
         nameBox.setText(object.getName());
-        genreBox.setText(object.getGenre().getName());
+        genres.forEach(x-> genreBox.addItem(x));
         durationBox.setText(String.valueOf(object.getDuration()));
         additionalInfo.setComment(object.getComment());
         additionalInfo.setImage(object.getImagePath());
@@ -98,7 +100,7 @@ public class EditSongDialogView extends Composite implements EditSongDialogPrese
 
     @Override
     public String getNewGenre() {
-        return genreBox.getText().trim();
+        return genreBox.getSelectedItemText();
     }
 
     @Override

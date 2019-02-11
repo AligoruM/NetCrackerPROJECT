@@ -1,7 +1,6 @@
 package catalogApp.client.presenter;
 
 import catalogApp.client.event.UpdateUserLibraryEvent;
-import catalogApp.client.presenter.helper.FieldUpdaters;
 import catalogApp.client.services.BookWebService;
 import catalogApp.client.view.components.tables.AbstractCatalogCellTable;
 import catalogApp.client.view.dialogs.EditBookDialogView;
@@ -96,7 +95,7 @@ public class BookTabPresenter implements Presenter {
 
     }
 
-    List<Integer> getSelectedIDs() {
+    private List<Integer> getSelectedIDs() {
         List<Integer> tmp = new ArrayList<>();
         display.getSelectionModel().getSelectedSet().forEach(e -> tmp.add(e.getId()));
         return tmp;

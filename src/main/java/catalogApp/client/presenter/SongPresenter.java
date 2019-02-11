@@ -19,7 +19,7 @@ public class SongPresenter implements Presenter {
         Widget asWidget();
     }
 
-    Display display;
+    private Display display;
 
     private Song song;
 

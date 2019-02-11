@@ -1,18 +1,4 @@
 //import catalogApp.server.security.CustomAuthenticationProvider;
-import catalogApp.server.security.UserDetailsServiceImpl;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
 /*
 @RunWith(MockitoJUnitRunner.class)
 public class CustomAuthenticationProviderTest {

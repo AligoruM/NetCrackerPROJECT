@@ -21,7 +21,7 @@ public class BookPresenter implements Presenter {
 
     private Book book;
 
-    Display display;
+    private Display display;
 
     private ListDataProvider<Book> dataProvider;
 

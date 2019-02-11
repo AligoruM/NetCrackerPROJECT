@@ -1,14 +1,10 @@
 package catalogApp.client.presenter;
 
 import catalogApp.client.event.UpdateUserLibraryEvent;
-import catalogApp.client.presenter.helper.FieldUpdaters;
 import catalogApp.client.services.SongWebService;
 import catalogApp.client.view.components.tables.AbstractCatalogCellTable;
 import catalogApp.client.view.dialogs.EditSongDialogView;
-import catalogApp.client.view.mainPage.library.UserLibPanelView;
-import catalogApp.shared.model.Book;
 import catalogApp.shared.model.Song;
-import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;

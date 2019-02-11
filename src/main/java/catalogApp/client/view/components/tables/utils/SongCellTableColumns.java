@@ -1,6 +1,5 @@
 package catalogApp.client.view.components.tables.utils;
 
-import catalogApp.shared.model.Book;
 import catalogApp.shared.model.Song;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.cellview.client.Column;

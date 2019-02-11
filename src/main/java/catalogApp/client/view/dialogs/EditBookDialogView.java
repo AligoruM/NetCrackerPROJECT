@@ -9,6 +9,8 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.*;
 
+import java.util.List;
+
 import static catalogApp.client.view.constants.LibraryConstants.*;
 
 public class EditBookDialogView extends Composite implements EditBookDialogPresenter.Display {
@@ -32,7 +34,7 @@ public class EditBookDialogView extends Composite implements EditBookDialogPrese
 
     private TextBox nameBox = new TextBox();
 
-    private TextBox authorBox = new TextBox();
+    private ListBox authorBox = new ListBox();
 
 
     private static EditBookDialogViewUiBinder ourUiBinder = GWT.create(EditBookDialogViewUiBinder.class);
@@ -71,10 +73,11 @@ public class EditBookDialogView extends Composite implements EditBookDialogPrese
     }
 
     @Override
-    public void showData(Book object) {
+    public void showData(Book object, List<String> authors) {
         idBox.setText(String.valueOf(object.getId()));
         nameBox.setText(object.getName());
-        authorBox.setText(object.getAuthor().getName());
+        authors.forEach(x->authorBox.addItem(x));
+        authorBox.setSelectedIndex(authors.indexOf(object.getAuthor().getName()));
         additionalInfo.setComment(object.getComment());
         additionalInfo.setImage(object.getImagePath());
     }
@@ -82,7 +85,7 @@ public class EditBookDialogView extends Composite implements EditBookDialogPrese
 
     @Override
     public String getNewAuthor() {
-        return authorBox.getText().trim();
+        return authorBox.getSelectedItemText();
     }
 
     @Override

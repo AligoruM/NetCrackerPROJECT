@@ -2,9 +2,7 @@ package catalogApp.client.view.components.tables;
 
 import catalogApp.client.view.components.tables.utils.BookCellTableColumns;
 import catalogApp.shared.model.Book;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.view.client.ListDataProvider;
 
 import java.util.Comparator;
 import java.util.List;

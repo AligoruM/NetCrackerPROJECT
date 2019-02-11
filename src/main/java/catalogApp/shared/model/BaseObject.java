@@ -11,7 +11,7 @@ public class BaseObject {
     private String comment;
     private String imagePath;
 
-    public BaseObject(int id, String name, Type type) {
+    BaseObject(int id, String name, Type type) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -24,7 +24,7 @@ public class BaseObject {
         this.isArchived = isArchived;
     }
 
-    public BaseObject() {
+    BaseObject() {
     }
 
     public int getId() {
@@ -43,7 +43,7 @@ public class BaseObject {
         this.name = name;
     }
 
-    public Type getType() {
+    Type getType() {
         return type;
     }
 

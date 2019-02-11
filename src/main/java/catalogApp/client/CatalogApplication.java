@@ -8,7 +8,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 
 
-public class CatalogApplication implements EntryPoint {
+class CatalogApplication implements EntryPoint {
 
 
     public void onModuleLoad() {
