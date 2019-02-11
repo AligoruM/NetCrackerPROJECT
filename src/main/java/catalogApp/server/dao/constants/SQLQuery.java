@@ -41,7 +41,7 @@ public class SQLQuery {
         return "select O." + ID_OBJ + " as " + ID_OBJ_ALIAS + ", O." + NAME_OBJ + " " + NAME_OBJ_ALIAS + ", " +
                 " O." + ARCHIVED_OBJ + " as " + ARCHIVED_OBJ_ALIAS + ", O." + IMG_OBJ + " as " + IMG_OBJ_ALIAS + ", " +
                 " O." + COMMENT_OBJ + " as " + COMMENT_OBJ_ALIAS + ", AV." + VALUE_AV + " as " + DURATION_ALIAS + ", " +
-                " AV3." + ID_OBJ + " as " + ID_GENRE_ALIAS + ", AV3." + NAME_OBJ + " as " + NAME_GENRE_ALIAS +  ", " +
+                " AV3." + ID_OBJ + " as " + ID_GENRE_ALIAS + ", AV3." + NAME_OBJ + " as " + NAME_GENRE_ALIAS + ", " +
                 " AV4." + VALUE_AV + " as " + MARK_ALIAS +
                 " from " + OBJECT_TABLE + " O" +
                 " join " + ATTR_VAL_TABLE + " AV on (O." + ID_OBJ + " = AV." + ID_OBJ_AV + " and AV." + ID_ATTR_AV + "=" + Attribute.SONG_DURATION + ")" +
@@ -72,8 +72,8 @@ public class SQLQuery {
         return "update  " + OBJECT_TABLE + " set " + NAME_OBJ + "=\"" + name + "\" where " + ID_OBJ + "=" + id;
     }
 
-    public static String CHECK_FOR_EXIST_BY_NAME_AND_TYPE(String name, int type){
-        return "select COUNT(1) as " + COUNT_ALIAS + " from "+ OBJECT_TABLE + " where " + NAME_OBJ + "=\"" + name + "\" and " + ID_TYPE_OBJ + "=" + type;
+    public static String CHECK_FOR_EXIST_BY_NAME_AND_TYPE(String name, int type) {
+        return "select COUNT(1) as " + COUNT_ALIAS + " from " + OBJECT_TABLE + " where " + NAME_OBJ + "=\"" + name + "\" and " + ID_TYPE_OBJ + "=" + type;
     }
 
     public static String UPDATE_OBJECTS_STATE(int state, String paramName) {
@@ -124,6 +124,10 @@ public class SQLQuery {
                 "from " + OBJECT_TABLE + " O" +
                 " left join " + ATTR_VAL_TABLE + " AV on O." + ID_OBJ + " = AV." + ID_OBJ_AV + " and AV." + ID_ATTR_AV + "=" + Attribute.USER_DESCRIPTION +
                 " where O." + ID_TYPE_OBJ + "=" + Types.USER;
+    }
+
+    public static String OBJECT_IMAGE_PATH_BY_ID(int id) {
+        return "select " + IMG_OBJ + " from " + OBJECT_TABLE + " where " + ID_OBJ + "=" + id;
     }
 
     public static String GET_SIMPLE_USER(int id) {

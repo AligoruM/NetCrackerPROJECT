@@ -41,6 +41,10 @@ public interface IJdbcService {
 
     SimpleUser addUser(String name, String pass, String role);
 
+    void updateAvatar(String filename);
+
+    String getUserAvatarPath(int id);
+
     void deleteObjectFromUserLib(List<Integer> ids, int type);
 
     void updateUser(SimpleUser simpleUser);

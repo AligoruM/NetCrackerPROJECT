@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static catalogApp.server.dao.constants.Tables.IMG_OBJ;
 import static catalogApp.server.dao.constants.Tables.ROLE_ALIAS;
 import static catalogApp.shared.constants.FileServiceConstants.IMAGE_SERVICE_DIR;
 
@@ -36,7 +37,7 @@ public class UserDAO {
     public User getUser(String name) {
         try {
             return jdbcTemplate.queryForObject(SQLQuery.USER_BY_NAME(name), new UserMapper());
-        }catch (EmptyResultDataAccessException ex){
+        } catch (EmptyResultDataAccessException ex) {
             logger.warn("Incorrect authorization. User: " + name + ". User not found");
             return null;
         }
@@ -45,7 +46,7 @@ public class UserDAO {
     public SimpleUser getSimpleUser(String name) {
         try {
             Integer id = jdbcTemplate.queryForObject(SQLQuery.USER_ID_BY_NAME(name), (rs, rowNum) -> rs.getInt("id"));
-            if(id!=null) {
+            if (id != null) {
                 SimpleUser simpleUser = jdbcTemplate.queryForObject(SQLQuery.GET_SIMPLE_USER(id), new SimpleUserMapper());
                 if (simpleUser != null) {
                     simpleUser.setRoles(getUserRoles(id));
@@ -54,7 +55,7 @@ public class UserDAO {
                     return null;
                 }
                 return simpleUser;
-            }else {
+            } else {
                 throw new IncorrectResultSizeDataAccessException(1);
             }
         } catch (IncorrectResultSizeDataAccessException ex) {
@@ -63,7 +64,7 @@ public class UserDAO {
         }
     }
 
-    public Integer getUserIdByName(String name){
+    public Integer getUserIdByName(String name) {
         return jdbcTemplate.queryForObject(SQLQuery.USER_ID_BY_NAME(name), (rs, rowNum) -> rs.getInt("id"));
     }
 
@@ -73,25 +74,25 @@ public class UserDAO {
         return users;
     }
 
-    public Set<String> getUserRoles(int id){
+    public Set<String> getUserRoles(int id) {
         return new HashSet<>(jdbcTemplate.query(SQLQuery.USER_ROLES_BY_ID(id), (rs, rowNum) -> rs.getString(ROLE_ALIAS)));
     }
 
     public void updateUserAttributes(SimpleUser newSimpleUser, SimpleUser oldSimpleUser) {
         if (newSimpleUser.getId() == oldSimpleUser.getId()) {
             int id = oldSimpleUser.getId();
-            if (newSimpleUser.getDescription()!=null && !newSimpleUser.getDescription().equals(oldSimpleUser.getDescription())) {
+            if (newSimpleUser.getDescription() != null && !newSimpleUser.getDescription().equals(oldSimpleUser.getDescription())) {
                 String description = newSimpleUser.getDescription();
                 updateUserAttr(description, id, Attribute.USER_DESCRIPTION);
             }
-            if(newSimpleUser.getImagePath()!=null && !oldSimpleUser.getImagePath().contains(newSimpleUser.getImagePath())){
+            if (newSimpleUser.getImagePath() != null && !oldSimpleUser.getImagePath().contains(newSimpleUser.getImagePath())) {
                 String filepath = IMAGE_SERVICE_DIR + "/" + newSimpleUser.getImagePath();
                 updateAvatar(id, filepath);
             }
         }
     }
 
-    private void updateAvatar(int id, String filepath){
+    public void updateAvatar(int id, String filepath) {
         jdbcTemplate.execute(SQLQuery.UPDATE_OBJECT_IMAGE(filepath, id));
     }
 
@@ -113,8 +114,12 @@ public class UserDAO {
         }
     }
 
-    public boolean updateUserPassword(int id, String password){
+    public boolean updateUserPassword(int id, String password) {
         return updateUserAttr(password, id, Attribute.USER_PASSWORD) == 1;
+    }
+
+    public String getObjectImagePath(int id) {
+        return jdbcTemplate.queryForObject(SQLQuery.OBJECT_IMAGE_PATH_BY_ID(id), (rs, rowNum) ->  rs.getString(IMG_OBJ));
     }
 
     private void setAdditionDataInSimpleUser(SimpleUser simpleUser) {

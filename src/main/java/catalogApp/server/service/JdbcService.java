@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import static catalogApp.shared.constants.FileServiceConstants.IMAGE_SERVICE_DIR;
@@ -205,6 +204,17 @@ public class JdbcService implements IJdbcService {
             }
         }
         return null;
+    }
+
+    @Override
+    public void updateAvatar(String filename) {
+        String filepath = IMAGE_SERVICE_DIR + "/" + filename;
+        userDAO.updateAvatar(getUserId(), filepath);
+    }
+
+    @Override
+    public String getUserAvatarPath(int id) {
+        return userDAO.getObjectImagePath(id);
     }
 
 

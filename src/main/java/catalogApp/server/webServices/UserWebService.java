@@ -26,6 +26,7 @@ import static catalogApp.shared.constants.UserConstants.*;
 public class UserWebService {
 
     private static IJdbcService jdbcService;
+    private static IImageService imageService;
 
     @POST
     @Path("/UserProfile")
@@ -53,16 +54,16 @@ public class UserWebService {
 
     @POST
     @Path("/updPass")
-    public Boolean changePassword(String password){
+    public Boolean changePassword(String password) {
         return jdbcService.changePassword(password);
     }
 
     @POST
     @Path("/user")
-    public SimpleUser createUser(Map<String, String> map){
-        if(map==null || !map.containsKey(USERNAME_FIELD) || !map.containsKey(PASSWORD_FIELD) || !map.containsKey(ROLE_FIELD)){
+    public SimpleUser createUser(Map<String, String> map) {
+        if (map == null || !map.containsKey(USERNAME_FIELD) || !map.containsKey(PASSWORD_FIELD) || !map.containsKey(ROLE_FIELD)) {
             return null;
-        }else {
+        } else {
             return jdbcService.addUser(map.get(USERNAME_FIELD), map.get(PASSWORD_FIELD), map.get(ROLE_FIELD));
         }
     }
@@ -70,8 +71,26 @@ public class UserWebService {
     @GET
     @Path("/roles")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<String> getRoles(){
+    public List<String> getRoles() {
         return Arrays.asList("ADMIN", "USER");
+    }
+
+    @POST
+    @Path("/avatar")
+    @Consumes({MediaType.MULTIPART_FORM_DATA})
+    public String uploadAvatar(@FormDataParam("image") InputStream fileInputStream,
+                               @FormDataParam("image") FormDataContentDisposition fileMetaData) {
+        jdbcService.updateAvatar(fileMetaData.getFileName());
+        if (imageService.saveImage(fileInputStream, fileMetaData.getFileName()))
+            return "200";
+        else return "500";
+    }
+
+    @GET
+    @Path("avatar/{id}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getAvatar(@PathParam("id") int id) {
+        return jdbcService.getUserAvatarPath(id);
     }
 
 
@@ -79,4 +98,7 @@ public class UserWebService {
         jdbcService = service;
     }
 
+    public void setImageService(IImageService service) {
+        imageService = service;
+    }
 }

@@ -10,6 +10,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
+import org.fusesource.restygwt.client.TextCallback;
 
 import static catalogApp.shared.constants.FileServiceConstants.IMAGE_FIELD;
 import static catalogApp.shared.constants.FileServiceConstants.AVATAR_SERVICE_PATH;
@@ -41,8 +42,6 @@ public class ProfilePresenter implements Presenter {
     private Display display;
     private UserWebService userWebService;
 
-    private boolean isLoaded;
-
     public ProfilePresenter(Display display, UserWebService userWebService) {
         this.display = display;
         this.userWebService = userWebService;
@@ -71,11 +70,11 @@ public class ProfilePresenter implements Presenter {
 
                 @Override
                 public void onSuccess(Method method, Boolean response) {
-                    if(response){
+                    if (response) {
                         Window.alert("changed");
                         Cookies.removeCookie("JSESSIONID");
                         Window.Location.replace(GWT.getHostPageBaseURL() + "login");
-                    }else
+                    } else
                         Window.alert("Something went wrong");
                 }
             });
@@ -87,18 +86,10 @@ public class ProfilePresenter implements Presenter {
             SimpleUser updatedSimpleUser = new SimpleUser();
             updatedSimpleUser.setId(simpleUser.getId());
 
-            String imagePath = display.getFileUploader().getFileUpload().getFilename();
-            imagePath = imagePath.substring(imagePath.lastIndexOf('\\') + 1);
-
             String newDescription = display.getDescription().trim();
-            if (!newDescription.equals(simpleUser.getDescription())) {
+            if (!newDescription.equals(simpleUser.getDescription() == null ? "" : simpleUser.getDescription())) {
                 updatedSimpleUser.setDescription(newDescription);
-                isChanged=true;
-            }
-
-            if(!imagePath.isEmpty() && isLoaded){
-                updatedSimpleUser.setImagePath(imagePath);
-                isChanged=true;
+                isChanged = true;
             }
 
             if (isChanged) {
@@ -138,12 +129,24 @@ public class ProfilePresenter implements Presenter {
 
     private void initUploader() {
         FileUploader fileUploader = display.getFileUploader();
-        fileUploader.setAction(GWT.getModuleName()+'/' + AVATAR_SERVICE_PATH);
+        fileUploader.setAction(GWT.getModuleName() + '/' + AVATAR_SERVICE_PATH);
         fileUploader.setFileFieldName(IMAGE_FIELD);
 
         fileUploader.addSubmitCompleteHandler(event -> {
-            Window.alert("Successfully loaded");
-            isLoaded=true;
+            userWebService.getAvatarUrl(simpleUser.getId(), new TextCallback() {
+                @Override
+                public void onFailure(Method method, Throwable exception) {
+                    GWT.log("get avatar doesnt work", exception);
+                }
+
+                @Override
+                public void onSuccess(Method method, String response) {
+                    if (response != null) {
+                        simpleUser.setImagePath(response);
+                        display.updateData(simpleUser);
+                    }
+                }
+            });
         });
 
         display.getUploadButton().addClickHandler(event -> {

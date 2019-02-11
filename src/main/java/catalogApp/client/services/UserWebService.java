@@ -3,6 +3,7 @@ package catalogApp.client.services;
 import catalogApp.shared.model.SimpleUser;
 import org.fusesource.restygwt.client.MethodCallback;
 import org.fusesource.restygwt.client.RestService;
+import org.fusesource.restygwt.client.TextCallback;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -27,7 +28,8 @@ public interface UserWebService extends RestService {
 
     @GET
     @Path("rest/avatar/{id}")
-    void getAvatarUrl(@PathParam("id") int id, MethodCallback<String> callback);
+    @Produces(MediaType.TEXT_PLAIN)
+    void getAvatarUrl(@PathParam("id") int id, TextCallback callback);
 
     @POST
     @Path("rest/updPass/")
