@@ -31,7 +31,7 @@ public class BookMapper implements RowMapper<Book> {
         book.setArchived(resultSet.getBoolean(ARCHIVED_OBJ_ALIAS));
         book.setComment(resultSet.getString(COMMENT_OBJ_ALIAS));
         book.setImagePath(resultSet.getString(IMG_OBJ_ALIAS));
-        book.setRating(resultSet.getDouble(MARK_ALIAS));
+        book.setRating(resultSet.getFloat(MARK_ALIAS));
         book.setAuthor(author);
         book.setType(bookType);
 

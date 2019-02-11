@@ -33,7 +33,6 @@ public class SongView extends ObjectView implements SongPresenter.Display {
         genreLabel.setText(song.getGenre().getName());
         durationLabel.setText(DurationFormatter.formatDuration(song.getDuration()));
         ratingPanel.setRating(song.getRating());
-        ratingPanel.setActive(!song.isMarked());
     }
 
 

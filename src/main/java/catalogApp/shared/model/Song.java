@@ -8,7 +8,7 @@ public class Song extends BaseObject implements Ratable {
 
     private int duration;
     private SongGenre genre;
-    private double rating;
+    private float rating;
     private boolean isMarked;
 
     public Song() {
@@ -51,12 +51,12 @@ public class Song extends BaseObject implements Ratable {
     }
 
     @Override
-    public double getRating() {
+    public float getRating() {
         return rating;
     }
 
     @Override
-    public void setRating(double rating) {
+    public void setRating(float rating) {
         this.rating = rating;
     }
 

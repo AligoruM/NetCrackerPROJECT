@@ -30,7 +30,6 @@ public class BookView extends ObjectView implements BookPresenter.Display {
         super.setData(book);
         authorLabel.setText(book.getAuthor().getName());
         ratingPanel.setRating(book.getRating());
-        ratingPanel.setActive(!book.isMarked());
     }
 
     public RatingPanel getRatingPanel(){

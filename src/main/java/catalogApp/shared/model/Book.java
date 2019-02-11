@@ -9,7 +9,7 @@ public class Book extends BaseObject implements Ratable {
 
 
     private Author author;
-    private double rating;
+    private float rating;
     private boolean isMarked;
 
 
@@ -29,12 +29,12 @@ public class Book extends BaseObject implements Ratable {
     }
 
     @Override
-    public double getRating() {
+    public float getRating() {
         return rating;
     }
 
     @Override
-    public void setRating(double rating) {
+    public void setRating(float rating) {
         this.rating = rating;
     }
 

@@ -54,11 +54,13 @@ public class UserLibPanelPresenter implements Presenter {
         this.bookWebService = bookWebService;
         this.eventBus = eventBus;
 
-        bookPresenter = new BookPresenter(new BookView(), bookWebService);
-        songPresenter = new SongPresenter(new SongView(), songWebService);
+
 
         bookTabPresenter = new BookTabPresenter(new BookTabView(), eventBus, bookWebService);
         songTabPresenter = new SongTabPresenter(new SongTabView(), eventBus, songWebService);
+
+        bookPresenter = new BookPresenter(new BookView(), bookWebService, bookTabPresenter.getBookListDataProvider());
+        songPresenter = new SongPresenter(new SongView(), songWebService, songTabPresenter.getSongListDataProvider());
 
         bookTabPresenter.loadData(false);
         bookTabPresenter.go(display.getBookContainer());

@@ -6,6 +6,7 @@ import catalogApp.shared.model.Song;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.ListDataProvider;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 
@@ -22,8 +23,11 @@ public class SongPresenter implements Presenter {
 
     private Song song;
 
-    public SongPresenter(Display display, SongWebService songWebService) {
+    private ListDataProvider<Song> dataProvider;
+
+    public SongPresenter(Display display, SongWebService songWebService, ListDataProvider<Song> dataProvider) {
         this.display = display;
+        this.dataProvider = dataProvider;
         display.getRatingPanel().getOneButton().addClickHandler(event -> songWebService.markSong(song.getId(), 1, getMethodSongCallback()));
         display.getRatingPanel().getTwoButton().addClickHandler(event -> songWebService.markSong(song.getId(), 2, getMethodSongCallback()));
         display.getRatingPanel().getThreeButton().addClickHandler(event -> songWebService.markSong(song.getId(), 3, getMethodSongCallback()));
@@ -42,18 +46,19 @@ public class SongPresenter implements Presenter {
         display.setData(song);
     }
 
-    private MethodCallback<Double> getMethodSongCallback() {
-        return new MethodCallback<Double>() {
+    private MethodCallback<Float> getMethodSongCallback() {
+        return new MethodCallback<Float>() {
             @Override
             public void onFailure(Method method, Throwable exception) {
-                GWT.log("something in marking went wrong...");
+                GWT.log("something in song marking went wrong...");
             }
 
             @Override
-            public void onSuccess(Method method, Double response) {
-                song.setMarked(true);
+            public void onSuccess(Method method, Float response) {
                 song.setRating(response);
                 display.setData(song);
+                if (dataProvider != null)
+                    dataProvider.refresh();
             }
         };
     }

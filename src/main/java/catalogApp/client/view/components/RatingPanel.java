@@ -34,7 +34,7 @@ public class RatingPanel extends Composite {
         initWidget(ourUiBinder.createAndBindUi(this));
     }
 
-    public void setActive(boolean enabled){
+    public void setActive(boolean enabled) {
         oneButton.setEnabled(enabled);
         twoButton.setEnabled(enabled);
         threeButton.setEnabled(enabled);
@@ -42,8 +42,33 @@ public class RatingPanel extends Composite {
         fiveButton.setEnabled(enabled);
     }
 
-    public void setRating(double rating){
+    public void setRating(float rating) {
         ratingLabel.setText(formatter.format(rating));
+        setActive(true);
+        switch (Math.round(rating)) {
+            case 1:
+                GWT.log("Disabled 1");
+                oneButton.setEnabled(false);
+                break;
+            case 2:
+                GWT.log("Disabled 2");
+                twoButton.setEnabled(false);
+                break;
+            case 3:
+                GWT.log("Disabled 3");
+                threeButton.setEnabled(false);
+                break;
+            case 4:
+                GWT.log("Disabled 4");
+                fourButton.setEnabled(false);
+                break;
+            case 5:
+                GWT.log("Disabled 5");
+                fiveButton.setEnabled(false);
+                break;
+            default:
+                break;
+        }
     }
 
     public Button getOneButton() {

@@ -272,12 +272,22 @@ public class JdbcService implements IJdbcService {
     }
 
     private void setIsMarked(int userId, List<? extends Ratable> list) {
-        List<Integer> markedIds = jdbcDAO.getUsersMarks(userId);
+        List<String> userMarks = jdbcDAO.getUsersMarks(userId);
         for (Ratable item : list) {
-            if (markedIds.contains(item.getId())) {
-                item.setMarked(true);
+            boolean marked = false;
+            for (String mark : userMarks) {
+                String[] pair = mark.split(":");
+                if(String.valueOf(item.getId()).equals(pair[0])){
+                    item.setRating(Integer.valueOf(pair[1]));
+                    marked=true;
+                    break;
+                }
+            }
+            if(!marked) {
+                item.setRating(0);
             }
         }
+
     }
 
 }

@@ -6,13 +6,16 @@ import catalogApp.shared.model.Book;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.ListDataProvider;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 
 public class BookPresenter implements Presenter {
-    public interface Display{
+    public interface Display {
         void setData(Book book);
+
         Widget asWidget();
+
         RatingPanel getRatingPanel();
     }
 
@@ -20,8 +23,11 @@ public class BookPresenter implements Presenter {
 
     Display display;
 
-    public BookPresenter(Display display, BookWebService bookWebService) {
+    private ListDataProvider<Book> dataProvider;
+
+    public BookPresenter(Display display, BookWebService bookWebService, ListDataProvider<Book> dataProvider) {
         this.display = display;
+        this.dataProvider = dataProvider;
         display.getRatingPanel().getOneButton().addClickHandler(event -> bookWebService.markBook(book.getId(), 1, getMethodCallback()));
         display.getRatingPanel().getTwoButton().addClickHandler(event -> bookWebService.markBook(book.getId(), 2, getMethodCallback()));
         display.getRatingPanel().getThreeButton().addClickHandler(event -> bookWebService.markBook(book.getId(), 3, getMethodCallback()));
@@ -35,23 +41,24 @@ public class BookPresenter implements Presenter {
         container.add(display.asWidget());
     }
 
-    public void changeBook(Book book){
-        this.book=book;
+    public void changeBook(Book book) {
+        this.book = book;
         display.setData(book);
     }
 
-    private MethodCallback<Double> getMethodCallback(){
-        return new MethodCallback<Double>() {
+    private MethodCallback<Float> getMethodCallback() {
+        return new MethodCallback<Float>() {
             @Override
             public void onFailure(Method method, Throwable exception) {
-                GWT.log("something in marking went wrong...");
+                GWT.log("something in book marking went wrong...");
             }
 
             @Override
-            public void onSuccess(Method method, Double response) {
+            public void onSuccess(Method method, Float response) {
                 book.setRating(response);
-                book.setMarked(true);
                 display.setData(book);
+                if (dataProvider != null)
+                    dataProvider.refresh();
             }
         };
     }

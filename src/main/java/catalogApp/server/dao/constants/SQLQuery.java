@@ -95,6 +95,9 @@ public class SQLQuery {
     public static String UPDATE_ATTRIBUTE_VALUE(String value, int objectId, int attrId) {
         return "update " + ATTR_VAL_TABLE + " set " + VALUE_AV + "=\"" + value + "\" where " + ID_OBJ_AV + "=" + objectId + " and " + ID_ATTR_AV + "=" + attrId;
     }
+    public static String UPDATE_ATTRIBUTE_VALUE_BY_ALL_FIELD(String newValue, int objectId, int attrId, String oldValue) {
+        return "update " + ATTR_VAL_TABLE + " set " + VALUE_AV + "=\"" + newValue + "\" where " + ID_OBJ_AV + "=" + objectId + " and " + ID_ATTR_AV + "=" + attrId + " and " + VALUE_AV + "=\"" + oldValue +'"';
+    }
 
     public static String DELETE_ATTRIBUTE_VALUE_BY_ALL_FIELDS(String value, int objectId, int attId) {
         return "delete from " + ATTR_VAL_TABLE + " where " + ID_OBJ_AV + "=" + objectId + " and " + ID_ATTR_AV + "=" + attId + " and " + VALUE_AV + "=\"" + value + "\"";

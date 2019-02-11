@@ -227,47 +227,55 @@ public class EavDAO implements IJdbcDAO {
     }
 
     @Override
-    public double markItem(int userId, int objectId, double newMark) {
+    public double markItem(int userId, int objectId, int newMark) {
         Double currentMark;
         Integer currentQuantity = 0;
 
-        List<Integer> userMarks = jdbcTemplate.query(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(userId, Attribute.IS_USER_MARKED_IT), (rs, i) -> rs.getInt(VALUE_AV_ALIAS));
+        try {
+            currentMark = jdbcTemplate.queryForObject(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(objectId, Attribute.OBJECT_MARK),
+                    (rs, rowNum) -> rs.getDouble(VALUE_AV_ALIAS));
+        } catch (IncorrectResultSizeDataAccessException ex) {
+            currentMark = 0.0;
+            if (ex.getActualSize() == 0) {
+                jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(currentMark.toString(), objectId, Attribute.OBJECT_MARK));
+            }
+        }
+        try {
+            currentQuantity = jdbcTemplate.queryForObject(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(objectId, Attribute.OBJECT_MARK_QUANTITY),
+                    (rs, rowNum) -> rs.getInt("value"));
+        } catch (IncorrectResultSizeDataAccessException ex) {
+            jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(currentQuantity.toString(), objectId, Attribute.OBJECT_MARK_QUANTITY));
+        }
 
-        if (!userMarks.contains(objectId)) {
-            jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(String.valueOf(objectId), userId, Attribute.IS_USER_MARKED_IT));
-            try {
-                currentMark = jdbcTemplate.queryForObject(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(objectId, Attribute.OBJECT_MARK),
-                        (rs, rowNum) -> rs.getDouble(VALUE_AV_ALIAS));
-            } catch (IncorrectResultSizeDataAccessException ex) {
-                currentMark = 0.0;
-                if (ex.getActualSize() == 0) {
-                    jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(currentMark.toString(), objectId, Attribute.OBJECT_MARK));
-                }
-            }
-            try {
-                currentQuantity = jdbcTemplate.queryForObject(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(objectId, Attribute.OBJECT_MARK_QUANTITY),
-                        (rs, rowNum) -> rs.getInt("value"));
-            } catch (IncorrectResultSizeDataAccessException ex) {
-                jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(currentQuantity.toString(), objectId, Attribute.OBJECT_MARK_QUANTITY));
-            }
+        List<String> userMarks = jdbcTemplate.query(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(userId, Attribute.IS_USER_MARKED_IT), (rs, i) -> rs.getString(VALUE_AV_ALIAS));
+
+        int res = checkForMarkInAllUsersMarks(userMarks, objectId);
+
+
+        if (res == -1) {
+            jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(objectId + ":" + newMark, userId, Attribute.IS_USER_MARKED_IT));
             if (currentMark != null && currentQuantity != null) {
                 double updatedMark = (currentMark * currentQuantity + newMark) / (currentQuantity + 1);
                 jdbcTemplate.update(SQLQuery.UPDATE_ATTRIBUTE_VALUE(Double.toString(updatedMark), objectId, Attribute.OBJECT_MARK));
                 jdbcTemplate.update(SQLQuery.UPDATE_ATTRIBUTE_VALUE(Integer.toString(currentQuantity + 1), objectId, Attribute.OBJECT_MARK_QUANTITY));
-                return updatedMark;
+                return newMark;
             }
-        }else {
-            try {
-                currentMark = jdbcTemplate.queryForObject(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(objectId, Attribute.OBJECT_MARK),
-                        (rs, rowNum) -> rs.getDouble(VALUE_AV_ALIAS));
-            }catch (IncorrectResultSizeDataAccessException ex){
-                return 0.0;
+        } else {
+            int oldMark = 0;
+            if (userMarks.get(res).split(":").length == 2) {
+                oldMark = Integer.valueOf(userMarks.get(res).split(":")[1]);
+                jdbcTemplate.update(SQLQuery.UPDATE_ATTRIBUTE_VALUE_BY_ALL_FIELD(objectId + ":" + newMark, userId, Attribute.IS_USER_MARKED_IT, objectId + ":" + oldMark));
+            }
+            if (currentMark != null && currentQuantity != null) {
+                double updatedMark = (currentMark * currentQuantity - oldMark + newMark) / currentQuantity;
+                jdbcTemplate.update(SQLQuery.UPDATE_ATTRIBUTE_VALUE(Double.toString(updatedMark), objectId, Attribute.OBJECT_MARK));
+                return newMark;
             }
         }
 
-        if(currentMark!=null) {
+        if (currentMark != null) {
             return currentMark;
-        }else {
+        } else {
             return 0.0;
         }
     }
@@ -276,13 +284,13 @@ public class EavDAO implements IJdbcDAO {
     public Integer createUser(String name, String password, Set<String> roles) {
         int id = createObjectAndReturnNewId(name, Types.USER);
         jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(password, id, Attribute.USER_PASSWORD));
-        roles.forEach(e->jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(e, id, Attribute.USER_ROLE)));
+        roles.forEach(e -> jdbcTemplate.execute(SQLQuery.CREATE_ATTRIBUTE_VALUE(e, id, Attribute.USER_ROLE)));
         return id;
     }
 
     @Override
-    public List<Integer> getUsersMarks(int userId) {
-        return jdbcTemplate.query(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(userId, Attribute.IS_USER_MARKED_IT), (rs, rowNum) -> rs.getInt(VALUE_AV_ALIAS));
+    public List<String> getUsersMarks(int userId) {
+        return jdbcTemplate.query(SQLQuery.ATTRIBUTE_VALUE_BY_ID_AND_ATTRIBUTES(userId, Attribute.IS_USER_MARKED_IT), (rs, rowNum) -> rs.getString(VALUE_AV_ALIAS));
     }
 
     private List<Integer> getObjectsIdsByUserIdAndAttribute(int id, int idAttribute) {
@@ -310,6 +318,16 @@ public class EavDAO implements IJdbcDAO {
             logger.info("Author(" + authorName + ") not found. Created.");
         }
         return authorId;
+    }
+
+    private int checkForMarkInAllUsersMarks(List<String> userMarks, int bookId) {
+        for (String mark : userMarks) {
+            String[] pair = mark.split(":");
+            if (Integer.valueOf(pair[0]) == bookId) {
+                return userMarks.indexOf(mark);
+            }
+        }
+        return -1;
     }
 
     private Integer createOrGetGenre(String genreName) {

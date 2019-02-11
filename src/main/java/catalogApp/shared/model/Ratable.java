@@ -1,9 +1,9 @@
 package catalogApp.shared.model;
 
 public interface Ratable {
-    double getRating() ;
+    float getRating() ;
 
-    void setRating(double rating);
+    void setRating(float rating);
 
     boolean isMarked();
 

@@ -56,9 +56,9 @@ public interface IJdbcDAO {
 
     void changeStateItems(List<Integer> ids, boolean state);
 
-    double markItem(int userId, int objectId, double newMark);
+    double markItem(int userId, int objectId, int newMark);
 
     Integer createUser(String name, String password, Set<String> roles);
 
-    List<Integer> getUsersMarks(int userId);
+    List<String> getUsersMarks(int userId);
 }
