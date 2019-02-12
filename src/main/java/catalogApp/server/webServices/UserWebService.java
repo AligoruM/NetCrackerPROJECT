@@ -53,6 +53,8 @@ public class UserWebService {
     @POST
     @Path("/updPass")
     public Boolean changePassword(String password) {
+        if(password.isEmpty())
+            return false;
         return jdbcService.changePassword(password);
     }
 
