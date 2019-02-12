@@ -38,6 +38,7 @@ public class AddBookDialogView extends Composite implements AddBookDialogPresent
     @Override
     public void setListBoxData(List<String> suggestions) {
         if(suggestions!=null) {
+            authorBox.clear();
             suggestions.forEach(x -> authorBox.addItem(x));
         }
     }

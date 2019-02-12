@@ -56,7 +56,7 @@ public class AddAuthorDialogPresenter implements Presenter {
                     public void onSuccess(Method method, Boolean response) {
                         if(response){
                             Window.alert("Added");
-                            authors.set(0, author);
+                            authors.add(0, author);
                             display.hideDialog();
                         }else {
                             Window.alert("Author already exists");
